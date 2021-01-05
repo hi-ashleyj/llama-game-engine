@@ -193,8 +193,9 @@ Asset.prototype.draw = function(x, y, w, h) {
             }
         }
         case ("arc"): {
+            let r = (w + h) / 4;
             this.layer.ctx.beginPath();
-            this.layer.ctx.arc(x, y, (w + h) / 4, this.arcAngleS, this.arcAngleE);
+            this.layer.ctx.arc(x - (r / 2), y - (r / 2), r, this.arcAngleS, this.arcAngleE);
             this.layer.ctx.lineTo(x, y);
             if (this.fill) {
                 this.layer.ctx.fillStyle = this.fill;
