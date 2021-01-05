@@ -195,6 +195,7 @@ Asset.prototype.draw = function(x, y, w, h) {
         case ("arc"): {
             this.layer.ctx.beginPath();
             this.layer.ctx.arc(x, y, (w + h) / 4, this.arcAngleS, this.arcAngleE);
+            this.layer.ctx.lineTo(x, y);
             if (this.fill) {
                 this.layer.ctx.fillStyle = this.fill;
                 this.layer.ctx.fill();
@@ -242,7 +243,7 @@ Layer.prototype.add = function(...assets) {
     for (let thing of assets) {
         thing.layer = this;
     }
-    
+
     return this;
 };
 
