@@ -15,7 +15,7 @@ let Ahalfcircle = new Asset("halfcircle", {
     angleTo: 180
 });
 
-let AhalfcircleI = Ahalfcircle.clone("halfcircleI", { angleFrom: 180, angleTo: 360, fill: "#7700cc" });
+let AhalfcircleI = Ahalfcircle.clone("halfcircleI", { arcAngleS: Ahalfcircle.arcAngleE, arcAngleE: Ahalfcircle.arcAngleS, fill: "#7700cc" });
 
 Lbase.add(Abackground, Ahalfcircle);
 
@@ -23,6 +23,6 @@ Lcontent.add(AhalfcircleI);
 
 Abackground.draw(0, 0, Game.width, Game.height);
 
-Ahalfcircle.draw(Game.width / 2, Game.height / 2, 300, 300);
+Ahalfcircle.draw(...Asset.center(Game.width / 2, Game.height / 2, 300, 300));
 
-AhalfcircleI.draw(Game.width / 2, Game.height / 2, 200, 200);
+AhalfcircleI.draw(...Asset.center(Game.width / 2, Game.height / 2, 200, 200));
