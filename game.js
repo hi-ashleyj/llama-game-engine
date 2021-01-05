@@ -326,7 +326,24 @@ Animate.property.prototype.tick = function(stamp) {
     this.parent[this.name] = value; 
 };
 
+Game.timeouts = [];
+
+Game.wait = function(callback, delay) {
+    Game.timeouts.push({ callback, delay });
+};
+
 Game.loop = function(time) {
+    for (let i = Game.timeouts.length - 1; i >= 0; i--) {
+        if (Game.timeouts[i].start) {
+            if (Game.timeouts[i].start + Game.timeouts[i].delay >= time) {
+                Game.timeouts[i].callback(time - (Game.timeouts[i].start + Game.timeouts[i].delay));
+                Game.timeouts.splice(i, 1);
+            }
+        } else {
+            Game.timeouts[i].start = time;
+        }
+    }
+
     Animate.tick(time);
 
     Layer.drawAll();
