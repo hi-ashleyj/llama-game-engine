@@ -127,8 +127,8 @@ let Asset = function(id, options) {
             this.type = "rect";
         } else if (options.primitive == "circle") {
             this.type = "arc";
-            this.arcAngleS = 0;
-            this.arcAngleE = 2 * Math.PI;
+            this.angleFrom = 0;
+            this.angleTo = 360;
         } else if (options.primitive == "arc") {
             this.type = "arc";
             this.angleFrom = options.angleFrom;
