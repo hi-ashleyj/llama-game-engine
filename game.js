@@ -334,7 +334,7 @@ Game.wait = function(callback, delay) {
 Game.loop = function(time) {
     for (let i = Game.timeouts.length - 1; i >= 0; i--) {
         if (Game.timeouts[i].start) {
-            if (Game.timeouts[i].start + Game.timeouts[i].delay >= time) {
+            if (time >= Game.timeouts[i].start + Game.timeouts[i].delay) {
                 Game.timeouts[i].callback(time - (Game.timeouts[i].start + Game.timeouts[i].delay));
                 Game.timeouts.splice(i, 1);
             }
