@@ -227,6 +227,8 @@ let Layer = function(id, options) {
     john.className = "game-canvas";
     john.style.zIndex = options.level;
     document.querySelector("div#game").append(john);
+    john.width = Game.width;
+    john.height = Game.height;
 
     this.id = id;
     this.level = options.level;
