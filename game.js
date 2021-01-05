@@ -254,7 +254,7 @@ Layer.drawAll = function() {
     let layers = Object.keys(Layer.list).sort((a, b) => { return Layer.list[a].level - Layer.list[b].level;});
 
     for (let i = 0; i < layers.length; i++) {
-        Layer.list[i].draw();
+        Layer.list[layers[i]].draw();
     }
 };
 
@@ -306,8 +306,8 @@ Animate.property.prototype.tick = function(stamp) {
         this.offset = stamp;
         this.once = false;
     }
-    let factor = (stamp - this.offset) % this.time;
-    let value = this.steps.from + ((this.steps.to - this.steps.from) / factor);
+    let factor = ((stamp - this.offset) % this.time) / this.time;
+    let value = this.steps.from + ((this.steps.to - this.steps.from) * factor);
     this.parent[this.name] = value; 
 };
 
