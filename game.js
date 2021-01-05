@@ -321,7 +321,6 @@ Animate.property.prototype.tick = function(stamp) {
         }
     }
 
-    console.log(to, from);
     let value = this.steps[from] + ((this.steps[to] - this.steps[from]) * ((factor - from) / (to - from)));
     this.parent[this.name] = value; 
 };
