@@ -131,8 +131,8 @@ let Asset = function(id, options) {
             this.arcAngleE = 2 * Math.PI;
         } else if (options.primitive == "arc") {
             this.type = "arc";
-            this.arcAngleS = ((options.angleFrom - 90) * Math.PI / 180);
-            this.arcAngleE = ((options.angleTo - 90) * Math.PI / 180);
+            this.angleFrom = options.angleFrom;
+            this.angleTo = options.angleTo;
         }
 
         this.fill = (options.fill) ? options.fill : null;
@@ -173,30 +173,30 @@ Asset.center = function(x, y, w, h) {
     return [x - (w / 2), y - (h / 2), w, h];
 };
 
-Asset.prototype.draw = function(x, y, w, h) {
+Asset.prototype.draw = function() {
     switch (this.type) {
         case ("image"): {
             if (this.crop) {
-                this.layer.ctx.image(this.resource, ...this.crop, x, y, w, h);
+                this.layer.ctx.image(this.resource, ...this.crop, this.x, this.y, this.w, this.h);
             } else {
-                this.layer.ctx.image(this.resource, x, y, w, h);
+                this.layer.ctx.image(this.resource, this.x, this.y, this.w, this.h);
             }
         }
         case ("rect"): {
             if (this.fill) {
                 this.layer.ctx.fillStyle = this.fill;
-                this.layer.ctx.fillRect(x, y, w, h);
+                this.layer.ctx.fillRect(this.x, this.y, this.w, this.h);
             }
             if (this.stroke) {
                 this.layer.ctx.fillStyle = this.stroke;
-                this.layer.ctx.strokeRect(x, y, w, h);
+                this.layer.ctx.strokeRect(this.x, this.y, this.w, this.h);
             }
         }
         case ("arc"): {
-            let r = (w + h) / 4;
+            let r = (this.w + this.h) / 4;
             this.layer.ctx.beginPath();
-            this.layer.ctx.arc(x - (r / 2), y - (r / 2), r, this.arcAngleS, this.arcAngleE);
-            this.layer.ctx.lineTo(x, y);
+            this.layer.ctx.arc(this.x + r, this.y + r, r, ((this.angleFrom - 90) * Math.PI / 180), ((this.angleTo - 90) * Math.PI / 180));
+            this.layer.ctx.lineTo(this.x + r, this.y + r);
             if (this.fill) {
                 this.layer.ctx.fillStyle = this.fill;
                 this.layer.ctx.fill();
@@ -207,6 +207,13 @@ Asset.prototype.draw = function(x, y, w, h) {
             }
         }
     }
+};
+
+Asset.prototype.position = function(x, y, w, h) {
+    this.x = x;
+    this.y = y;
+    if (w) { this.w = w; }
+    if (h) { this.h = h; }
 };
 
 Asset.prototype.clone = function(id, changes) {
@@ -236,19 +243,81 @@ let Layer = function(id, options) {
     this.level = options.level;
     this.canvas = john;
     this.ctx = this.canvas.getContext("2d");
+    this.targets = [];
 
+    Layer.list[id] = this;
     return this;
+};
+Layer.list = {};
+
+Layer.drawAll = function() {
+    let layers = Object.keys(Layer.list).sort((a, b) => { return Layer.list[a].level - Layer.list[b].level;});
+
+    for (let i = 0; i < layers.length; i++) {
+        Layer.list[i].draw();
+    }
 };
 
 Layer.prototype.add = function(...assets) {
     for (let thing of assets) {
         thing.layer = this;
+        this.targets.push(thing);
     }
 
     return this;
 };
 
+Layer.prototype.draw = function() {
+    this.ctx.clearRect(0, 0, Game.width, Game.height);
+    for (let i = 0; i < this.targets.length; i++) {
+        this.targets[i].draw();
+    }
+};
 
+let Animate = {};
+Animate.last = -1;
+Animate.targets = [];
+
+Animate.tick = function(stamp) {
+    if (Animate.last < 0) {
+        Animate.last = stamp;
+    }
+    for (let i in Animate.targets) {
+        Animate.targets[i].tick(stamp);
+    }
+    Animate.last = stamp;
+};
+
+Animate.property = function(parent, name, time, steps, count) {
+    this.parent = parent;
+    this.name = name;
+    this.time = time;
+    this.steps = steps;
+    this.count = (count) ? count : Infinity;
+    this.once = true;
+    this.offset = 0;
+
+    Animate.targets.push(this);
+    return this;
+};
+
+Animate.property.prototype.tick = function(stamp) {
+    if (this.once) {
+        this.offset = stamp;
+        this.once = false;
+    }
+    let factor = (stamp - this.offset) % this.time;
+    let value = this.steps.from + ((this.steps.to - this.steps.from) / factor);
+    this.parent[this.name] = value; 
+};
+
+Game.loop = function(time) {
+    Animate.tick(time);
+
+    Layer.drawAll();
+
+    window.requestAnimationFrame(Game.loop);
+};
 
 Game.create = function(options) {
     Game.width = options.width;
@@ -256,3 +325,7 @@ Game.create = function(options) {
 
     Controller.setup();
 }
+
+Game.start = function() {
+    window.requestAnimationFrame(Game.loop);
+};
