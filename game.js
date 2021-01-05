@@ -238,8 +238,11 @@ let Layer = function(id, options) {
     return this;
 };
 
-Layer.prototype.add = function(asset) {
-    asset.layer = this;
+Layer.prototype.add = function(...assets) {
+    for (let thing of assets) {
+        thing.layer = this;
+    }
+    
     return this;
 };
 
