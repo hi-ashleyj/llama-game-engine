@@ -195,8 +195,8 @@ Asset.prototype.draw = function() {
         case ("arc"): {
             let r = (this.w + this.h) / 4;
             this.layer.ctx.beginPath();
-            this.layer.ctx.arc(this.x + r, this.y + r, r, ((this.angleFrom - 90) * Math.PI / 180), ((this.angleTo - 90) * Math.PI / 180));
-            this.layer.ctx.lineTo(this.x + r, this.y + r);
+            this.layer.ctx.arc(this.x, this.y, r, ((this.angleFrom - 90) * Math.PI / 180), ((this.angleTo - 90) * Math.PI / 180));
+            this.layer.ctx.lineTo(this.x, this.y);
             if (this.fill) {
                 this.layer.ctx.fillStyle = this.fill;
                 this.layer.ctx.fill();
@@ -317,9 +317,12 @@ Animate.property.prototype.tick = function(stamp) {
         if (this.points[i] >= factor) {
             to = this.points[i];
             from = this.points[i - 1];
+            break;
         }
     }
-    let value = this.steps[from] + ((this.steps[to] - this.steps[from]) * (1 / (to - from)) * factor);
+
+    console.log(to, from);
+    let value = this.steps[from] + ((this.steps[to] - this.steps[from]) * ((factor - from) / (to - from)));
     this.parent[this.name] = value; 
 };
 
