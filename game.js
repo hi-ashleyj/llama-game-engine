@@ -293,6 +293,7 @@ Animate.property = function(parent, name, time, steps, count) {
     this.name = name;
     this.time = time;
     this.steps = steps;
+    this.points = Object.keys(this.steps).map((val) => { return parseFloat(val); }).sort((a, b) => { return a - b });
     this.count = (count) ? count : Infinity;
     this.once = true;
     this.offset = 0;
@@ -307,7 +308,18 @@ Animate.property.prototype.tick = function(stamp) {
         this.once = false;
     }
     let factor = ((stamp - this.offset) % this.time) / this.time;
-    let value = this.steps.from + ((this.steps.to - this.steps.from) * factor);
+    if (this.points < 2) {
+        return;
+    }
+    let to;
+    let from;
+    for (let i = 0; i < this.points.length; i++) {
+        if (this.points[i] >= factor) {
+            to = this.points[i];
+            from = this.points[i - 1];
+        }
+    }
+    let value = this.steps[from] + ((this.steps[to] - this.steps[from]) * (1 / (to - from)) * factor);
     this.parent[this.name] = value; 
 };
 
