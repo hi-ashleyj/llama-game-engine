@@ -1,2 +1,511 @@
-/*! For license information please see discord.min.js.LICENSE.txt */
-!function webpackUniversalModuleDefinition(e,t){"object"==typeof exports&&"object"==typeof module?module.exports=t():"function"==typeof define&&define.amd?define([],t):"object"==typeof exports?exports.Discord=t():e.Discord=t()}(window,(function(){return function(e){var t={};function __webpack_require__(i){if(t[i])return t[i].exports;var s=t[i]={i:i,l:!1,exports:{}};return e[i].call(s.exports,s,s.exports,__webpack_require__),s.l=!0,s.exports}return __webpack_require__.m=e,__webpack_require__.c=t,__webpack_require__.d=function(e,t,i){__webpack_require__.o(e,t)||Object.defineProperty(e,t,{enumerable:!0,get:i})},__webpack_require__.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},__webpack_require__.t=function(e,t){if(1&t&&(e=__webpack_require__(e)),8&t)return e;if(4&t&&"object"==typeof e&&e&&e.__esModule)return e;var i=Object.create(null);if(__webpack_require__.r(i),Object.defineProperty(i,"default",{enumerable:!0,value:e}),2&t&&"string"!=typeof e)for(var s in e)__webpack_require__.d(i,s,function(t){return e[t]}.bind(null,s));return i},__webpack_require__.n=function(e){var t=e&&e.__esModule?function getDefault(){return e.default}:function getModuleExports(){return e};return __webpack_require__.d(t,"a",t),t},__webpack_require__.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},__webpack_require__.p="",__webpack_require__(__webpack_require__.s=102)}([function(e,t,i){"use strict";(function(e){const s=t.Package=i(61),{Error:n,RangeError:r}=i(2),o=t.browser="undefined"!=typeof window;t.DefaultOptions={shardCount:1,messageCacheMaxSize:200,messageCacheLifetime:0,messageSweepInterval:0,messageEditHistoryMaxSize:-1,fetchAllMembers:!1,disableMentions:"none",partials:[],restWsBridgeTimeout:5e3,restRequestTimeout:15e3,retryLimit:1,restTimeOffset:500,restSweepInterval:60,presence:{},ws:{large_threshold:50,compress:!1,properties:{$os:o?"browser":e.platform,$browser:"discord.js",$device:"discord.js"},version:6},http:{version:7,api:"https://discord.com/api",cdn:"https://cdn.discordapp.com",invite:"https://discord.gg",template:"https://discord.new"}},t.UserAgent=o?null:`DiscordBot (${s.homepage.split("#")[0]}, ${s.version}) Node.js/${e.version}`,t.WSCodes={1e3:"WS_CLOSE_REQUESTED",4004:"TOKEN_INVALID",4010:"SHARDING_INVALID",4011:"SHARDING_REQUIRED",4013:"INVALID_INTENTS",4014:"DISALLOWED_INTENTS"};const a=["webp","png","jpg","jpeg","gif"],c=Array.from({length:9},((e,t)=>2**(t+4)));function makeImageUrl(e,{format:t="webp",size:i}={}){if(t&&!a.includes(t))throw new n("IMAGE_FORMAT",t);if(i&&!c.includes(i))throw new r("IMAGE_SIZE",i);return`${e}.${t}${i?"?size="+i:""}`}function keyMirror(e){let t=Object.create(null);for(const i of e)t[i]=i;return t}t.Endpoints={CDN:e=>({Emoji:(t,i="png")=>`${e}/emojis/${t}.${i}`,Asset:t=>`${e}/assets/${t}`,DefaultAvatar:t=>`${e}/embed/avatars/${t}.png`,Avatar:(t,i,s="webp",n,r=!1)=>(r&&(s=i.startsWith("a_")?"gif":s),makeImageUrl(`${e}/avatars/${t}/${i}`,{format:s,size:n})),Banner:(t,i,s="webp",n)=>makeImageUrl(`${e}/banners/${t}/${i}`,{format:s,size:n}),Icon:(t,i,s="webp",n,r=!1)=>(r&&(s=i.startsWith("a_")?"gif":s),makeImageUrl(`${e}/icons/${t}/${i}`,{format:s,size:n})),AppIcon:(t,i,{format:s="webp",size:n}={})=>makeImageUrl(`${e}/app-icons/${t}/${i}`,{size:n,format:s}),AppAsset:(t,i,{format:s="webp",size:n}={})=>makeImageUrl(`${e}/app-assets/${t}/${i}`,{size:n,format:s}),GDMIcon:(t,i,s="webp",n)=>makeImageUrl(`${e}/channel-icons/${t}/${i}`,{size:n,format:s}),Splash:(t,i,s="webp",n)=>makeImageUrl(`${e}/splashes/${t}/${i}`,{size:n,format:s}),DiscoverySplash:(t,i,s="webp",n)=>makeImageUrl(`${e}/discovery-splashes/${t}/${i}`,{size:n,format:s}),TeamIcon:(t,i,{format:s="webp",size:n}={})=>makeImageUrl(`${e}/team-icons/${t}/${i}`,{size:n,format:s})}),invite:(e,t)=>`${e}/${t}`,botGateway:"/gateway/bot"},t.Status={READY:0,CONNECTING:1,RECONNECTING:2,IDLE:3,NEARLY:4,DISCONNECTED:5,WAITING_FOR_GUILDS:6,IDENTIFYING:7,RESUMING:8},t.VoiceStatus={CONNECTED:0,CONNECTING:1,AUTHENTICATING:2,RECONNECTING:3,DISCONNECTED:4},t.OPCodes={DISPATCH:0,HEARTBEAT:1,IDENTIFY:2,STATUS_UPDATE:3,VOICE_STATE_UPDATE:4,VOICE_GUILD_PING:5,RESUME:6,RECONNECT:7,REQUEST_GUILD_MEMBERS:8,INVALID_SESSION:9,HELLO:10,HEARTBEAT_ACK:11},t.VoiceOPCodes={IDENTIFY:0,SELECT_PROTOCOL:1,READY:2,HEARTBEAT:3,SESSION_DESCRIPTION:4,SPEAKING:5,HELLO:8,CLIENT_CONNECT:12,CLIENT_DISCONNECT:13},t.Events={RATE_LIMIT:"rateLimit",CLIENT_READY:"ready",GUILD_CREATE:"guildCreate",GUILD_DELETE:"guildDelete",GUILD_UPDATE:"guildUpdate",GUILD_UNAVAILABLE:"guildUnavailable",GUILD_AVAILABLE:"guildAvailable",GUILD_MEMBER_ADD:"guildMemberAdd",GUILD_MEMBER_REMOVE:"guildMemberRemove",GUILD_MEMBER_UPDATE:"guildMemberUpdate",GUILD_MEMBER_AVAILABLE:"guildMemberAvailable",GUILD_MEMBER_SPEAKING:"guildMemberSpeaking",GUILD_MEMBERS_CHUNK:"guildMembersChunk",GUILD_INTEGRATIONS_UPDATE:"guildIntegrationsUpdate",GUILD_ROLE_CREATE:"roleCreate",GUILD_ROLE_DELETE:"roleDelete",INVITE_CREATE:"inviteCreate",INVITE_DELETE:"inviteDelete",GUILD_ROLE_UPDATE:"roleUpdate",GUILD_EMOJI_CREATE:"emojiCreate",GUILD_EMOJI_DELETE:"emojiDelete",GUILD_EMOJI_UPDATE:"emojiUpdate",GUILD_BAN_ADD:"guildBanAdd",GUILD_BAN_REMOVE:"guildBanRemove",CHANNEL_CREATE:"channelCreate",CHANNEL_DELETE:"channelDelete",CHANNEL_UPDATE:"channelUpdate",CHANNEL_PINS_UPDATE:"channelPinsUpdate",MESSAGE_CREATE:"message",MESSAGE_DELETE:"messageDelete",MESSAGE_UPDATE:"messageUpdate",MESSAGE_BULK_DELETE:"messageDeleteBulk",MESSAGE_REACTION_ADD:"messageReactionAdd",MESSAGE_REACTION_REMOVE:"messageReactionRemove",MESSAGE_REACTION_REMOVE_ALL:"messageReactionRemoveAll",MESSAGE_REACTION_REMOVE_EMOJI:"messageReactionRemoveEmoji",USER_UPDATE:"userUpdate",PRESENCE_UPDATE:"presenceUpdate",VOICE_SERVER_UPDATE:"voiceServerUpdate",VOICE_STATE_UPDATE:"voiceStateUpdate",VOICE_BROADCAST_SUBSCRIBE:"subscribe",VOICE_BROADCAST_UNSUBSCRIBE:"unsubscribe",TYPING_START:"typingStart",TYPING_STOP:"typingStop",WEBHOOKS_UPDATE:"webhookUpdate",ERROR:"error",WARN:"warn",DEBUG:"debug",SHARD_DISCONNECT:"shardDisconnect",SHARD_ERROR:"shardError",SHARD_RECONNECTING:"shardReconnecting",SHARD_READY:"shardReady",SHARD_RESUME:"shardResume",INVALIDATED:"invalidated",RAW:"raw"},t.ShardEvents={CLOSE:"close",DESTROYED:"destroyed",INVALID_SESSION:"invalidSession",READY:"ready",RESUMED:"resumed",ALL_READY:"allReady"},t.PartialTypes=keyMirror(["USER","CHANNEL","GUILD_MEMBER","MESSAGE","REACTION"]),t.WSEvents=keyMirror(["READY","RESUMED","GUILD_CREATE","GUILD_DELETE","GUILD_UPDATE","INVITE_CREATE","INVITE_DELETE","GUILD_MEMBER_ADD","GUILD_MEMBER_REMOVE","GUILD_MEMBER_UPDATE","GUILD_MEMBERS_CHUNK","GUILD_INTEGRATIONS_UPDATE","GUILD_ROLE_CREATE","GUILD_ROLE_DELETE","GUILD_ROLE_UPDATE","GUILD_BAN_ADD","GUILD_BAN_REMOVE","GUILD_EMOJIS_UPDATE","CHANNEL_CREATE","CHANNEL_DELETE","CHANNEL_UPDATE","CHANNEL_PINS_UPDATE","MESSAGE_CREATE","MESSAGE_DELETE","MESSAGE_UPDATE","MESSAGE_DELETE_BULK","MESSAGE_REACTION_ADD","MESSAGE_REACTION_REMOVE","MESSAGE_REACTION_REMOVE_ALL","MESSAGE_REACTION_REMOVE_EMOJI","USER_UPDATE","PRESENCE_UPDATE","TYPING_START","VOICE_STATE_UPDATE","VOICE_SERVER_UPDATE","WEBHOOKS_UPDATE"]),t.MessageTypes=["DEFAULT","RECIPIENT_ADD","RECIPIENT_REMOVE","CALL","CHANNEL_NAME_CHANGE","CHANNEL_ICON_CHANGE","PINS_ADD","GUILD_MEMBER_JOIN","USER_PREMIUM_GUILD_SUBSCRIPTION","USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_1","USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_2","USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_3","CHANNEL_FOLLOW_ADD",null,"GUILD_DISCOVERY_DISQUALIFIED","GUILD_DISCOVERY_REQUALIFIED"],t.ActivityTypes=["PLAYING","STREAMING","LISTENING","WATCHING","CUSTOM_STATUS","COMPETING"],t.ChannelTypes={TEXT:0,DM:1,VOICE:2,GROUP:3,CATEGORY:4,NEWS:5,STORE:6},t.ClientApplicationAssetTypes={SMALL:1,BIG:2},t.Colors={DEFAULT:0,WHITE:16777215,AQUA:1752220,GREEN:3066993,BLUE:3447003,YELLOW:16776960,PURPLE:10181046,LUMINOUS_VIVID_PINK:15277667,GOLD:15844367,ORANGE:15105570,RED:15158332,GREY:9807270,NAVY:3426654,DARK_AQUA:1146986,DARK_GREEN:2067276,DARK_BLUE:2123412,DARK_PURPLE:7419530,DARK_VIVID_PINK:11342935,DARK_GOLD:12745742,DARK_ORANGE:11027200,DARK_RED:10038562,DARK_GREY:9936031,DARKER_GREY:8359053,LIGHT_GREY:12370112,DARK_NAVY:2899536,BLURPLE:7506394,GREYPLE:10070709,DARK_BUT_NOT_BLACK:2895667,NOT_QUITE_BLACK:2303786},t.ExplicitContentFilterLevels=["DISABLED","MEMBERS_WITHOUT_ROLES","ALL_MEMBERS"],t.VerificationLevels=["NONE","LOW","MEDIUM","HIGH","VERY_HIGH"],t.APIErrors={UNKNOWN_ACCOUNT:10001,UNKNOWN_APPLICATION:10002,UNKNOWN_CHANNEL:10003,UNKNOWN_GUILD:10004,UNKNOWN_INTEGRATION:10005,UNKNOWN_INVITE:10006,UNKNOWN_MEMBER:10007,UNKNOWN_MESSAGE:10008,UNKNOWN_OVERWRITE:10009,UNKNOWN_PROVIDER:10010,UNKNOWN_ROLE:10011,UNKNOWN_TOKEN:10012,UNKNOWN_USER:10013,UNKNOWN_EMOJI:10014,UNKNOWN_WEBHOOK:10015,UNKNOWN_BAN:10026,UNKNOWN_GUILD_TEMPLATE:10057,BOT_PROHIBITED_ENDPOINT:20001,BOT_ONLY_ENDPOINT:20002,CHANNEL_HIT_WRITE_RATELIMIT:20028,MAXIMUM_GUILDS:30001,MAXIMUM_FRIENDS:30002,MAXIMUM_PINS:30003,MAXIMUM_ROLES:30005,MAXIMUM_WEBHOOKS:30007,MAXIMUM_REACTIONS:30010,MAXIMUM_CHANNELS:30013,MAXIMUM_ATTACHMENTS:30015,MAXIMUM_INVITES:30016,GUILD_ALREADY_HAS_TEMPLATE:30031,UNAUTHORIZED:40001,ACCOUNT_VERIFICATION_REQUIRED:40002,REQUEST_ENTITY_TOO_LARGE:40005,FEATURE_TEMPORARILY_DISABLED:40006,USER_BANNED:40007,ALREADY_CROSSPOSTED:40033,MISSING_ACCESS:50001,INVALID_ACCOUNT_TYPE:50002,CANNOT_EXECUTE_ON_DM:50003,EMBED_DISABLED:50004,CANNOT_EDIT_MESSAGE_BY_OTHER:50005,CANNOT_SEND_EMPTY_MESSAGE:50006,CANNOT_MESSAGE_USER:50007,CANNOT_SEND_MESSAGES_IN_VOICE_CHANNEL:50008,CHANNEL_VERIFICATION_LEVEL_TOO_HIGH:50009,OAUTH2_APPLICATION_BOT_ABSENT:50010,MAXIMUM_OAUTH2_APPLICATIONS:50011,INVALID_OAUTH_STATE:50012,MISSING_PERMISSIONS:50013,INVALID_AUTHENTICATION_TOKEN:50014,NOTE_TOO_LONG:50015,INVALID_BULK_DELETE_QUANTITY:50016,CANNOT_PIN_MESSAGE_IN_OTHER_CHANNEL:50019,INVALID_OR_TAKEN_INVITE_CODE:50020,CANNOT_EXECUTE_ON_SYSTEM_MESSAGE:50021,INVALID_OAUTH_TOKEN:50025,BULK_DELETE_MESSAGE_TOO_OLD:50034,INVALID_FORM_BODY:50035,INVITE_ACCEPTED_TO_GUILD_NOT_CONTAINING_BOT:50036,INVALID_API_VERSION:50041,CANNOT_DELETE_COMMUNITY_REQUIRED_CHANNEL:50074,REACTION_BLOCKED:90001,RESOURCE_OVERLOADED:13e4},t.DefaultMessageNotifications=["ALL","MENTIONS"],t.MembershipStates=[null,"INVITED","ACCEPTED"],t.WebhookTypes=[null,"Incoming","Channel Follower"]}).call(this,i(15))},function(e,t,i){"use strict";const{PartialTypes:s}=i(0);e.exports=class GenericAction{constructor(e){this.client=e}handle(e){return e}getPayload(e,t,i,s,n){const r=t.cache.get(i);return!r&&this.client.options.partials.includes(s)?t.add(e,n):r}getChannel(e){const t=e.channel_id||e.id;return e.channel||this.getPayload({id:t,guild_id:e.guild_id,recipients:[e.author||{id:e.user_id}]},this.client.channels,t,s.CHANNEL)}getMessage(e,t,i){const n=e.message_id||e.id;return e.message||this.getPayload({id:n,channel_id:t.id,guild_id:e.guild_id||(t.guild?t.guild.id:null)},t.messages,n,s.MESSAGE,i)}getReaction(e,t,i){const n=e.emoji.id||decodeURIComponent(e.emoji.name);return this.getPayload({emoji:e.emoji,count:t.partial?null:0,me:!!i&&i.id===this.client.user.id},t.reactions,n,s.REACTION)}getMember(e,t){return this.getPayload(e,t.members,e.user.id,s.GUILD_MEMBER)}getUser(e){const t=e.user_id;return e.user||this.getPayload({id:t},this.client.users,t,s.USER)}getUserFromMember(e){if(e.guild_id&&e.member&&e.member.user){const t=this.client.guilds.cache.get(e.guild_id);return t?t.members.add(e.member).user:this.client.users.add(e.member.user)}return this.getUser(e)}}},function(e,t,i){"use strict";e.exports=i(62),e.exports.Messages=i(105)},function(e,t,i){"use strict";const s=i(106),n=i(4);e.exports=class Collection extends s{toJSON(){return this.map((e=>"function"==typeof e.toJSON?e.toJSON():n.flatten(e)))}}},function(e,t,i){"use strict";(function(t){const{parse:s}=i(35),n=i(36),{Colors:r,DefaultOptions:o,Endpoints:a}=i(0),{Error:c,RangeError:l,TypeError:h}=i(2),isObject=e=>"object"==typeof e&&null!==e;class Util{constructor(){throw new Error(`The ${this.constructor.name} class may not be instantiated.`)}static flatten(e,...t){if(!isObject(e))return e;const s=Object.keys(e).filter((e=>!e.startsWith("_"))).map((e=>({[e]:!0})));t=s.length?Object.assign(...s,...t):Object.assign({},...t);const n={};for(let[s,r]of Object.entries(t)){if(!r)continue;r=!0===r?s:r;const t=e[s],o=isObject(t),a=o&&"function"==typeof t.valueOf?t.valueOf():null;t instanceof i(3)?n[r]=Array.from(t.keys()):a instanceof i(3)?n[r]=Array.from(a.keys()):Array.isArray(t)?n[r]=t.map((e=>Util.flatten(e))):"object"!=typeof a?n[r]=a:o||(n[r]=t)}return n}static splitMessage(e,{maxLength:t=2e3,char:i="\n",prepend:s="",append:n=""}={}){if((e=Util.resolveString(e)).length<=t)return[e];const r=e.split(i);if(r.some((e=>e.length>t)))throw new l("SPLIT_MAX_LEN");const o=[];let a="";for(const e of r)a&&(a+i+e+n).length>t&&(o.push(a+n),a=s),a+=(a&&a!==s?i:"")+e;return o.concat(a).filter((e=>e))}static escapeMarkdown(e,{codeBlock:t=!0,inlineCode:i=!0,bold:s=!0,italic:n=!0,underline:r=!0,strikethrough:o=!0,spoiler:a=!0,codeBlockContent:c=!0,inlineCodeContent:l=!0}={}){return c?l?(i&&(e=Util.escapeInlineCode(e)),t&&(e=Util.escapeCodeBlock(e)),n&&(e=Util.escapeItalic(e)),s&&(e=Util.escapeBold(e)),r&&(e=Util.escapeUnderline(e)),o&&(e=Util.escapeStrikethrough(e)),a&&(e=Util.escapeSpoiler(e)),e):e.split(/(?<=^|[^`])`(?=[^`]|$)/g).map(((e,i,c)=>i%2&&i!==c.length-1?e:Util.escapeMarkdown(e,{codeBlock:t,bold:s,italic:n,underline:r,strikethrough:o,spoiler:a}))).join(i?"\\`":"`"):e.split("```").map(((e,t,c)=>t%2&&t!==c.length-1?e:Util.escapeMarkdown(e,{inlineCode:i,bold:s,italic:n,underline:r,strikethrough:o,spoiler:a,inlineCodeContent:l}))).join(t?"\\`\\`\\`":"```")}static escapeCodeBlock(e){return e.replace(/```/g,"\\`\\`\\`")}static escapeInlineCode(e){return e.replace(/(?<=^|[^`])`(?=[^`]|$)/g,"\\`")}static escapeItalic(e){let t=0;return e=e.replace(/(?<=^|[^*])\*([^*]|\*\*|$)/g,((e,i)=>"**"===i?++t%2?"\\*"+i:i+"\\*":"\\*"+i)),t=0,e.replace(/(?<=^|[^_])_([^_]|__|$)/g,((e,i)=>"__"===i?++t%2?"\\_"+i:i+"\\_":"\\_"+i))}static escapeBold(e){let t=0;return e.replace(/\*\*(\*)?/g,((e,i)=>i?++t%2?i+"\\*\\*":"\\*\\*"+i:"\\*\\*"))}static escapeUnderline(e){let t=0;return e.replace(/__(_)?/g,((e,i)=>i?++t%2?i+"\\_\\_":"\\_\\_"+i:"\\_\\_"))}static escapeStrikethrough(e){return e.replace(/~~/g,"\\~\\~")}static escapeSpoiler(e){return e.replace(/\|\|/g,"\\|\\|")}static fetchRecommendedShards(e,t=1e3){if(!e)throw new c("TOKEN_MISSING");return n(`${o.http.api}/v${o.http.version}${a.botGateway}`,{method:"GET",headers:{Authorization:"Bot "+e.replace(/^Bot\s*/i,"")}}).then((e=>{if(e.ok)return e.json();if(401===e.status)throw new c("TOKEN_INVALID");throw e})).then((e=>e.shards*(1e3/t)))}static parseEmoji(e){if(e.includes("%")&&(e=decodeURIComponent(e)),!e.includes(":"))return{animated:!1,name:e,id:null};const t=e.match(/<?(?:(a):)?(\w{2,32}):(\d{17,19})?>?/);return t?{animated:Boolean(t[1]),name:t[2],id:t[3]||null}:null}static cloneObject(e){return Object.assign(Object.create(e),e)}static mergeDefault(e,t){if(!t)return e;for(const n in e)i=t,s=n,Object.prototype.hasOwnProperty.call(i,s)&&void 0!==t[n]?t[n]===Object(t[n])&&(t[n]=Util.mergeDefault(e[n],t[n])):t[n]=e[n];var i,s;return t}static convertToBuffer(e){return"string"==typeof e&&(e=Util.str2ab(e)),t.from(e)}static str2ab(e){co
+let Game = {};
+
+let Controller = {};
+Controller.events = [];
+Controller.lasts = {};
+Controller.pressed = {};
+Controller.mouse = {};
+Controller.mouse.location = {};
+
+Controller.on = function(action, target, call) {
+    Controller.events.push({ action, target, call });
+};
+
+Controller.fire = function(action, target, data) {
+    for (let i in Controller.events) {
+        if ((!Controller.events[i].target || Controller.events[i].target == target) && (!Controller.events[i].action || Controller.events[i].action == action)) {
+            Controller.events[i].call(action, target, (data) ? data : null);
+        }
+    }
+};
+
+Controller.isPressed = function(code) {
+    return Controller.pressed[code];
+}
+
+Controller.handleKeyboard = function(e) {
+    let target = "key_" + e.key.toLowerCase();
+    if (e.type == "keydown") {
+        if (!Controller.pressed[target]) {
+            Controller.pressed[target] = true;
+            Controller.lasts[target] = e.timeStamp;
+            Controller.fire("press", target);
+        }
+    } else if (e.type == "keyup") {
+        if (Controller.pressed[target]) {
+            Controller.pressed[target] = false;
+            let diff = e.timeStamp - Controller.lasts[target];
+
+            if (diff <= 150) {
+                Controller.fire("click", target);
+            } else {
+                Controller.fire("hold", target, diff);
+            }
+
+            Controller.lasts[target] = e.timeStamp;
+            Controller.fire("release", target);
+        }
+    }
+};
+
+Controller.handleMouse = function(e) {
+    let target = "mouse_" + ((e.button) ? ["left", "middle", "right", "back", "forward"][e.button] : "moose");
+    if (e.type == "mousedown") {
+        if (!Controller.pressed[target]) {
+            Controller.pressed[target] = true;
+            Controller.lasts[target] = e.timeStamp;
+            Controller.fire("press", target);
+        }
+    } else if (e.type == "mouseup") {
+        if (Controller.pressed[target]) {
+            Controller.pressed[target] = false;
+            let diff = e.timeStamp - Controller.lasts[target];
+
+            if (diff <= 150) {
+                Controller.fire("click", target);
+            } else {
+                Controller.fire("hold", target, diff);
+            }
+
+            Controller.lasts[target] = e.timeStamp;
+            Controller.fire("release", target);
+        }
+    }
+    if (e.clientX && e.clientY) {
+        let deltaX = e.clientX - Controller.mouse.location.x;
+        let deltaY = e.clientY - Controller.mouse.location.y;
+
+        Controller.fire("move", "mouse_location", { x: e.clientX, y: e.clientY, deltaX, deltaY });
+
+        Controller.mouse.location.x = e.clientX;
+        Controller.mouse.location.y = e.clientY;
+    }
+    if (e.type == "wheel") {
+        let direction = "";
+        if (e.deltaY < 0) {
+            direction += "N";
+        } else if (e.deltaY > 0) {
+            direction += "S";
+        }
+
+        if (e.deltaX < 0) {
+            direction += "W";
+        } else if (e.deltaX > 0) {
+            direction += "E";
+        }
+
+        Controller.fire("move", "mouse_wheel", { direction, deltaX: e.deltaX, deltaY: e.deltaY });
+    }
+};
+
+Controller.setup = function() {
+    document.addEventListener("mousedown", Controller.handleMouse, false);
+    document.addEventListener("mouseup", Controller.handleMouse, false);
+    document.addEventListener("mousemove", Controller.handleMouse, false);
+    document.addEventListener("wheel", Controller.handleMouse, false);
+
+    document.addEventListener("keydown", Controller.handleKeyboard, false);
+    document.addEventListener("keyup", Controller.handleKeyboard, false);
+};
+
+let Asset = function(options) {
+    if (options.image) {
+        this.type = "image";
+        this.location = options.image;
+        if (Asset.locations[this.location]) {
+            this.resource = Asset.locations[this.location];
+        } else {
+            let u = this;
+            this.resource = document.createElement("img");
+            Asset.locations[this.location] = this.resource;
+            Asset.loading.push(this.location);
+            this.resource.addEventListener("load", () => {
+                for (let i = Asset.loading.length - 1; i >= 0; i--) {
+                    if (Asset.loading[i] == u.location) {
+                        Asset.loading.splice(i, 1);
+                    }
+                }
+            });
+            this.resource.src = this.location;
+            Asset.dumpspace.append(this.resource);
+        }
+        if (options.crop) {
+            this.crop = [options.crop.x, options.crop.y, options.crop.w, options.crop.h];
+        }
+    }
+
+    return this;
+};
+
+Asset.Primitive = function(options) {
+    if (options.type) {
+        if (options.type == "rectangle") {
+            this.type = "rect";
+        } else if (options.type == "circle") {
+            this.type = "arc";
+            this.angleFrom = 0;
+            this.angleTo = 360;
+        } else if (options.type == "arc") {
+            this.type = "arc";
+            this.angleFrom = options.angleFrom;
+            this.angleTo = options.angleTo;
+        }
+
+        this.fill = (options.fill) ? options.fill : null;
+        this.stroke = (options.stroke) ? options.stroke : null;
+    }
+
+    return this;
+};
+
+Asset.Font = function(fontname, loc, features) {
+    this.font = fontname;
+    this.loc = loc;
+    this.features = (features) ? features : null;
+
+    if (Asset.locations[this.loc]) {
+        return this;
+    }
+
+    Asset.locations[this.loc] = true;
+
+    if (this.features) {
+        this.face = new FontFace(this.font, "url(" + this.loc + ")", this.features);
+    } else {
+        this.face = new FontFace(this.font, "url(" + this.loc + ")");
+    }
+
+    Asset.loading.push(this.loc);
+
+    this.face.load().then((face) => {
+        document.fonts.add(face);
+        for (let i = Asset.loading.length - 1; i >= 0; i--) {
+            if (Asset.loading[i] == this.loc) {
+                Asset.loading.splice(i, 1);
+            }
+        }
+    });
+
+    return this;
+};
+
+Asset.loading = [];
+Asset.locations = {};
+Asset.dumpspace = document.querySelector("div.image-dumpspace");
+
+Asset.center = function(x, y, w, h) {
+    return [x - (w / 2), y - (h / 2), w, h];
+};
+
+Asset.prototype.draw = function(layer, x, y, w, h) {
+    switch (this.type) {
+        case ("image"): {
+            if (this.crop) {
+                layer.ctx.drawImage(this.resource, ...this.crop, x, y, w, h);
+            } else {
+                layer.ctx.drawImage(this.resource, x, y, w, h);
+            }
+            break;
+        }
+    }
+};
+
+Asset.Primitive.prototype.draw = function(layer, x, y, w, h) {
+    switch (this.type) {
+        case ("rect"): {
+            if (this.fill) {
+                layer.ctx.fillStyle = this.fill;
+                layer.ctx.fillRect(x, y, w, h);
+            }
+            if (this.stroke) {
+                layer.ctx.fillStyle = this.stroke;
+                layer.ctx.strokeRect(x, y, w, h);
+            }
+            break;
+        }
+        case ("arc"): {
+            let r = (w + h) / 4;
+            layer.ctx.beginPath();
+            layer.ctx.arc(x, y, r, ((this.angleFrom - 90) * Math.PI / 180), ((this.angleTo - 90) * Math.PI / 180));
+            layer.ctx.lineTo(x, y);
+            layer.ctx.closePath();
+            if (this.fill) {
+                layer.ctx.fillStyle = this.fill;
+                layer.ctx.fill();
+            }
+            if (this.stroke) {
+                layer.ctx.fillStyle = this.stroke;
+                layer.ctx.stroke();
+            }
+            break;
+        }
+    }
+};
+
+let Sound = function(layer, description, asset) {
+    // TODO: do sounds
+};
+
+let Layer = function(id, options) {
+    if (!Game.width || !Game.height) {
+        throw "Game not created yet";
+    }
+    let john = document.createElement("canvas");
+    john.className = "game-canvas";
+    john.style.zIndex = options.level;
+    document.querySelector("div#game").append(john);
+    john.width = Game.width;
+    john.height = Game.height;
+
+    this.id = id;
+    this.level = options.level;
+    this.canvas = john;
+    this.ctx = this.canvas.getContext("2d");
+    this.ctx.imageSmoothingEnabled = false;
+    this.targets = [];
+
+    Layer.list[id] = this;
+    return this;
+};
+
+Layer.list = {};
+
+Layer.drawAll = function() {
+    let layers = Object.keys(Layer.list).sort((a, b) => { return Layer.list[a].level - Layer.list[b].level;});
+
+    for (let i = 0; i < layers.length; i++) {
+        Layer.list[layers[i]].draw();
+    }
+};
+
+Layer.purgeAll = function() {
+    for (let i in Layer.list) {
+        Layer.list[i].purge();
+    }
+};
+
+Layer.prototype.assign = function(...assets) {
+    for (let thing of assets) {
+        this.targets.push(thing);
+    }
+
+    return this;
+};
+
+Layer.prototype.remove = function(...assets) {
+    for (let i = this.targets.length - 1; i >= 0; i--) {
+        if (assets.includes(this.targets[i])) {
+            this.targets.splice(i, 1);
+        }
+    }
+}
+
+Layer.prototype.purge = function() {
+    this.targets = [];
+};
+
+Layer.prototype.draw = function() {
+    this.ctx.clearRect(0, 0, Game.width, Game.height);
+    for (let i = 0; i < this.targets.length; i++) {
+        this.targets[i].draw(this);
+    }
+};
+
+let Animate = {};
+Animate.stamp = -1;
+Animate.targets = [];
+
+Animate.tick = function(stamp) {
+    Animate.stamp = stamp;
+};
+
+Animate.property = function(time, steps, count) {
+    this.time = time;
+    this.steps = steps;
+    this.points = Object.keys(this.steps).map((val) => { return parseFloat(val); }).sort((a, b) => { return a - b });
+    this.count = (count) ? count : Infinity;
+    this.once = true;
+    this.offset = 0;
+
+    Animate.targets.push(this);
+    return this;
+};
+
+Animate.property.prototype.value = function() {
+    if (this.once) {
+        this.offset = Animate.stamp;
+        this.once = false;
+    }
+    let factor = ((Animate.stamp - this.offset) % this.time) / this.time;
+    if (Math.floor(((Animate.stamp - this.offset) / this.time)) >= this.count) { return null; }
+    if (this.points < 2) {
+        return;
+    }
+    let to;
+    let from;
+    for (let i = 0; i < this.points.length; i++) {
+        if (this.points[i] >= factor && !(factor == this.points[i] && factor == 0)) {
+            to = this.points[i];
+            from = this.points[i - 1];
+            break;
+        }
+    }
+
+    let value = this.steps[from] + ((this.steps[to] - this.steps[from]) * ((factor - from) / (to - from)));
+    return value; 
+};
+
+let TileMap = function(options) {
+    this.scaleX = options.scaleX;
+    this.scaleY = options.scaleY;
+    this.size = options.size;
+    this.map = new Array(this.size);
+
+    for (let i = 0; i < this.size; i ++) {
+        this.map[i] = new Asset(Object.assign({ crop: { x: i * this.scaleX, y: 0, w: this.scaleX, h: this.scaleY } }, options));
+    }
+
+    return this;
+};
+
+Animate.Sequence = function(animations, def) {
+    this.animations = animations;
+    this.default = def;
+    this.using = def;
+    this.timing = new Animate.property(this.animations[this.using].duration, {0: 0, 1: this.animations[this.using].sequence.length}, Infinity);
+    return this;
+};
+
+Animate.Sequence.prototype.switch = function(thing) {
+    if (this.animations[thing]) {
+        this.using = thing;
+        this.timing = new Animate.property(this.animations[this.using].duration, {0: 0, 1: this.animations[this.using].sequence.length}, Infinity);
+    }
+};
+
+Animate.Sequence.prototype.use = function(thing) {
+    if (this.using !== thing) {
+        this.switch(thing);
+    }
+};
+
+Animate.Sequence.prototype.draw = function(layer, x, y, w, h) {
+    let thing = Math.floor(this.timing.value());
+    this.animations[this.using].sequence[thing].draw(layer, x, y, w, h);
+};
+
+let GameObject = function(options) {
+    this.asset = options.asset;
+    this.x = (options.x) ? options.x : 0;
+    this.y = (options.y) ? options.y : 0;
+    this.w = (options.w) ? options.w : 100;
+    this.h = (options.h) ? options.h : 100;
+
+    return this;
+};
+
+GameObject.prototype.draw = function(layer) {
+    this.asset.draw(layer, this.x, this.y, this.w, this.h);
+};
+
+GameObject.prototype.move = function(x, y, w, h) {
+    if (typeof x == "number") { this.x += x; };
+    if (typeof y == "number") { this.y += y; };
+    if (typeof w == "number") { this.w += w; };
+    if (typeof h == "number") { this.h += h; };
+};
+
+GameObject.prototype.position = function(x, y, w, h) {
+    if (typeof x == "number") { this.x = x; };
+    if (typeof y == "number") { this.y = y; };
+    if (typeof w == "number") { this.w = w; };
+    if (typeof h == "number") { this.h = h; };
+};
+
+let Text = function(options) {
+    this.text = options.text;
+    this.size = options.size;
+    this.font = options.font;
+    this.style = (options.style) ? options.style : "";
+    this.fill = (options.fill) ? options.fill : null;
+    this.stroke = (options.stroke) ? options.stroke : null;
+    this.alignH = (["left", "center", "right"].includes(options.alignH)) ? options.alignH : "left";
+    this.alignV = (["top", "middle", "bottom", "alphabetic"].includes(options.alignV)) ? options.alignV : "alphabetic";
+
+    return this;
+};
+
+Text.prototype.draw = function(layer, x, y, _w, _h) {
+    layer.ctx.textAlign = this.alignH;
+    layer.ctx.textBaseline = this.alignV;
+    layer.ctx.font = ((this.style) ? this.style + " ": "") + this.size + "px " + this.font;
+    if (this.fill) {
+        layer.ctx.fillStyle = this.fill;
+        layer.ctx.fillText(this.text, x, y);
+    }
+    if (this.stroke) {
+        layer.ctx.strokeStyle = this.stroke;
+        layer.ctx.strokeText(this.text, x, y);
+    }
+};
+
+Game.timeouts = [];
+Game.last = -1;
+
+Game.wait = function(callback, delay) {
+    Game.timeouts.push({ callback, delay });
+};
+
+Game.events = [];
+
+Game.on = function(type, call) {
+    Game.events.push({ type, call });
+};
+
+Game.fire = function(type, data) {
+    for (let e of Game.events) {
+        if (e.type == type) {
+            e.call((data) ? data : null);
+        }
+    }
+};
+
+
+Game.loop = function(time) {
+    if (Game.last < 0) {
+        Game.last = time;
+    }
+    let delta = (time - Game.last);
+    Animate.tick(time);
+
+    for (let i = Game.timeouts.length - 1; i >= 0; i--) {
+        if (Game.timeouts[i].start) {
+            if (time >= Game.timeouts[i].start + Game.timeouts[i].delay) {
+                Game.timeouts[i].callback(time - (Game.timeouts[i].start + Game.timeouts[i].delay));
+                Game.timeouts.splice(i, 1);
+            }
+        } else {
+            Game.timeouts[i].start = time;
+        }
+    }
+
+    Game.fire("loop", { stamp: time, delta: delta });
+
+    Layer.drawAll();
+
+    Game.fire("postdraw", { stamp: time, delta: delta });
+
+    window.requestAnimationFrame(Game.loop);
+    Game.last = time;
+};
+
+Game.create = function(options) {
+    Game.width = options.width;
+    Game.height = options.height;
+
+    Controller.setup();
+}
+
+Game.start = function() {
+    window.requestAnimationFrame(Game.loop);
+};
