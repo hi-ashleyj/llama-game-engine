@@ -39,18 +39,18 @@ MultiText.prototype.draw = function(layer, x, y, w, _h) {
         }
     }
 
-    let lineLengths = lines.map((val) => { return layer.ctx.measureText(val).width; });
-    let longest = Math.max(...lineLengths);
-
     let additionalHeight = ((lines.length - 1) * this.spacing * this.size);
-    let initialOffset = (this.alignV == "middle") ? (additionalHeight / -2) : ((this.alignV == "bottom") ? (additionalHeight * -1) : 0);
+    let initialOffset = (this.alignV == "middle") ? (additionalHeight / 2) : ((this.alignV == "bottom") ? (additionalHeight * 1) : 0);
 
-    if (this.fill) {
-        layer.ctx.fillStyle = this.fill;
-        layer.ctx.fillText(this.text, x, y);
-    }
-    if (this.stroke) {
-        layer.ctx.strokeStyle = this.stroke;
-        layer.ctx.strokeText(this.text, x, y);
+    for (let i = 0; i < lines.length; i++) {
+        let thisY = y - initialOffset + (i * this.spacing * this.size)
+        if (this.fill) {
+            layer.ctx.fillStyle = this.fill;
+            layer.ctx.fillText(this.text, x, thisY);
+        }
+        if (this.stroke) {
+            layer.ctx.strokeStyle = this.stroke;
+            layer.ctx.strokeText(this.text, x, thisY);
+        }
     }
 };
