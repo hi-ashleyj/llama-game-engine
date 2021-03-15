@@ -7,18 +7,45 @@ Controller.pressed = {};
 Controller.mouse = {};
 Controller.mouse.location = {};
 
+/**
+ * @callback controllerevent
+ * @param {string} action 
+ * @param {string} target 
+ * @param {object} data 
+ * @returns 
+ */
+
+/**
+ * Event Actions
+ * @typedef {("press"|"release"|"click"|"hold")} eventactions
+ */
+
+/**
+ * Creates an event handler for a keyboard or mouse event
+ * @param  {eventactions} action 
+ * @param  {string} target
+ * @param  {controllerevent} call
+ */
 Controller.on = function(action, target, call) {
     Controller.events.push({ action, target, call });
+    return;
 };
-
+/**
+ * @param  {eventactions} action
+ * @param  {string} target
+ * @param  {?object} data
+ */
 Controller.fire = function(action, target, data) {
     for (let i in Controller.events) {
         if ((!Controller.events[i].target || Controller.events[i].target == target) && (!Controller.events[i].action || Controller.events[i].action == action)) {
             Controller.events[i].call(action, target, (data) ? data : null);
         }
     }
+    return;
 };
-
+/**
+ * @param  {string} code
+ */
 Controller.isPressed = function(code) {
     return Controller.pressed[code];
 }
@@ -97,7 +124,9 @@ Controller.handleMouse = function(e) {
         Controller.fire("move", "mouse_wheel", { direction, deltaX: e.deltaX, deltaY: e.deltaY });
     }
 };
-
+/**
+ * Prepares the Controller (keyboard/mouse) to handle events
+ */
 Controller.setup = function() {
     document.addEventListener("mousedown", Controller.handleMouse, false);
     document.addEventListener("mouseup", Controller.handleMouse, false);
@@ -108,6 +137,23 @@ Controller.setup = function() {
     document.addEventListener("keyup", Controller.handleKeyboard, false);
 };
 
+/**
+ * Asset
+ * @typedef {object} Asset
+ */
+
+/**
+ * Loads and prepares an image
+ * @constructor
+ * @param {object} options
+ * @param {string} options.image - URL/URI to image resource
+ * @param {object=} options.crop - Pre-crop image
+ * @param {number} options.crop.x - X co-ordinate of crop
+ * @param {number} options.crop.y - Y co-ordinate of crop
+ * @param {number} options.crop.w - width co-ordinate of crop
+ * @param {number} options.crop.h - height co-ordinate of crop
+ * @returns {Asset}
+ */
 let Asset = function(options) {
     if (options.image) {
         this.type = "image";
@@ -137,6 +183,17 @@ let Asset = function(options) {
     return this;
 };
 
+/**
+ * Asset that is a primitive shape
+ * @constructor
+ * @param {object} options 
+ * @param {("rectangle"|"circle"|"arc")} options.type
+ * @param {string=} options.fill
+ * @param {string=} options.stroke
+ * @param {number=} options.angleTo
+ * @param {number=} options.angleFrom
+ * @returns {Asset}
+ */
 Asset.Primitive = function(options) {
     if (options.type) {
         if (options.type == "rectangle") {
@@ -158,6 +215,20 @@ Asset.Primitive = function(options) {
     return this;
 };
 
+/**
+ * Loads a font using the FontFace API
+ * @param {string} fontname 
+ * @param {string} loc 
+ * @param {object=} features 
+ * @param {string=} features.family
+ * @param {string=} features.style
+ * @param {string=} features.weight
+ * @param {string=} features.stretch
+ * @param {string=} features.unicodeRange
+ * @param {string=} features.variant
+ * @param {string=} features.featureSettings
+ * @returns {Object}
+ */
 Asset.Font = function(fontname, loc, features) {
     this.font = fontname;
     this.loc = loc;
@@ -193,10 +264,27 @@ Asset.loading = [];
 Asset.locations = {};
 Asset.dumpspace = document.querySelector("div.image-dumpspace");
 
+
+/**
+ * Returns co-ordinates centered
+ * @param {number} x 
+ * @param {number} y 
+ * @param {number} w 
+ * @param {number} h 
+ * @returns {number[]=[x, y, w, h]} 
+ */
 Asset.center = function(x, y, w, h) {
     return [x - (w / 2), y - (h / 2), w, h];
 };
 
+/**
+ * Draws the asset on the layer
+ * @param {Layer} layer 
+ * @param {number} x 
+ * @param {number} y 
+ * @param {number} w 
+ * @param {number} h 
+ */
 Asset.prototype.draw = function(layer, x, y, w, h) {
     switch (this.type) {
         case ("image"): {
@@ -210,6 +298,14 @@ Asset.prototype.draw = function(layer, x, y, w, h) {
     }
 };
 
+/**
+ * Draws the asset on the layer
+ * @param {Layer} layer 
+ * @param {number} x 
+ * @param {number} y 
+ * @param {number} w 
+ * @param {number} h 
+ */
 Asset.Primitive.prototype.draw = function(layer, x, y, w, h) {
     switch (this.type) {
         case ("rect"): {
@@ -246,6 +342,17 @@ let Sound = function(layer, description, asset) {
     // TODO: do sounds
 };
 
+/**
+ * @typedef {object} Layer
+ */
+
+/** This is a layer lol
+ * @constructor
+ * @param {string} id 
+ * @param {object} options 
+ * @param {number} options.level - height of the later
+ * @returns {Layer}
+ */
 let Layer = function(id, options) {
     if (!Game.width || !Game.height) {
         throw "Game not created yet";
@@ -270,6 +377,9 @@ let Layer = function(id, options) {
 
 Layer.list = {};
 
+/**
+ * Draws all known layers
+ */
 Layer.drawAll = function() {
     let layers = Object.keys(Layer.list).sort((a, b) => { return Layer.list[a].level - Layer.list[b].level;});
 
@@ -278,32 +388,49 @@ Layer.drawAll = function() {
     }
 };
 
+/**
+ * Purges assets for all known layers
+ */
 Layer.purgeAll = function() {
     for (let i in Layer.list) {
         Layer.list[i].purge();
     }
 };
 
-Layer.prototype.assign = function(...assets) {
-    for (let thing of assets) {
+/**
+ * Adds GameObjects to the layer
+ * @param  {...GameObject} gameObjects 
+ * @returns {Layer}
+ */
+Layer.prototype.assign = function(...gameObjects) {
+    for (let thing of gameObjects) {
         this.targets.push(thing);
     }
 
     return this;
 };
 
-Layer.prototype.remove = function(...assets) {
+/**
+ * Removes GameObjects from the layer
+ * @param  {...GameObject} gameObjects 
+ */
+Layer.prototype.remove = function(...gameObjects) {
     for (let i = this.targets.length - 1; i >= 0; i--) {
-        if (assets.includes(this.targets[i])) {
+        if (gameObjects.includes(this.targets[i])) {
             this.targets.splice(i, 1);
         }
     }
 }
-
+/**
+ * Removes all GameObjects from the layer
+ */
 Layer.prototype.purge = function() {
     this.targets = [];
 };
 
+/**
+ * Draws all assets on this layer.
+ */
 Layer.prototype.draw = function() {
     this.ctx.clearRect(0, 0, Game.width, Game.height);
     for (let i = 0; i < this.targets.length; i++) {
@@ -319,6 +446,18 @@ Animate.tick = function(stamp) {
     Animate.stamp = stamp;
 };
 
+/**
+ * @typedef {object} AnimateProperty
+ */
+
+/**
+ * Animate Property for time-linked 
+ * @constructor
+ * @param {number} time - time in milliseconds to complete one loops
+ * @param {object} steps - steps to take ({ amount: value, amount: value })
+ * @param {number=} count - amount of times to repeat
+ * @returns {AnimateProperty}
+ */
 Animate.property = function(time, steps, count) {
     this.time = time;
     this.steps = steps;
@@ -330,6 +469,11 @@ Animate.property = function(time, steps, count) {
     Animate.targets.push(this);
     return this;
 };
+
+/**
+ * Gets value for animate property at the current point in time
+ * @returns {number}
+ */
 
 Animate.property.prototype.value = function() {
     if (this.once) {
@@ -355,6 +499,21 @@ Animate.property.prototype.value = function() {
     return value; 
 };
 
+/**
+ * @typedef {object} TileMap
+ * @property {Asset[]} map - 0-indexed list of pre-cropped assets.
+ */
+
+/**
+ * TileMap
+ * @constructor
+ * @param {object} options 
+ * @param {string} options.image - URL/URI to image resource
+ * @param {number} options.scaleX - width of one tile
+ * @param {number} options.scaleY - height of one tile
+ * @param {number} options.size - number of tiles
+ * @returns {TileMap}
+ */
 let TileMap = function(options) {
     this.scaleX = options.scaleX;
     this.scaleY = options.scaleY;
@@ -368,6 +527,22 @@ let TileMap = function(options) {
     return this;
 };
 
+/**
+ * @typedef {object} AnimateSequence
+ */
+
+/**
+ * @typedef {object} AnimateSequenceAnimations
+ * @property {number} duration - duration of animation
+ * @property {Asset[]} sequence - array of Assets to cycle through
+ */
+
+/**
+ * @constructor
+ * @param {AnimateSequenceAnimations{}} animations 
+ * @param {string} def - default sequence 
+ * @returns {AnimateSequence}
+ */
 Animate.Sequence = function(animations, def) {
     this.animations = animations;
     this.default = def;
@@ -376,6 +551,11 @@ Animate.Sequence = function(animations, def) {
     return this;
 };
 
+
+/**
+ * Lethal animation switching.
+ * @param {string} thing - name of sequence to switch to
+ */
 Animate.Sequence.prototype.switch = function(thing) {
     if (this.animations[thing]) {
         this.using = thing;
@@ -383,17 +563,44 @@ Animate.Sequence.prototype.switch = function(thing) {
     }
 };
 
+/**
+ * Non-lethal animation switching.
+ * @param {string} thing - name of sequence to use / switch to if required
+ */
+
 Animate.Sequence.prototype.use = function(thing) {
     if (this.using !== thing) {
         this.switch(thing);
     }
 };
 
+/**
+ * Draws the asset for the animation in use on the layer
+ * @param {Layer} layer 
+ * @param {number} x 
+ * @param {number} y 
+ * @param {number} w 
+ * @param {number} h 
+ */
 Animate.Sequence.prototype.draw = function(layer, x, y, w, h) {
     let thing = Math.floor(this.timing.value());
     this.animations[this.using].sequence[thing].draw(layer, x, y, w, h);
 };
 
+/**
+ * @typedef {object} GameObject
+ */
+
+/**
+ * @constructor
+ * @param {object} options 
+ * @param {Asset} options.asset
+ * @param {number} options.x
+ * @param {number} options.y
+ * @param {number} options.w
+ * @param {number} options.h
+ * @returns {GameObject}
+ */
 let GameObject = function(options) {
     this.asset = options.asset;
     this.x = (options.x) ? options.x : 0;
@@ -404,10 +611,21 @@ let GameObject = function(options) {
     return this;
 };
 
+/**
+ * Draws the asset on the layer passed in
+ * @param {Layer} layer 
+ */
 GameObject.prototype.draw = function(layer) {
     this.asset.draw(layer, this.x, this.y, this.w, this.h);
 };
 
+/**
+ * Moves/resizes the game object by the amounts given
+ * @param {number|null} x 
+ * @param {number|null} y 
+ * @param {number|null} w 
+ * @param {number|null} h 
+ */
 GameObject.prototype.move = function(x, y, w, h) {
     if (typeof x == "number") { this.x += x; };
     if (typeof y == "number") { this.y += y; };
@@ -415,6 +633,13 @@ GameObject.prototype.move = function(x, y, w, h) {
     if (typeof h == "number") { this.h += h; };
 };
 
+/**
+ * Sets the position/scale of the game object to the values given
+ * @param {number|null} x 
+ * @param {number|null} y 
+ * @param {number|null} w 
+ * @param {number|null} h 
+ */
 GameObject.prototype.position = function(x, y, w, h) {
     if (typeof x == "number") { this.x = x; };
     if (typeof y == "number") { this.y = y; };
@@ -422,6 +647,24 @@ GameObject.prototype.position = function(x, y, w, h) {
     if (typeof h == "number") { this.h = h; };
 };
 
+/**
+ * @typedef {object} Text
+ */
+
+/**
+ * Text
+ * @constructor
+ * @param {object} options 
+ * @param {string} options.text - text content
+ * @param {number} options.size - font size
+ * @param {string} options.font - font name
+ * @param {string=} options.style - style information
+ * @param {string=} options.fill - fill style
+ * @param {string=} options.stroke - stroke style
+ * @param {("left"|"center"|"right")="left"} options.alignH - horizontal alignment
+ * @param {("top"|"middle"|"bottom"|"alphabetic")="alphabetic"} options.alignV - vertical alignment
+ * @returns {Text}
+ */
 let Text = function(options) {
     this.text = options.text;
     this.size = options.size;
@@ -435,6 +678,14 @@ let Text = function(options) {
     return this;
 };
 
+/**
+ * Draws the asset for the animation in use on the layer
+ * @param {Layer} layer 
+ * @param {number} x 
+ * @param {number} y 
+ * @param {number} _w - unused
+ * @param {number} _h - unused
+ */
 Text.prototype.draw = function(layer, x, y, _w, _h) {
     layer.ctx.textAlign = this.alignH;
     layer.ctx.textBaseline = this.alignV;
@@ -499,6 +750,12 @@ Game.loop = function(time) {
     Game.last = time;
 };
 
+/**
+ * Creates and Prepares the game handler
+ * @param {object} options 
+ * @param {number} options.width - canvas width
+ * @param {number} options.heigh - canvas height
+ */
 Game.create = function(options) {
     Game.width = options.width;
     Game.height = options.height;
@@ -506,6 +763,9 @@ Game.create = function(options) {
     Controller.setup();
 }
 
+/**
+ * Starts the main game loop
+ */
 Game.start = function() {
     window.requestAnimationFrame(Game.loop);
 };
