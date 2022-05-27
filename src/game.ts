@@ -62,7 +62,7 @@ export class Game {
     static create(options: { width: number, height: number }) {
         Game.width = options.width;
         Game.height = options.height;
-
+        Game.makeElements();
         Controller.setup();
     }
 
@@ -119,6 +119,6 @@ export class Game {
     }
 
     static pushCanvas(canvas: HTMLCanvasElement) {
-
+        Game.root.append(canvas);
     }
 }

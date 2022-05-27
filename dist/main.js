@@ -197,6 +197,7 @@ define("game", ["require", "exports", "controller", "layer"], function (require,
         static create(options) {
             Game.width = options.width;
             Game.height = options.height;
+            Game.makeElements();
             controller_1.Controller.setup();
         }
         static start() {
@@ -244,6 +245,7 @@ define("game", ["require", "exports", "controller", "layer"], function (require,
             Game.last = time;
         }
         static pushCanvas(canvas) {
+            Game.root.append(canvas);
         }
     }
     exports.Game = Game;
