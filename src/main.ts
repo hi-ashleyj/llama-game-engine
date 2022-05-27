@@ -3,9 +3,8 @@ import { Game } from "./game";
 import { GameObject } from "./game-object";
 import { Layer } from "./layer";
 
-import * as Animate from "./animate";
-import * as Asset from "./asset";
-
+import Animate from "./animate";
+import Asset from "./asset";
 
 export const Llama = {
     Game,
@@ -15,3 +14,5 @@ export const Llama = {
     Animate,
     Asset
 }
+
+export default Llama;

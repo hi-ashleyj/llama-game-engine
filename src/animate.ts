@@ -96,3 +96,11 @@ export class AnimationSwitches implements AnimatedDrawable {
         this.drawables[this.use].reset();
     }
 }
+
+export const Animate = {
+    AnimationSequence,
+    AnimationSwitches,
+    Curves
+};
+
+export default Animate;
