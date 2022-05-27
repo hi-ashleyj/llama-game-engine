@@ -1,0 +1,23 @@
+{
+  "name": "llama-game-engine",
+  "version": "0.1.1",
+  "description": "",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "tsc",
+    "postversion": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hi-ashleyj/llama-game-engine.git"
+  },
+  "author": "",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/hi-ashleyj/llama-game-engine/issues"
+  },
+  "homepage": "https://github.com/hi-ashleyj/llama-game-engine#readme",
+  "devDependencies": {
+    "typescript": "^4.7.2"
+  }
+}
