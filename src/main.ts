@@ -7,7 +7,7 @@ import * as Animate from "./animate";
 import * as Asset from "./asset";
 
 
-export default {
+export const Llama = {
     Game,
     Layer,
     Controller,
