@@ -1,6 +1,8 @@
 import { ControllerEvent, ControllerAction, ControllerCallback } from "./types/controller";
 import { Drawable } from "./types/drawing";
-declare class Controller {
+import { AnimatedDrawable } from "./types/animate";
+import { TextOptions } from "./types/asset";
+export class Controller {
     static events: ControllerEvent[];
     static lasts: {
         [key: string]: number;
@@ -16,7 +18,7 @@ declare class Controller {
     static isPressed(code: string): boolean;
     static setup(): void;
 }
-declare class GameObject {
+export class GameObject {
     constructor(options: {
         asset: Drawable;
         x: number;
@@ -40,7 +42,7 @@ declare class GameObject {
         h: number;
     }): void;
 }
-declare class Layer {
+export class Layer {
     static list: Map<string, Layer>;
     readonly width: number;
     readonly height: number;
@@ -55,7 +57,41 @@ declare class Layer {
     static draw(): void;
     static purge(): void;
 }
-declare class Game {
+declare class Curves {
+    static stamp: number;
+    static targets: Set<Curves>;
+    static tick(stamp: number): void;
+    time: number;
+    steps: {
+        [percent: number]: number;
+    };
+    count: number;
+    offset: number;
+    points: number[];
+    constructor(time: number, steps: {
+        [percent: number]: number;
+    }, count?: number);
+    value(): number | null;
+}
+declare class AnimationSequence implements AnimatedDrawable {
+    constructor(drawables: Drawable[], duration: number);
+    reset(): void;
+    draw(layer: Layer, x: number, y: number, w: number, h: number): void;
+}
+declare class AnimationSwitches implements AnimatedDrawable {
+    constructor(drawables: {
+        [key: string]: AnimatedDrawable;
+    }, defaultDrawable: string);
+    draw(layer: Layer, x: number, y: number, w: number, h: number): void;
+    switch(key: string): void;
+    reset(useDefault?: boolean): void;
+}
+export const Animate: {
+    AnimationSequence: typeof AnimationSequence;
+    AnimationSwitches: typeof AnimationSwitches;
+    Curves: typeof Curves;
+};
+export class Game {
     static width: number;
     static height: number;
     static timeouts: Set<{
@@ -79,13 +115,92 @@ declare class Game {
     static loop(time: DOMHighResTimeStamp): number;
     static pushCanvas(canvas: HTMLCanvasElement): void;
 }
-export const Llama: {
-    Game: typeof Game;
-    Layer: typeof Layer;
-    Controller: typeof Controller;
-    GameObject: typeof GameObject;
-    Animate: typeof Animate;
-    Asset: typeof Asset;
+declare class Image implements Drawable {
+    static dumpspace: HTMLDivElement;
+    static locations: Map<string, HTMLImageElement>;
+    static loading: Set<string>;
+    static setDumpSpace(element: HTMLDivElement): void;
+    constructor({ image, crop }: {
+        image: string;
+        crop?: {
+            x: number;
+            y: number;
+            width: number;
+            height: number;
+        };
+    });
+    draw(layer: Layer, x: number, y: number, w: number, h: number): void;
+}
+declare class TileMap {
+    map: Array<Image>;
+    constructor(image: string, { tiles, sizeX, sizeY }: {
+        tiles: number;
+        sizeX: number;
+        sizeY: number;
+    });
+}
+declare class Font {
+    static locations: Map<string, boolean>;
+    static loading: Set<string>;
+    name: string;
+    uri: string;
+    features: null;
+    fontFace: FontFace;
+    constructor(name: any, uri: any, features: any);
+}
+declare class Primitive implements Drawable {
+    fill: string;
+    stroke: string;
+    constructor({ fill, stroke }: {
+        fill?: string;
+        stroke?: string;
+    });
+    draw(layer: Layer, x: number, y: number, w: number, h: number): void;
+    static center(x: any, y: any, w: any, h: any): any[];
+}
+declare class Rectangle extends Primitive {
+    constructor({ fill, stroke }: {
+        fill?: string;
+        stroke?: string;
+    });
+    draw(layer: Layer, x: number, y: number, w: number, h: number): void;
+}
+declare class Circle extends Primitive {
+    constructor({ fill, stroke }: {
+        fill?: string;
+        stroke?: string;
+    });
+    draw(layer: Layer, x: number, y: number, w: number, h: number): void;
+}
+declare class Arc extends Primitive {
+    angleFrom: number;
+    angleTo: number;
+    constructor({ fill, stroke, angleFrom, angleTo }: {
+        fill?: string;
+        stroke?: string;
+        angleFrom: number;
+        angleTo: number;
+    });
+    draw(layer: Layer, x: number, y: number, w: number, h: number): void;
+}
+declare class Text implements Drawable {
+    text: string;
+    size: number;
+    fill: string;
+    stroke: string;
+    style: string;
+    constructor(options: TextOptions);
+    draw(layer: Layer, x: number, y: number, w: number, h: number): void;
+}
+export let Asset: {
+    Image: typeof Image;
+    Text: typeof Text;
+    Arc: typeof Arc;
+    Circle: typeof Circle;
+    Rectangle: typeof Rectangle;
+    Primitive: typeof Primitive;
+    TileMap: typeof TileMap;
+    Font: typeof Font;
 };
 
 //# sourceMappingURL=main.d.ts.map

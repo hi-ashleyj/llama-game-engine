@@ -193,7 +193,8 @@ export class Text implements Drawable {
         }
     }
 }
-let Asset = {
+
+export let Asset = {
     Image, Text, Arc, Circle, Rectangle, Primitive, TileMap, Font
 };
 

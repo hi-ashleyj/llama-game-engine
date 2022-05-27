@@ -1,3 +1,4 @@
+import Animate from "./animate";
 import { Controller } from "./controller";
 import { Layer } from "./layer";
 
@@ -95,7 +96,7 @@ export class Game {
             return Game.last = time;
         }
 
-        // Animate.tick(time);
+        Animate.Curves.tick(time);
 
         for (let timeout of Game.timeouts) {
             if (timeout.start === undefined) {

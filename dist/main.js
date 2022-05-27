@@ -1,6 +1,3 @@
-function $parcel$export(e, n, v, s) {
-  Object.defineProperty(e, n, {get: v, set: s, enumerable: true, configurable: true});
-}
 class $edb0ad70e86925e1$export$bd0bf19f25da8474 {
     static events = [];
     static lasts = {};
@@ -109,6 +106,78 @@ class $edb0ad70e86925e1$export$bd0bf19f25da8474 {
         document.addEventListener("keyup", $edb0ad70e86925e1$export$bd0bf19f25da8474.handleKeyboard, false);
     }
 }
+
+
+class $971351ec61e49235$export$7fc05a3731226b90 {
+    static stamp = -1;
+    static targets = new Set();
+    static tick(stamp) {
+        $971351ec61e49235$export$7fc05a3731226b90.stamp = stamp;
+    }
+    offset = -1;
+    constructor(time, steps, count){
+        this.time = time;
+        this.steps = steps;
+        this.count = count ? count : Infinity;
+        this.points = Object.keys(steps).map((key)=>parseFloat(key)).sort((a, b)=>a - b);
+        $971351ec61e49235$export$7fc05a3731226b90.targets.add(this);
+    }
+    value() {
+        if (this.points.length < 2) return null;
+        if (this.offset < 0) this.offset = $971351ec61e49235$export$7fc05a3731226b90.stamp;
+        let duration = $971351ec61e49235$export$7fc05a3731226b90.stamp - this.offset;
+        if (Math.floor(duration / this.time) >= this.count) return null;
+        let factor = duration % this.time / this.time;
+        for(let i = 1; i < this.points.length; i++)if (this.points[i] >= factor) {
+            let to = this.points[i];
+            let from = this.points[i - 1];
+            let percent = (factor - from) / (to - from);
+            return this.steps[from] + (this.steps[to] - this.steps[from]) * percent;
+        }
+    }
+}
+class $971351ec61e49235$export$44710f68374d3da8 {
+    drawables = [];
+    constructor(drawables, duration){
+        this.drawables = drawables;
+        this.duration = duration;
+        this.reset();
+    }
+    reset() {
+        this.timing = new $971351ec61e49235$export$7fc05a3731226b90(this.duration, {
+            0: 0,
+            1: this.drawables.length
+        });
+    }
+    draw(layer, x, y, w, h) {
+        this.drawables[this.timing.value()].draw(layer, x, y, w, h);
+    }
+}
+class $971351ec61e49235$export$e90425c1fce4da58 {
+    constructor(drawables, defaultDrawable){
+        this.drawables = drawables;
+        this.default = defaultDrawable;
+        this.use = defaultDrawable;
+    }
+    draw(layer, x, y, w, h) {
+        this.drawables[this.use].draw(layer, x, y, w, h);
+    }
+    switch(key) {
+        if (this.use === key) return;
+        this.use = key;
+        this.drawables[this.use].reset();
+    }
+    reset(useDefault = false) {
+        if (useDefault) this.use = this.default;
+        this.drawables[this.use].reset();
+    }
+}
+const $971351ec61e49235$export$83a1293bbde53b95 = {
+    AnimationSequence: $971351ec61e49235$export$44710f68374d3da8,
+    AnimationSwitches: $971351ec61e49235$export$e90425c1fce4da58,
+    Curves: $971351ec61e49235$export$7fc05a3731226b90
+};
+var $971351ec61e49235$export$2e2bcd8739ae039 = $971351ec61e49235$export$83a1293bbde53b95;
 
 
 
@@ -238,7 +307,7 @@ class $8aaa40018df40525$export$985739bfa5723e08 {
             window.requestAnimationFrame($8aaa40018df40525$export$985739bfa5723e08.loop);
             return $8aaa40018df40525$export$985739bfa5723e08.last = time;
         }
-        // Animate.tick(time);
+        (0, $971351ec61e49235$export$2e2bcd8739ae039).Curves.tick(time);
         for (let timeout of $8aaa40018df40525$export$985739bfa5723e08.timeouts){
             if (timeout.start === undefined) {
                 timeout.start = time;
@@ -298,87 +367,7 @@ class $6e2679f058a662f2$export$434da80b31429dcb {
 
 
 
-var $971351ec61e49235$exports = {};
 
-$parcel$export($971351ec61e49235$exports, "Curves", () => $971351ec61e49235$export$7fc05a3731226b90);
-$parcel$export($971351ec61e49235$exports, "AnimationSequence", () => $971351ec61e49235$export$44710f68374d3da8);
-$parcel$export($971351ec61e49235$exports, "AnimationSwitches", () => $971351ec61e49235$export$e90425c1fce4da58);
-class $971351ec61e49235$export$7fc05a3731226b90 {
-    static stamp = -1;
-    static targets = new Set();
-    static tick(stamp) {
-        $971351ec61e49235$export$7fc05a3731226b90.stamp = stamp;
-    }
-    offset = -1;
-    constructor(time, steps, count){
-        this.time = time;
-        this.steps = steps;
-        this.count = count ? count : Infinity;
-        this.points = Object.keys(steps).map((key)=>parseFloat(key)).sort((a, b)=>a - b);
-        $971351ec61e49235$export$7fc05a3731226b90.targets.add(this);
-    }
-    value() {
-        if (this.points.length < 2) return null;
-        if (this.offset < 0) this.offset = $971351ec61e49235$export$7fc05a3731226b90.stamp;
-        let duration = $971351ec61e49235$export$7fc05a3731226b90.stamp - this.offset;
-        if (Math.floor(duration / this.time) >= this.count) return null;
-        let factor = duration % this.time / this.time;
-        for(let i = 1; i < this.points.length; i++)if (this.points[i] >= factor) {
-            let to = this.points[i];
-            let from = this.points[i - 1];
-            let percent = (factor - from) / (to - from);
-            return this.steps[from] + (this.steps[to] - this.steps[from]) * percent;
-        }
-    }
-}
-class $971351ec61e49235$export$44710f68374d3da8 {
-    drawables = [];
-    constructor(drawables, duration){
-        this.drawables = drawables;
-        this.duration = duration;
-        this.reset();
-    }
-    reset() {
-        this.timing = new $971351ec61e49235$export$7fc05a3731226b90(this.duration, {
-            0: 0,
-            1: this.drawables.length
-        });
-    }
-    draw(layer, x, y, w, h) {
-        this.drawables[this.timing.value()].draw(layer, x, y, w, h);
-    }
-}
-class $971351ec61e49235$export$e90425c1fce4da58 {
-    constructor(drawables, defaultDrawable){
-        this.drawables = drawables;
-        this.default = defaultDrawable;
-        this.use = defaultDrawable;
-    }
-    draw(layer, x, y, w, h) {
-        this.drawables[this.use].draw(layer, x, y, w, h);
-    }
-    switch(key) {
-        if (this.use === key) return;
-        this.use = key;
-        this.drawables[this.use].reset();
-    }
-    reset(useDefault = false) {
-        if (useDefault) this.use = this.default;
-        this.drawables[this.use].reset();
-    }
-}
-
-
-var $19600059415940a9$exports = {};
-
-$parcel$export($19600059415940a9$exports, "Image", () => $19600059415940a9$export$3e431a229df88919);
-$parcel$export($19600059415940a9$exports, "TileMap", () => $19600059415940a9$export$16ec26812de3ce7a);
-$parcel$export($19600059415940a9$exports, "Font", () => $19600059415940a9$export$89abf52a030e56ee);
-$parcel$export($19600059415940a9$exports, "Primitive", () => $19600059415940a9$export$250ffa63cdc0d034);
-$parcel$export($19600059415940a9$exports, "Rectangle", () => $19600059415940a9$export$4617fb02663045ef);
-$parcel$export($19600059415940a9$exports, "Circle", () => $19600059415940a9$export$c89a927ffc67e6fa);
-$parcel$export($19600059415940a9$exports, "Arc", () => $19600059415940a9$export$6ef80ffb606dd232);
-$parcel$export($19600059415940a9$exports, "Text", () => $19600059415940a9$export$5f1af8db9871e1d6);
 class $19600059415940a9$export$3e431a229df88919 {
     static locations = new Map();
     static loading = new Set();
@@ -535,17 +524,20 @@ class $19600059415940a9$export$5f1af8db9871e1d6 {
         }
     }
 }
-
-
-const $b013a5dd6d18443e$export$254d8d8a01fb0176 = {
-    Game: $8aaa40018df40525$export$985739bfa5723e08,
-    Layer: $df9966d71ee61f6e$export$936d0764594b6eb3,
-    Controller: $edb0ad70e86925e1$export$bd0bf19f25da8474,
-    GameObject: $6e2679f058a662f2$export$434da80b31429dcb,
-    Animate: $971351ec61e49235$exports,
-    Asset: $19600059415940a9$exports
+let $19600059415940a9$export$c413dd039085b182 = {
+    Image: $19600059415940a9$export$3e431a229df88919,
+    Text: $19600059415940a9$export$5f1af8db9871e1d6,
+    Arc: $19600059415940a9$export$6ef80ffb606dd232,
+    Circle: $19600059415940a9$export$c89a927ffc67e6fa,
+    Rectangle: $19600059415940a9$export$4617fb02663045ef,
+    Primitive: $19600059415940a9$export$250ffa63cdc0d034,
+    TileMap: $19600059415940a9$export$16ec26812de3ce7a,
+    Font: $19600059415940a9$export$89abf52a030e56ee
 };
+var $19600059415940a9$export$2e2bcd8739ae039 = $19600059415940a9$export$c413dd039085b182;
 
 
-export {$b013a5dd6d18443e$export$254d8d8a01fb0176 as Llama};
+
+
+export {$edb0ad70e86925e1$export$bd0bf19f25da8474 as Controller, $8aaa40018df40525$export$985739bfa5723e08 as Game, $6e2679f058a662f2$export$434da80b31429dcb as GameObject, $df9966d71ee61f6e$export$936d0764594b6eb3 as Layer, $971351ec61e49235$export$83a1293bbde53b95 as Animate, $19600059415940a9$export$c413dd039085b182 as Asset};
 //# sourceMappingURL=main.js.map
