@@ -1,7 +1,7 @@
 {
   "name": "@hi-ashleyj/llama",
   "description": "A (Bad) 2D Canvas Game Engine",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "source": "src/main.ts",
   "main": "dist/main.js",
