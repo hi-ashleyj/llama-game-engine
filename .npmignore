@@ -3,3 +3,11 @@ components
 src
 tsconfig.json
 .parcel-cache
+
+.DS_Store
+node_modules
+/.svelte-kit
+/package
+.env
+.env.*
+!.env.example
