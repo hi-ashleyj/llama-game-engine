@@ -1,5 +1,4 @@
 .github
-components
 src
 tsconfig.json
 .parcel-cache
