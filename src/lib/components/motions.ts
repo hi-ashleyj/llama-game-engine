@@ -1,4 +1,3 @@
-import { onDestroy } from "svelte";
 import { writable } from "svelte/store";
 import type { Writable } from "svelte/store";
 
@@ -16,17 +15,13 @@ export class Timing {
      * Use 0 for repeats for infinite
      */
     create({ duration, repeats }: { duration: number, repeats: number }) {
-        let store = writable(0)
+        let store = { ...writable(0), stop: () => this.targets.delete(out) };
         let out = {
             current: 0,
             duration,
             repeats,
             store
         }
-
-        onDestroy(() => {
-            if (this.targets.has(out)) this.targets.delete(out);
-        })
 
         this.targets.add(out);
         return store;

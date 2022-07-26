@@ -6,7 +6,7 @@
     export let zIndex = 0;
 
     let canvas: HTMLCanvasElement | undefined;
-    $: ctx = (canvas instanceof HTMLCanvasElement) ? canvas.getContext("2d") : null;
+    $: ctx = (typeof canvas !== "undefined") ? canvas.getContext("2d") : null;
 
     let targets = new Set<DrawableFunction>();
 
@@ -17,6 +17,8 @@
     };
 
     let draw = function() {
+        if (ctx === null) return;
+        ctx.clearRect(0, 0, $width, $height);
         targets.forEach(f => f({ width: $width, height: $height, ctx }));
     };
 

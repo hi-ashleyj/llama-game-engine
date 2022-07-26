@@ -1,0 +1,29 @@
+<script lang="ts">
+
+    import { setupDrawable } from "$lib/setup";
+    import type { DrawableFunction } from "$lib/types/contexts";
+
+    export let fill: string | null = null;
+    export let stroke: string | null = null;
+
+    const TWO_PI = Math.PI * 2;
+    
+    const draw: DrawableFunction = function({ ctx }, { x, y, w, h }: { x: number, y: number, w: number, h: number }) {
+        let r = (w + h) / 4
+        
+        ctx.beginPath();
+        ctx.arc(x + r / 2, y + r / 2, r, 0, TWO_PI);
+        
+        if (fill) {
+            ctx.fillStyle = fill;
+            ctx.fill();
+        }
+
+        if (stroke) {
+            ctx.strokeStyle = stroke;
+            ctx.stroke();
+        }
+    };
+    
+    setupDrawable({ draw });
+</script>

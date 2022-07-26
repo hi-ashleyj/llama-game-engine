@@ -24,7 +24,7 @@
     };
 
     const draw: DrawableFunction = function({ width, height, ctx }) {
-        targets.forEach(f => f({ width, height, ctx}, {x, y, w, h}));
+        targets.forEach(f => f({ width, height, ctx}, {x: ax, y: ay, w, h}));
     };
 
     setupDrawable({ assign, draw });

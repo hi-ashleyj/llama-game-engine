@@ -51,3 +51,7 @@ export const setupDrawable = function ({ assign, draw }: Partial<DrawableContext
         game: getContext(GAME) as GameContext
     }
 };
+
+export const getGame = function(): GameContext {
+    return getContext(GAME);
+};

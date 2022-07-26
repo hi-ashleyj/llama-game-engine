@@ -4,6 +4,7 @@
     import { onMount, createEventDispatcher } from "svelte";
     import { setupGame } from "../setup";
     import type { GameContext } from "../types/contexts";
+    import { Timing } from "./motions";
 
     const dispatch = createEventDispatcher();
     
@@ -32,11 +33,14 @@
         return () => layers.delete(layerDraw);
     };
 
-    const context: GameContext = {
+    const timing = new Timing();
+
+    export const context: GameContext = {
         width: widthStore,
         height: heightStore,
         background: backgroundStore,
-        assign
+        assign,
+        createTimer: timing.create.bind(timing)
     }
 
     setupGame(context);
@@ -57,7 +61,7 @@
 
         dispatch("beforeframe", { delta, time });
 
-        
+        timing.update(delta);
 
         dispatch("frame", { delta, time });
 

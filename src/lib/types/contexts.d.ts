@@ -1,10 +1,12 @@
 import { Writable } from 'svelte/store';
+import { Timing } from "../components/motions";
 
 export type GameContext = { 
     assign: (draw: Function) => () => any, 
     width: Writable<number>, 
     height: Writable<number>, 
-    background: Writable<string> 
+    background: Writable<string>,
+    createTimer: Timing["create"]
 };
 
 export type LayerContext = { 
