@@ -1,16 +1,18 @@
 <script lang="ts">
 
-    import { Game } from "@hi-ashleyj/llama/index";
+    import { Game, Layer } from "@hi-ashleyj/llama";
 
-    const frameHandler = function(delta, time) {
-        
+    const frameHandler = function(e: CustomEvent<{ delta: number, time: DOMHighResTimeStamp }>) {
+        let { delta, time } = e.detail;
     };
 
 </script>
 
 <div class="game-wrapper">
     <Game on:frame={frameHandler}>
-
+        <Layer zIndex={0}>
+            
+        </Layer>
     </Game>
 </div>
 

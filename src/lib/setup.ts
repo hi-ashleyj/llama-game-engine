@@ -30,7 +30,7 @@ export const setupLayer = function (context: LayerContext) {
 
     setContext(LAYER, context);
 
-    setupDrawable({ assign: context.assign, draw: context.draw });
+    return setupDrawable({ assign: context.assign, draw: context.draw });
 };
 
 export const setupDrawable = function ({ assign, draw }: Partial<DrawableContext>) {
@@ -45,5 +45,9 @@ export const setupDrawable = function ({ assign, draw }: Partial<DrawableContext
 
     if (assign) {
         setContext(DRAWABLE, { assign });
+    }
+
+    return {
+        game: getContext(GAME) as GameContext
     }
 };

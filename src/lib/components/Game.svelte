@@ -41,12 +41,6 @@
 
     setupGame(context);
 
-    let timeouts = new Set<Function>();
-
-    const setTimeout = function(fn, ms) {
-        let out = { fn, ms };
-    };
-
     let last = -1;
 
     const loop = function(time: DOMHighResTimeStamp) {
@@ -61,9 +55,15 @@
 
         // TODO: NEW TIMEOUT LOGIC
 
+        dispatch("beforeframe", { delta, time });
+
+        
+
         dispatch("frame", { delta, time });
 
         draw(delta, time);
+        
+        dispatch("afterframe", { delta, time });
 
         requestAnimationFrame(loop);
         last = time;
@@ -75,7 +75,7 @@
 
 </script>
 
-<div class="game">
+<div class="game" style:background-color={background}>
     <slot />
 </div>
 
