@@ -18,7 +18,7 @@ export class Layer {
             throw new Error( 'Layer id is required' );
         }
         if (Layer.list.has( id )) {
-            return Layer.list.get( id );
+            return Layer.list.get( id ) as Layer;
         }
 
         this.id = id;
@@ -37,7 +37,7 @@ export class Layer {
         this.canvas.style.zIndex = options.level.toString();
         this.canvas.className = "llama-game-engine game-canvas";
 
-        this.ctx = this.canvas.getContext( '2d' );
+        this.ctx = this.canvas.getContext( '2d' ) as CanvasRenderingContext2D;
         this.ctx.imageSmoothingEnabled = false;
 
         Game.pushCanvas( this.canvas );
