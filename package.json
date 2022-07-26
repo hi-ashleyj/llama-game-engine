@@ -1,17 +1,17 @@
 {
   "name": "@hi-ashleyj/llama",
-  "description": "A (Bad) 2D Canvas Game Engine",
+  "description": "A (Pretty Bad) 2D Canvas Game Engine (powered by Svelte)",
   "version": "0.1.1",
   "type": "module",
   "source": "src/main.ts",
   "main": "dist/main.js",
   "types": "dist/main.d.ts",
   "scripts": {
-		"dev": "vite dev",
-		"build": "vite build",
-		"package": "svelte-kit package",
-		"preview": "vite preview",
-		"prepare": "svelte-kit sync"
+    "dev": "vite dev",
+    "build": "vite build",
+    "package": "svelte-kit package",
+    "preview": "vite preview",
+    "prepare": "svelte-kit sync"
   },
   "repository": {
     "type": "git",
@@ -24,9 +24,12 @@
   },
   "homepage": "https://github.com/hi-ashleyj/llama-game-engine#readme",
   "devDependencies": {
-		"@sveltejs/adapter-static": "next",
-		"@sveltejs/kit": "next",
-		"svelte": "^3.44.0",
-		"vite": "^3.0.0"
+    "@sveltejs/adapter-static": "next",
+    "@sveltejs/kit": "next",
+    "svelte": "^3.44.0",
+    "svelte-preprocess": "^4.10.7",
+    "svelte2tsx": "^0.5.12",
+    "typescript": "^4.7.4",
+    "vite": "^3.0.0"
   }
 }

@@ -1,0 +1,18 @@
+{
+	"compilerOptions": {
+		"allowJs": true,
+		"checkJs": true,
+		"module": "ESNext",
+		"moduleResolution": "node",
+		"noImplicitAny": true,
+		"baseUrl": ".",
+		"allowSyntheticDefaultImports": true,
+		"paths": {
+			"$lib": ["src/lib"],
+			"$lib/*": ["src/lib/*"],
+			"@hi-ashleyj/llama": ["src/lib"],
+			"@hi-ashleyj/llama*": ["src/lib/*"]
+		}
+	},
+	"include": ["src/**/*.d.ts", "src/**/*.js", "src/**/*.svelte"]
+}

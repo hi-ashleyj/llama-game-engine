@@ -1,8 +1,8 @@
-<script>
+<script lang="ts">
     
-    import { setContext } from "svelte";
     import { writable } from "svelte/store";
     import { onMount, createEventDispatcher } from "svelte";
+    import { GameContext, setupGame } from "../setup";
 
     const dispatch = createEventDispatcher();
     
@@ -18,31 +18,31 @@
     $: { $heightStore = height }
     $: { $backgroundStore = background }
 
-    const layers = new Set();
+    const layers = new Set<Function>();
 
-    const draw = function(delta, time) {
+    const draw = function(delta: number, time: DOMHighResTimeStamp) {
         for (let layer of layers) {
             layer(delta, time);
         }
     };
 
-    const assign = function(layerDraw) {
+    const assign = function(layerDraw: Function) {
         layers.add(layerDraw);
         return () => layers.delete(layerDraw);
     };
 
-    const context = {
+    const context: GameContext = {
         width: widthStore,
         height: heightStore,
         background: backgroundStore,
         assign
     }
 
-    setContext("game", context);
+    setupGame(context);
 
     let last = -1;
 
-    const loop = function(time) {
+    const loop = function(time: DOMHighResTimeStamp) {
         if (last < 0) last = time;
 
         let delta = (time - last);
@@ -56,14 +56,14 @@
 
         dispatch("frame", { delta, time });
 
-        draw();
+        draw(delta, time);
 
         requestAnimationFrame(loop);
         last = time;
     };
 
     onMount(() => {
-        loop();
+        requestAnimationFrame(loop);
     });
 
 </script>
@@ -75,5 +75,9 @@
 <style>
     .game {
         position: relative;
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        margin: 0;
     }
 </style>
