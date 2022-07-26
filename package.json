@@ -3,9 +3,6 @@
   "description": "A (Pretty Bad) 2D Canvas Game Engine (powered by Svelte)",
   "version": "0.1.1",
   "type": "module",
-  "source": "src/main.ts",
-  "main": "dist/main.js",
-  "types": "dist/main.d.ts",
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
