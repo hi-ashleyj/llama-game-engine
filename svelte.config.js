@@ -9,12 +9,12 @@ const config = {
         prerender: {
             default: true
         },
+        alias: {
+            "@hi-ashleyj/llama": "./src/lib"
+        }
     },
     compilerOptions: {
 		dev: true,
-	},
-	experimental: {
-		inspector: true
 	},
 };
  

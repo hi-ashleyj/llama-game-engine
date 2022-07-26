@@ -1,5 +1,5 @@
 import { getContext, setContext, onDestroy } from 'svelte';
-import { GameContext, LayerContext, DrawableContext } from "./types/contexts";
+import type { GameContext, LayerContext, DrawableContext } from "./types/contexts";
 
 const GAME = Symbol();
 const LAYER = Symbol();
