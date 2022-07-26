@@ -12,7 +12,9 @@ export type LayerContext = {
     draw: () => any 
 };
 
+export type DrawableFunction = ({}: { width: number, height: number, ctx: CanvasRenderingContext2D }, ...more: any[] ) => any;
+
 export type DrawableContext = { 
     assign: (draw: Function) => () => any, 
-    draw: () => any 
+    draw: DrawableFunction
 }

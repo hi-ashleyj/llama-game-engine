@@ -1,24 +1,23 @@
 <script lang="ts">
 
     import { setupLayer } from "../setup";
+    import type { DrawableFunction } from "../types/contexts";
 
     export let zIndex = 0;
 
     let canvas: HTMLCanvasElement | undefined;
     $: ctx = (canvas instanceof HTMLCanvasElement) ? canvas.getContext("2d") : null;
 
-    let targets = new Set<Function>();
+    let targets = new Set<DrawableFunction>();
 
-    let assign = function(callable: Function) {
+    let assign = function(callable: DrawableFunction) {
         targets.add(callable);
 
         return () => { targets.delete(callable) }
     };
 
     let draw = function() {
-        for (let callable of targets) {
-            callable({ width: $width, height: $height, ctx })
-        }
+        targets.forEach(f => f({ width: $width, height: $height, ctx }));
     };
 
     let { width, height } = setupLayer({
@@ -29,6 +28,7 @@
 </script>
 
 <canvas width={$width} height={$height} bind:this={canvas} style:z-index={zIndex}></canvas>
+<slot />
 
 <style>
     canvas {
