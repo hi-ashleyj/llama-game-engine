@@ -1,16 +1,9 @@
 import { getContext, setContext, onDestroy } from 'svelte';
-import { Writable } from 'svelte/store';
+import { GameContext, LayerContext, DrawableContext } from "./types/contexts";
 
 const GAME = Symbol();
 const LAYER = Symbol();
 const DRAWABLE = Symbol();
-
-export type GameContext = { 
-    assign: (draw: Function) => () => any, 
-    width: Writable<number>, 
-    height: Writable<number>, 
-    background: Writable<string> 
-};
 
 export const setupGame = function (context: GameContext) {
     if (getContext(GAME)) {
@@ -18,11 +11,6 @@ export const setupGame = function (context: GameContext) {
     }
 
     setContext(GAME, context);
-};
-
-export type LayerContext = { 
-    assign: (draw: Function) => () => any, 
-    draw: () => any 
 };
 
 export const setupLayer = function (context: LayerContext) {
@@ -44,11 +32,6 @@ export const setupLayer = function (context: LayerContext) {
 
     setupDrawable({ assign: context.assign, draw: context.draw });
 };
-
-export type DrawableContext = { 
-    assign: (draw: Function) => () => any, 
-    draw: () => any 
-}
 
 export const setupDrawable = function ({ assign, draw }: Partial<DrawableContext>) {
     let parent = getContext(DRAWABLE) as DrawableContext | undefined;

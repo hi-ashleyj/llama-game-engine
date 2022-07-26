@@ -2,7 +2,8 @@
     
     import { writable } from "svelte/store";
     import { onMount, createEventDispatcher } from "svelte";
-    import { GameContext, setupGame } from "../setup";
+    import { setupGame } from "../setup";
+    import type { GameContext } from "../types/contexts";
 
     const dispatch = createEventDispatcher();
     
