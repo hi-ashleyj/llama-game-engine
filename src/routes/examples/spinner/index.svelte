@@ -6,6 +6,7 @@
 
     import { onMount } from "svelte";
     import Spinning from "./_Spinning.svelte";
+    import LoadingText from "./_LoadingText.svelte";
 
     let context: GameContext;
     let xStore;
@@ -24,7 +25,10 @@
             <GameObject x={0} y={0} w={1920} h={1080} >
                 <Rectangle fill="#333333" />
             </GameObject>
+        </Layer>
+        <Layer zIndex={1}>
             <Spinning />
+            <LoadingText />
         </Layer>
     </Game>
 </div>

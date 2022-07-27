@@ -15,8 +15,8 @@
         let r = (w + h) / 4
         
         ctx.beginPath();
-        ctx.arc(x + r / 2, y + r / 2, r, sd, ed);
-        ctx.lineTo(x + r / 2, y + r / 2);
+        ctx.arc(x + r, y + r, r, sd, ed);
+        ctx.lineTo(x + r, y + r);
         
         if (fill) {
             ctx.fillStyle = fill;

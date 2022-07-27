@@ -12,7 +12,7 @@
         let r = (w + h) / 4
         
         ctx.beginPath();
-        ctx.arc(x + r / 2, y + r / 2, r, 0, TWO_PI);
+        ctx.arc(x + r, y + r, r, 0, TWO_PI);
         
         if (fill) {
             ctx.fillStyle = fill;
