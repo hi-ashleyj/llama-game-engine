@@ -9,6 +9,11 @@ const config = {
 		hmr: {
 			clientPort: 443
 		}
+	},
+	resolve: {
+		alias: {
+			"@hi-ashleyj/llama": "./src/lib"
+		}
 	}
 };
 

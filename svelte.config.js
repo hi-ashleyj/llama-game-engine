@@ -6,9 +6,6 @@ const config = {
     preprocess: preprocess(),
     kit: {
         adapter: adapter(),
-        prerender: {
-            default: true
-        },
         alias: {
             "@hi-ashleyj/llama": "./src/lib"
         }
