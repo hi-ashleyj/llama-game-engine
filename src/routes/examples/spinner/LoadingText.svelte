@@ -1,7 +1,7 @@
 <script lang="ts">
 
     import { GameObject } from "@hi-ashleyj/llama";
-    import { Text } from "@hi-ashleyj/llama/Drawables";
+    import { Text } from "@hi-ashleyj/llama/drawables";
     import { getGame } from "@hi-ashleyj/llama/setup";
     import { onDestroy } from "svelte";
 

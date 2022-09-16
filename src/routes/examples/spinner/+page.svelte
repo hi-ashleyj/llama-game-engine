@@ -1,12 +1,12 @@
 <script lang="ts">
 
     import { Game, Layer, GameObject } from "@hi-ashleyj/llama";
-    import { Rectangle } from "@hi-ashleyj/llama/Drawables";
+    import { Rectangle } from "@hi-ashleyj/llama/drawables";
     import type { GameContext } from "@hi-ashleyj/llama/types";
 
     import { onMount } from "svelte";
-    import Spinning from "./_Spinning.svelte";
-    import LoadingText from "./_LoadingText.svelte";
+    import Spinning from "./Spinning.svelte";
+    import LoadingText from "./LoadingText.svelte";
 
     let context: GameContext;
     let xStore;
