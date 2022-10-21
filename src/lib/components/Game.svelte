@@ -5,6 +5,7 @@
     import { setupGame } from "../setup";
     import type { GameContext } from "../types/contexts";
     import { Timing } from "./motions";
+    import { Controller } from "./controller";
 
     const dispatch = createEventDispatcher();
     
@@ -34,13 +35,17 @@
     };
 
     const timing = new Timing();
+    const controller = new Controller();
 
     export const context: GameContext = {
         width: widthStore,
         height: heightStore,
         background: backgroundStore,
         assign,
-        createTimer: timing.create.bind(timing)
+        createTimer: timing.create.bind(timing),
+        onKeyboardEvent: controller.on.bind(controller),
+        isKeyboardPressed: controller.isPressed.bind(controller),
+        getKeyboardStore: controller.getStore.bind(controller)
     }
 
     setupGame(context);
@@ -75,6 +80,7 @@
 
     onMount(() => {
         requestAnimationFrame(loop);
+        controller.start();
     });
 
 </script>

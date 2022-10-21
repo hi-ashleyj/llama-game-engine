@@ -7,7 +7,7 @@
     "dev": "vite dev",
     "build": "vite build",
     "package": "svelte-kit package",
-    "preview": "vite preview",
+    "preview": "vite preview"
   },
   "repository": {
     "type": "git",

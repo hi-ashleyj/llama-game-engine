@@ -1,12 +1,16 @@
 import { Writable } from 'svelte/store';
 import { Timing } from "../components/motions";
+import { Controller } from "../components/controller";
 
 export type GameContext = { 
     assign: (draw: Function) => () => any, 
     width: Writable<number>, 
     height: Writable<number>, 
     background: Writable<string>,
-    createTimer: Timing["create"]
+    createTimer: Timing["create"],
+    onKeyboardEvent: Controller["on"]
+    isKeyboardPressed: Controller["isPressed"]
+    getKeyboardStore: Controller["getStore"]
 };
 
 export type LayerContext = { 

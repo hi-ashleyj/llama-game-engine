@@ -6,9 +6,9 @@
     export let text: string;
     export let size: number;
     export let font: string;
-    export let style: string | undefined;
-    export let fill: string | undefined;
-    export let stroke: string | undefined;
+    export let style: string | undefined = undefined;
+    export let fill: string | undefined = undefined;
+    export let stroke: string | undefined = undefined;
     export let alignH: "left" | "center" | "right" = "left";
     export let alignV: "top" | "middle" | "bottom" | "alphabetic" = "top";
 

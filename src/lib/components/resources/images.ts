@@ -1,6 +1,6 @@
 let list: Map<string, HTMLImageElement> = new Map();
 
-const resolve = function(src): HTMLImageElement {
+export const resolve = function(src): HTMLImageElement {
     if (list.has(src)) return list.get(src) as HTMLImageElement;
 
     let img = new Image();
@@ -9,5 +9,3 @@ const resolve = function(src): HTMLImageElement {
 
     return img;
 };
-
-export default { resolve };
