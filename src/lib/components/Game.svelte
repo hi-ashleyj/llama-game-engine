@@ -1,21 +1,23 @@
 <script lang="ts">
     
     import { writable } from "svelte/store";
-    import { onMount, createEventDispatcher } from "svelte";
+    import { onMount } from "svelte";
     import { setupGame } from "../setup";
-    import type { GameContext } from "../types/contexts";
+    import type { GameContext } from "../types";
     import { Timing } from "./motions";
     import { Controller } from "./controller";
+    import type { Writable } from "svelte/store";
 
-    const dispatch = createEventDispatcher();
-    
     export let width = 1920;
     export let height = 1080;
     export let background = "#000000";
 
-    const widthStore = writable(1920);
-    const heightStore = writable(1080);
-    const backgroundStore = writable("#000000");
+    // noinspection JSUnusedAssignment
+    const widthStore: Writable<number> = writable(1920);
+    // noinspection JSUnusedAssignment
+    const heightStore: Writable<number> = writable(1080);
+    // noinspection JSUnusedAssignment
+    const backgroundStore: Writable<string> = writable("#000000");
 
     $: { $widthStore = width }
     $: { $heightStore = height }
@@ -37,6 +39,11 @@
     const timing = new Timing();
     const controller = new Controller();
 
+    const frameEvents: Set<Function> = new Set();
+    const frameBeforeEvents: Set<Function> = new Set();
+    const frameAfterEvents: Set<Function> = new Set();
+
+    // noinspection JSUnusedGlobalSymbols
     export const context: GameContext = {
         width: widthStore,
         height: heightStore,
@@ -45,7 +52,19 @@
         createTimer: timing.create.bind(timing),
         onKeyboardEvent: controller.on.bind(controller),
         isKeyboardPressed: controller.isPressed.bind(controller),
-        getKeyboardStore: controller.getStore.bind(controller)
+        getKeyboardStore: controller.getStore.bind(controller),
+        onFrame: (callback: Function) => {
+            frameEvents.add(callback);
+            return () => frameEvents.delete(callback);
+        },
+        onBeforeFrame: (callback: Function) => {
+            frameBeforeEvents.add(callback);
+            return () => frameBeforeEvents.delete(callback);
+        },
+        onAfterFrame: (callback: Function) => {
+            frameAfterEvents.add(callback);
+            return () => frameAfterEvents.delete(callback);
+        },
     }
 
     setupGame(context);
@@ -64,15 +83,15 @@
 
         // TODO: NEW TIMEOUT LOGIC
 
-        dispatch("beforeframe", { delta, time });
+        frameBeforeEvents.forEach((callback) => callback({ delta, time }));
 
         timing.update(delta);
 
-        dispatch("frame", { delta, time });
+        frameEvents.forEach((callback) => callback({ delta, time }));
 
         draw(delta, time);
-        
-        dispatch("afterframe", { delta, time });
+
+        frameAfterEvents.forEach((callback) => callback({ delta, time }));
 
         requestAnimationFrame(loop);
         last = time;

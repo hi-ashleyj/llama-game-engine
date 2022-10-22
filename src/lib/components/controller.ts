@@ -11,6 +11,7 @@ export class Controller {
     constructor() {
         this.events = new Set();
         this.keyState = new Map();
+        this.keyStores = new Map();
     }
 
     events: Set<{ key: string | null, action: CONTROLLER_ACTION, call: (e: { key: string | null, action: CONTROLLER_ACTION }) => any | void }>;

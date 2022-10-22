@@ -1,8 +1,8 @@
 <script lang="ts">
 
-    import { GameObject } from "@hi-ashleyj/llama";
-    import { Text } from "@hi-ashleyj/llama/drawables";
-    import { getGame } from "@hi-ashleyj/llama/setup";
+    import { GameObject } from "../../../lib";
+    import { Text } from "../../../lib/drawables";
+    import { getGame } from "../../../lib";
     import { onDestroy } from "svelte";
 
     const context = getGame();

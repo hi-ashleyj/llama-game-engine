@@ -1,8 +1,8 @@
 <script lang="ts">
 
-    import { GameObject } from "@hi-ashleyj/llama";
-    import { Arc } from "@hi-ashleyj/llama/drawables";
-    import { getGame } from "@hi-ashleyj/llama/setup";
+    import { GameObject } from "../../../lib";
+    import { Arc } from "../../../lib/drawables";
+    import { getGame } from "../../../lib";
     import { onDestroy } from "svelte";
 
     const context = getGame();

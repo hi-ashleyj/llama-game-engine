@@ -8,9 +8,13 @@ export type GameContext = {
     height: Writable<number>, 
     background: Writable<string>,
     createTimer: Timing["create"],
-    onKeyboardEvent: Controller["on"]
-    isKeyboardPressed: Controller["isPressed"]
-    getKeyboardStore: Controller["getStore"]
+    onKeyboardEvent: Controller["on"],
+    isKeyboardPressed: Controller["isPressed"],
+    getKeyboardStore: Controller["getStore"],
+    onFrame: (callback: Function) => () => any,
+    onBeforeFrame: (callback: Function) => () => any,
+    onAfterFrame: (callback: Function) => () => any,
+
 };
 
 export type LayerContext = { 

@@ -1,12 +1,11 @@
 <script lang="ts">
 
     import { Game, Layer, GameObject } from "../../../lib";
-    import { Rectangle } from "../../../lib/components";
+    import { Rectangle } from "../../../lib/drawables";
     import type { GameContext } from "../../../lib/types";
 
     import { onMount } from "svelte";
-    import Spinning from "./Spinning.svelte";
-    import LoadingText from "./LoadingText.svelte";
+    import MovingBox from "./MovingBox.svelte";
 
     let context: GameContext;
     let xStore;
@@ -16,6 +15,8 @@
     });
 
     $: xPosition = 960 + (($xStore - 0.5) * 200);
+
+    let frame = () => {};
 
 </script>
 
@@ -27,13 +28,12 @@
             </GameObject>
         </Layer>
         <Layer zIndex={1}>
-            <Spinning />
-            <LoadingText />
+            <MovingBox />
         </Layer>
     </Game>
 </div>
 
-<style>
+<style lang="scss">
     * {
         box-sizing: border-box;
     }
