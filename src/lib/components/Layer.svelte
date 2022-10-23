@@ -10,20 +10,17 @@
 
     let targets = new Set<DrawableFunction>();
 
-    let assign = function(callable: DrawableFunction) {
-        targets.add(callable);
-
-        return () => { targets.delete(callable) }
-    };
-
-    let draw = function() {
-        if (ctx === null) return;
-        ctx.clearRect(0, 0, $width, $height);
-        targets.forEach(f => f({ width: $width, height: $height, ctx }));
-    };
-
     let { width, height } = setupLayer({
-        assign, draw
+        assign: (callable: DrawableFunction) => {
+            targets.add(callable);
+
+            return () => { targets.delete(callable) }
+        },
+        draw: () => {
+            if (ctx === null) return;
+            ctx.clearRect(0, 0, $width, $height);
+            targets.forEach(f => f({ width: $width, height: $height, ctx }));
+        }
     }).game;
     
 
