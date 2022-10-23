@@ -13,7 +13,7 @@ export const setupGame = function (context: GameContext) {
     setContext(GAME, context);
 };
 
-export const setupLayer = function (context: LayerContext): (draw: () => any) => () => any {
+export const setupLayer = function (context: LayerContext): ( { draw }: { draw: () => any } ) => () => any {
     if (getContext(LAYER)) {
         throw new Error("Cannot Mount Layer inside a Layer");
     }
@@ -23,20 +23,20 @@ export const setupLayer = function (context: LayerContext): (draw: () => any) =>
 
     setupDrawable({ assign: context.assign });
 
-    return (draw: () => any) => {
-        return game.assign(draw);
+    return (ctx) => {
+        return game.assign(ctx);
     }
 };
 
-export const setupDrawable = function ({ assign }: Partial<DrawableContext>): (draw: DrawableFunction) => () => any {
+export const setupDrawable = function ({ assign }: Partial<DrawableContext>): ({ draw }: { draw: () => DrawableFunction }) => () => any {
     let parent = getContext(DRAWABLE) as DrawableContext | undefined;
     if (assign) {
         setContext(DRAWABLE, { assign });
     }
 
-    return (draw: DrawableFunction) => {
+    return (ctx) => {
         if (!parent) return () => {};
-        return parent.assign(draw);
+        return parent.assign(ctx);
     }
 };
 

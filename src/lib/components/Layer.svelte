@@ -9,26 +9,26 @@
     let canvas: HTMLCanvasElement | undefined;
     $: ctx = (typeof canvas !== "undefined") ? canvas.getContext("2d") : null;
 
-    let targets = new Set<DrawableFunction>();
+    let targets = new Set<{ draw: DrawableFunction }>();
 
     const draw = () => {
         if (ctx === null) return;
         ctx.clearRect(0, 0, $width, $height);
-        targets.forEach(f => f({ width: $width, height: $height, ctx }));
+        targets.forEach(f => f.draw({ width: $width, height: $height, ctx }));
     }
 
     let { width, height } = getGame();
 
     let register = setupLayer({
-        assign: (callable: DrawableFunction) => {
-            targets.add(callable);
+        assign: (ctx) => {
+            targets.add(ctx);
 
-            return () => { targets.delete(callable) }
+            return () => { targets.delete(ctx) }
         }
     });
 
     onMount(() => {
-        return register(draw);
+        return register({ draw });
     })
 
 </script>

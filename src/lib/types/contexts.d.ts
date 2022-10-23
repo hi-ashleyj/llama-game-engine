@@ -3,7 +3,7 @@ import { Timing } from "../components/motions";
 import { Controller } from "../components/controller";
 
 export type GameContext = { 
-    assign: (draw: Function) => () => any, 
+    assign: (context: { draw: Function }) => () => any,
     width: Writable<number>, 
     height: Writable<number>, 
     background: Writable<string>,
@@ -17,13 +17,12 @@ export type GameContext = {
 
 };
 
-export type LayerContext = { 
-    assign: (draw: Function) => () => any
+export type LayerContext = {
+    assign: (context: { draw: Function }) => () => any
 };
 
 export type DrawableFunction = ({}: { width: number, height: number, ctx: CanvasRenderingContext2D }, ...more: any[] ) => any;
 
-export type DrawableContext = { 
-    assign: (draw: Function) => () => any, 
-    draw: DrawableFunction
+export type DrawableContext = {
+    assign: (context: { draw: Function }) => () => any
 }

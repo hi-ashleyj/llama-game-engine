@@ -17,23 +17,25 @@
     $: ax = (centered) ? x - (w / 2) : x;
     $: ay = (centered) ? y - (h / 2) : y;
 
-    const targets = new Set<DrawableFunction>();
-    
-    const assign = function(callable: DrawableFunction) {
-        targets.add(callable);
-        return () => { targets.delete(callable); };
+    const targets = new Set<{ draw: DrawableFunction }>();
+
+    const draw: DrawableFunction = function ( { width, height, ctx } ) {
+        targets.forEach(f => f.draw({ width, height, ctx }, { x: ax, y: ay, w, h }));
     };
 
-    const draw: DrawableFunction = function({ width, height, ctx }) {
-        targets.forEach(f => f({ width, height, ctx}, {x: ax, y: ay, w, h}));
-    };
-
-    let register = setupDrawable({ assign });
+    let register = setupDrawable({
+        assign: (ctx) => {
+            targets.add(ctx);
+            return () => {
+                targets.delete(ctx);
+            };
+        },
+    });
 
     onMount(() => {
-        return register(draw);
-    })
+        return register({ draw });
+    });
 
 </script>
 
-<slot />
+<slot/>

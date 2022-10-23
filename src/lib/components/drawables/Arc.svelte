@@ -33,6 +33,6 @@
     let register = setupDrawable({});
 
     onMount(() => {
-        return register(draw);
+        return register({ draw });
     })
 </script>

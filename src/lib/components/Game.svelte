@@ -23,17 +23,17 @@
     $: { $heightStore = height }
     $: { $backgroundStore = background }
 
-    const layers = new Set<Function>();
+    const layers = new Set<{ draw: Function }>();
 
     const draw = function(delta: number, time: DOMHighResTimeStamp) {
         for (let layer of layers) {
-            layer(delta, time);
+            layer.draw(delta, time);
         }
     };
 
-    const assign = function(layerDraw: Function) {
-        layers.add(layerDraw);
-        return () => layers.delete(layerDraw);
+    const assign = function(ctx) {
+        layers.add(ctx);
+        return () => layers.delete(ctx);
     };
 
     const timing = new Timing();
