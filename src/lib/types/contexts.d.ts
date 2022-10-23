@@ -18,8 +18,7 @@ export type GameContext = {
 };
 
 export type LayerContext = { 
-    assign: (draw: Function) => () => any, 
-    draw: () => any 
+    assign: (draw: Function) => () => any
 };
 
 export type DrawableFunction = ({}: { width: number, height: number, ctx: CanvasRenderingContext2D }, ...more: any[] ) => any;

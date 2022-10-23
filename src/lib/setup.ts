@@ -1,5 +1,5 @@
-import { getContext, setContext, onDestroy } from 'svelte';
-import type { GameContext, LayerContext, DrawableContext } from "./types/contexts";
+import { getContext, setContext } from 'svelte';
+import type { GameContext, LayerContext, DrawableContext, DrawableFunction } from "./types";
 
 const GAME = Symbol();
 const LAYER = Symbol();
@@ -13,42 +13,30 @@ export const setupGame = function (context: GameContext) {
     setContext(GAME, context);
 };
 
-export const setupLayer = function (context: LayerContext) {
+export const setupLayer = function (context: LayerContext): (draw: () => any) => () => any {
     if (getContext(LAYER)) {
         throw new Error("Cannot Mount Layer inside a Layer");
     }
-
-    let game = getContext(GAME) as GameContext | undefined;
-
+    const game = getContext(GAME) as GameContext | undefined;
     if (!game) throw new Error("Layers must be inside a Game");
-
-    let remove = game.assign(context.draw);
-
-    onDestroy(() => {
-        remove();
-    })
-
     setContext(LAYER, context);
 
-    return setupDrawable({ assign: context.assign, draw: context.draw });
+    setupDrawable({ assign: context.assign });
+
+    return (draw: () => any) => {
+        return game.assign(draw);
+    }
 };
 
-export const setupDrawable = function ({ assign, draw }: Partial<DrawableContext>) {
+export const setupDrawable = function ({ assign }: Partial<DrawableContext>): (draw: DrawableFunction) => () => any {
     let parent = getContext(DRAWABLE) as DrawableContext | undefined;
-    if (parent && draw) {
-        let remove = parent.assign(draw);
-
-        onDestroy(() => {
-            remove();
-        })
-    }
-
     if (assign) {
         setContext(DRAWABLE, { assign });
     }
 
-    return {
-        game: getContext(GAME) as GameContext
+    return (draw: DrawableFunction) => {
+        if (!parent) return () => {};
+        return parent.assign(draw);
     }
 };
 

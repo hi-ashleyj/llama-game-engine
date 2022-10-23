@@ -2,6 +2,7 @@
 
     import { setupDrawable } from "../setup";
     import type { DrawableFunction } from "../types/contexts";
+    import { onMount } from "svelte";
 
     export let x = 0;
     export let y = 0;
@@ -27,7 +28,11 @@
         targets.forEach(f => f({ width, height, ctx}, {x: ax, y: ay, w, h}));
     };
 
-    setupDrawable({ assign, draw });
+    let register = setupDrawable({ assign });
+
+    onMount(() => {
+        return register(draw);
+    })
 
 </script>
 

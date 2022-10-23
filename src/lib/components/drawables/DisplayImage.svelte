@@ -2,6 +2,7 @@
 
     import { setupDrawable } from "$lib/setup";
     import type { DrawableFunction } from "$lib/types/contexts";
+    import { onMount } from "svelte";
 
     export let image: HTMLImageElement | null = null;
     export let crop: { x: number, y: number, w: number, h: number } | null = null;
@@ -13,7 +14,11 @@
         }
         ctx.drawImage(image, x, y, w, h);
     };
-    
-    setupDrawable({ draw });
+
+    let register = setupDrawable({});
+
+    onMount(() => {
+        return register(draw);
+    })
     
 </script>

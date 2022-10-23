@@ -1,7 +1,8 @@
 <script lang="ts">
 
-    import { setupLayer } from "../setup";
-    import type { DrawableFunction } from "../types/contexts";
+    import { setupLayer, getGame } from "../setup";
+    import type { DrawableFunction } from "../types";
+    import { onMount } from "svelte";
 
     export let zIndex = 0;
 
@@ -10,19 +11,25 @@
 
     let targets = new Set<DrawableFunction>();
 
-    let { width, height } = setupLayer({
+    const draw = () => {
+        if (ctx === null) return;
+        ctx.clearRect(0, 0, $width, $height);
+        targets.forEach(f => f({ width: $width, height: $height, ctx }));
+    }
+
+    let { width, height } = getGame();
+
+    let register = setupLayer({
         assign: (callable: DrawableFunction) => {
             targets.add(callable);
 
             return () => { targets.delete(callable) }
-        },
-        draw: () => {
-            if (ctx === null) return;
-            ctx.clearRect(0, 0, $width, $height);
-            targets.forEach(f => f({ width: $width, height: $height, ctx }));
         }
-    }).game;
-    
+    });
+
+    onMount(() => {
+        return register(draw);
+    })
 
 </script>
 

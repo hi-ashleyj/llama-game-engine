@@ -2,6 +2,7 @@
 
     import { setupDrawable } from "$lib/setup";
     import type { DrawableFunction } from "$lib/types/contexts";
+    import { onMount } from "svelte";
 
     export let fill: string | null = null;
     export let stroke: string | null = null;
@@ -21,5 +22,10 @@
         }
     };
     
-    setupDrawable({ draw });
+    let register = setupDrawable({});
+
+    onMount(() => {
+        return register(draw);
+    })
+
 </script>

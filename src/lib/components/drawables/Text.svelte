@@ -2,6 +2,7 @@
 
     import { setupDrawable } from "$lib/setup";
     import type { DrawableFunction } from "$lib/types/contexts";
+    import { onMount } from "svelte";
 
     export let text: string;
     export let size: number;
@@ -31,7 +32,11 @@
             ctx.strokeText(text, x, y);
         }
     };
-    
-    setupDrawable({ draw });
+
+    let register = setupDrawable({});
+
+    onMount(() => {
+        return register(draw);
+    })
     
 </script>
