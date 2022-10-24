@@ -24,7 +24,7 @@ export class Controller {
             this.keyState.set(eklc, true);
 
             this.events.forEach(({ key, action, call }) => {
-                if ((key === eklc || key === null) && action === CONTROLLER_ACTION.DOWN) call({ key, action });
+                if ((key === eklc || key === null) && action === CONTROLLER_ACTION.DOWN) call({ key: eklc, action });
             })
 
             if (this.keyStores.has(eklc)) {
@@ -37,7 +37,7 @@ export class Controller {
             this.keyState.set(eklc, false);
 
             this.events.forEach(({ key, action, call }) => {
-                if ((key === eklc || key === null) && action === CONTROLLER_ACTION.UP) call({ key, action });
+                if ((key === eklc || key === null) && action === CONTROLLER_ACTION.UP) call({ key: eklc, action });
             })
 
             if (this.keyStores.has(eklc)) {
