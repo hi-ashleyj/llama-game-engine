@@ -13,6 +13,7 @@
      * TRUE = ANCHOR CENTER
      */
     export let centered = false;
+    export let opacity = 1;
 
     $: ax = (centered) ? x - (w / 2) : x;
     $: ay = (centered) ? y - (h / 2) : y;
@@ -20,7 +21,14 @@
     const targets = new Set<{ draw: DrawableFunction }>();
 
     const draw: DrawableFunction = function ( { width, height, ctx } ) {
+        if (opacity <= 0) return;
+        if (opacity < 1) {
+            ctx.globalAlpha = opacity;
+        }
         targets.forEach(f => f.draw({ width, height, ctx }, { x: ax, y: ay, w, h }));
+        if (opacity < 1) {
+            ctx.globalAlpha = 1;
+        }
     };
 
     let register = setupDrawable({
