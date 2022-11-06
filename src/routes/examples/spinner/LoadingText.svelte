@@ -4,6 +4,7 @@
     import { Text } from "../../../lib/drawables";
     import { getGame } from "../../../lib";
     import { onDestroy } from "svelte";
+    import MultiLineText from "@hi-ashleyj/llama/components/drawables/MultiLineText.svelte";
 
     const context = getGame();
 
@@ -18,5 +19,5 @@
 </script>
 
 <GameObject x={960} y={540 + 200} w={0} h={0} centered={false} >
-    <Text text={`loading${dots}`} size={30} font="sans-serif" alignH="center" fill="white" />
+    <MultiLineText text={`loading${dots}\nor whatever`} size={30} font="sans-serif" alignH="center" fill="white" />
 </GameObject>
