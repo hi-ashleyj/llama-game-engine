@@ -1,7 +1,7 @@
 {
   "name": "@hi-ashleyj/llama",
   "description": "A (Very Incomplete) 2D Canvas Game Engine powered by Svelte",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "type": "module",
   "scripts": {
     "dev": "vite dev",
@@ -20,13 +20,14 @@
   },
   "homepage": "https://github.com/hi-ashleyj/llama-game-engine#readme",
   "devDependencies": {
-    "@sveltejs/adapter-static": "next",
-    "@sveltejs/kit": "next",
-    "@sveltejs/package": "*",
+    "@sveltejs/adapter-static": "latest",
+    "@sveltejs/kit": "latest",
+    "@sveltejs/package": "latest",
+    "sass": "^1.58.0",
     "svelte": "^3.44.0",
     "svelte-preprocess": "^4.10.7",
     "svelte2tsx": "^0.5.12",
     "typescript": "^4.7.4",
-    "vite": "^3.0.0"
+    "vite": "^4.0.0"
   }
 }

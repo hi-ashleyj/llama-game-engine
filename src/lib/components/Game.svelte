@@ -31,7 +31,7 @@
         }
     };
 
-    const assign = function(ctx) {
+    const assign = function(ctx: any) {
         layers.add(ctx);
         return () => layers.delete(ctx);
     };
@@ -49,7 +49,8 @@
         height: heightStore,
         background: backgroundStore,
         assign,
-        createTimer: timing.create.bind(timing),
+        createTimer: timing.createTimer.bind(timing),
+        createBurst: timing.createBurst.bind(timing),
         onKeyboardEvent: controller.on.bind(controller),
         isKeyboardPressed: controller.isPressed.bind(controller),
         getKeyboardStore: controller.getStore.bind(controller),

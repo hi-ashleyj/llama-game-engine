@@ -2,25 +2,16 @@
 
     import { Game, Layer, GameObject } from "../../../lib";
     import { Rectangle } from "../../../lib/drawables";
-    import type { GameContext } from "../../../lib/types";
 
-    import { onMount } from "svelte";
     import Spinning from "./Spinning.svelte";
     import LoadingText from "./LoadingText.svelte";
+    import BurstTest from "./BurstTest.svelte";
 
-    let context: GameContext;
-    let xStore;
-
-    onMount(() => {
-        xStore = context.createTimer({ duration: 1000, repeats: 0 });
-    });
-
-    $: xPosition = 960 + (($xStore - 0.5) * 200);
 
 </script>
 
 <div class="game-wrapper">
-    <Game bind:context={context}>
+    <Game>
         <Layer zIndex={0}>
             <GameObject x={0} y={0} w={1920} h={1080} >
                 <Rectangle fill="#333333" />
@@ -29,6 +20,7 @@
         <Layer zIndex={1}>
             <Spinning />
             <LoadingText />
+            <BurstTest />
         </Layer>
     </Game>
 </div>
