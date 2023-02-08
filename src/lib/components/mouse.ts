@@ -28,7 +28,7 @@ export class Mouse {
             switch (e.button) {
                 case (0): { eklc = "mouse_left"; break; }
                 case (1): { eklc = "mouse_right"; break; }
-                case (2): { eklc = "mouse_right"; break; }
+                case (2): { eklc = "mouse_middle"; break; }
                 default: return;
             }
 
@@ -50,7 +50,7 @@ export class Mouse {
             switch (e.button) {
                 case (0): { eklc = "mouse_left"; break; }
                 case (1): { eklc = "mouse_right"; break; }
-                case (2): { eklc = "mouse_right"; break; }
+                case (2): { eklc = "mouse_middle"; break; }
                 default: return;
             }
 
@@ -112,7 +112,7 @@ export class Mouse {
         }
     }
 
-    getStore(key: string): Writable<typeof key extends "mouse_x" | "mouse_y" ? number : boolean> {
+    getStore(key: "mouse_x" | "mouse_y" | string): Writable<typeof key extends "mouse_x" | "mouse_y" ? number : boolean> {
         if (this.mouseStores.has(key)) {
             return this.mouseStores.get(key) as ReturnType<typeof this.getStore>;
         }
@@ -128,8 +128,12 @@ export class Mouse {
         return wr as ReturnType<typeof this.getStore>;
     }
 
-    isPressed(key: string): typeof key extends "mouse_x" | "mouse_y" ? number : boolean {
-        return (this.mouseState.get(key) ?? (key == "mouse_x" || key == "mouse_y" ? 0 : false)) as ReturnType<typeof this.isPressed>;
+    isPressed(key: string): boolean {
+        return this.mouseState.get(key) as boolean ?? false;
+    }
+
+    getPosition(key: "mouse_x" | "mouse_y"): number {
+        return this.mouseState.get(key) as number ?? 0;
     }
 
     changeWindowDimensions(width: number, height: number) {

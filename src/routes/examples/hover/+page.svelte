@@ -1,34 +1,26 @@
 <script lang="ts">
 
-    import { Game, Layer, GameObject } from "../../../lib";
+    import { Game, Layer, GameObject, MouseLeftClick } from "../../../lib";
     import { Rectangle } from "../../../lib/drawables";
-    import type { GameContext } from "../../../lib/types";
-
-    import { onMount } from "svelte";
-    import MovingBox from "./Area.svelte";
-
-    let context: GameContext;
-    let xStore;
-
-    onMount(() => {
-        xStore = context.createTimer({ duration: 1000, repeats: 0 });
-    });
-
-    $: xPosition = 960 + (($xStore - 0.5) * 200);
-
-    let frame = () => {};
+    import Follow from "./Follow.svelte";
+    
+    let fills = "#aa0000";
 
 </script>
 
 <div class="game-wrapper">
-    <Game bind:context={context}>
+    <Game>
         <Layer zIndex={0}>
             <GameObject x={0} y={0} w={1920} h={1080} >
-                <Rectangle fill="#333333" />
+                <Rectangle fill="#1e1e1e" />
             </GameObject>
         </Layer>
         <Layer zIndex={1}>
-            <MovingBox />
+            <GameObject x={960} y={540} w={500} h={200} opacity={0.4} centered={true}>
+                <Rectangle fill={fills} />
+                <MouseLeftClick on:click={() => fills = "white"} />
+            </GameObject>
+            <Follow />
         </Layer>
     </Game>
 </div>

@@ -58,6 +58,7 @@
         getKeyboardStore: controller.getStore.bind(controller),
         onMouseEvent: mouse.on.bind(mouse),
         isMousePressed: mouse.isPressed.bind(mouse),
+        getMousePosition: mouse.getPosition.bind(mouse),
         getMouseStore: mouse.getStore.bind(mouse),
         onFrame: (callback: Function) => {
             frameEvents.add(callback);

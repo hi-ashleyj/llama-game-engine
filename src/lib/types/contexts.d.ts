@@ -15,6 +15,7 @@ export type GameContext = {
     getKeyboardStore: Controller["getStore"],
     onMouseEvent: Mouse["on"],
     isMousePressed: Mouse["isPressed"],
+    getMousePosition: Mouse["getPosition"],
     getMouseStore: Mouse["getStore"],
     onFrame: (callback: Function) => () => any,
     onBeforeFrame: (callback: Function) => () => any,
