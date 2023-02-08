@@ -6,7 +6,7 @@
 
     export let zIndex = 0;
     export let staticMode: boolean = false;
-    let hasRenderedOnce = false;
+    let shouldRenderNextFrame = true;
 
     let canvas: HTMLCanvasElement | undefined;
     $: ctx = (typeof canvas !== "undefined") ? canvas.getContext("2d") : null;
@@ -28,12 +28,12 @@
         },
         requestFrame: () => {
             if (!staticMode) return;
-            draw();
+            shouldRenderNextFrame = true;
         }
     });
 
     onMount(() => {
-        return register({ draw, isStatic: () => { if (!hasRenderedOnce) {hasRenderedOnce = true; draw()} return staticMode; } });
+        return register({ draw, isStatic: () => { if (shouldRenderNextFrame) {shouldRenderNextFrame = false; draw()} return staticMode; } });
     })
 
 </script>
