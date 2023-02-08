@@ -7,6 +7,7 @@
     import { Timing } from "./motions";
     import { Controller } from "./controller";
     import type { Writable } from "svelte/store";
+    import { Mouse } from "./mouse";
 
     export let width = 1920;
     export let height = 1080;
@@ -38,6 +39,7 @@
 
     const timing = new Timing();
     const controller = new Controller();
+    const mouse = new Mouse();
 
     const frameEvents: Set<Function> = new Set();
     const frameBeforeEvents: Set<Function> = new Set();
@@ -54,6 +56,9 @@
         onKeyboardEvent: controller.on.bind(controller),
         isKeyboardPressed: controller.isPressed.bind(controller),
         getKeyboardStore: controller.getStore.bind(controller),
+        onMouseEvent: mouse.on.bind(mouse),
+        isMousePressed: mouse.isPressed.bind(mouse),
+        getMouseStore: mouse.getStore.bind(mouse),
         onFrame: (callback: Function) => {
             frameEvents.add(callback);
             return () => frameEvents.delete(callback);
@@ -101,13 +106,23 @@
     onMount(() => {
         requestAnimationFrame(loop);
         controller.start();
+        mouse.start();
     });
+
+    let wiw = 0;
+    let wih = 0;
+
+    $: {
+        mouse.changeWindowDimensions(wiw, wih);
+    }
 
 </script>
 
 <div class="game" style:background-color={background}>
     <slot />
 </div>
+
+<svelte:window bind:innerHeight={wih} bind:innerWidth={wiw}></svelte:window>
 
 <style>
     .game {

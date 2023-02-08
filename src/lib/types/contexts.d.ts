@@ -1,6 +1,7 @@
 import { Writable } from 'svelte/store';
 import { Timing } from "../components/motions";
 import { Controller } from "../components/controller";
+import { Mouse } from "../components/mouse";
 
 export type GameContext = { 
     assign: (context: { draw: Function }) => () => any,
@@ -12,6 +13,9 @@ export type GameContext = {
     onKeyboardEvent: Controller["on"],
     isKeyboardPressed: Controller["isPressed"],
     getKeyboardStore: Controller["getStore"],
+    onMouseEvent: Mouse["on"],
+    isMousePressed: Mouse["isPressed"],
+    getMouseStore: Mouse["getStore"],
     onFrame: (callback: Function) => () => any,
     onBeforeFrame: (callback: Function) => () => any,
     onAfterFrame: (callback: Function) => () => any,
