@@ -101,6 +101,10 @@ export class Mouse {
                 this.mouseStores.get("mouse_y")?.set(adjustedY);
             }
         });
+
+        window.addEventListener("contextmenu", (e) => {
+            e.preventDefault();
+        })
     }
 
     on(key: string | null, action: MOUSE_ACTION, callback: (e: { key: string | null, action: MOUSE_ACTION }) => any | void): () => any {

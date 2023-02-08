@@ -1,10 +1,17 @@
 <script lang="ts">
 
     import { Game, Layer, GameObject, MouseLeftClick } from "../../../lib";
-    import { Rectangle } from "../../../lib/drawables";
+    import { Rectangle, Text } from "../../../lib/drawables";
     import Follow from "./Follow.svelte";
-    
-    let fills = "#aa0000";
+    import MouseClickable from "$lib/components/mouse/MouseClickable.svelte";
+    import MouseEventArea from "$lib/components/mouse/MouseEventArea.svelte";
+
+    let leftFill = "#aa0000";
+    let rightFill = "#aa0000";
+    let pickerFill = "#aa0000";
+    let hoveringOne;
+    let hoverTwoFill = "#aa0000";
+    let hoveringTwo;
 
 </script>
 
@@ -16,9 +23,25 @@
             </GameObject>
         </Layer>
         <Layer zIndex={1}>
-            <GameObject x={960} y={540} w={500} h={200} opacity={0.4} centered={true}>
-                <Rectangle fill={fills} />
-                <MouseLeftClick on:click={() => fills = "white"} />
+            <GameObject x={960} y={340} w={500} h={60} centered={true}>
+                <Rectangle fill={leftFill} />
+                <MouseLeftClick on:click={() => leftFill = "#00aa00"} />
+            </GameObject>
+            <GameObject x={960} y={440} w={500} h={60} centered={true}>
+                <Rectangle fill={rightFill} />
+                <MouseClickable on:right={() => rightFill = "#00aa00"} />
+            </GameObject>
+            <GameObject x={960} y={540} w={500} h={60} centered={true}>
+                <Rectangle fill={pickerFill} />
+                <MouseClickable on:left={() => pickerFill = "#00aa00"} on:right={() => pickerFill = "#0000aa"} />
+            </GameObject>
+            <GameObject x={960} y={640} w={500} h={60} opacity={hoveringOne ? 1 : 0.6} centered={true}>
+                <Rectangle fill="white" />
+                <MouseEventArea bind:hover={hoveringOne} />
+            </GameObject>
+            <GameObject x={960} y={740} w={500} h={60} opacity={hoveringTwo ? 1 : 0.6} centered={true}>
+                <Rectangle fill={hoverTwoFill} />
+                <MouseEventArea on:click={() => hoverTwoFill = "#00aa00"} bind:hover={hoveringTwo} />
             </GameObject>
             <Follow />
         </Layer>
