@@ -6,7 +6,7 @@ export { default as MouseClickable } from "./components/mouse/MouseClickable.sve
 export { default as MouseEventArea } from "./components/mouse/MouseEventArea.svelte";
 
 export * as drawables from "./components/drawables/index";
-export { setupDrawable, getGame } from "./setup";
+export { setupDrawable, getGame, getLayer, getTriggerLayerRender } from "./setup";
 export { resolve as resolveImage } from "./components/resources/images";
 export { CONTROLLER_ACTION } from "./components/controller";
 export { MOUSE_ACTION } from "./components/mouse";

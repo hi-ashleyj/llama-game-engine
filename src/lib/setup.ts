@@ -14,7 +14,7 @@ export const setupGame = function (context: GameContext) {
     setContext(GAME, context);
 };
 
-export const setupLayer = function (context: LayerContext): ( { draw }: { draw: () => any } ) => () => any {
+export const setupLayer = function (context: LayerContext): ( { draw, isStatic }: { draw: () => any, isStatic: () => boolean } ) => () => any {
     if (getContext(LAYER)) {
         throw new Error("Cannot Mount Layer inside a Layer");
     }
@@ -27,6 +27,17 @@ export const setupLayer = function (context: LayerContext): ( { draw }: { draw: 
     return (ctx) => {
         return game.assign(ctx);
     }
+};
+
+export const getLayer = function() {
+    let layer = getContext(LAYER) as LayerContext | undefined;
+    if (!layer) throw new Error("Layer context does not exist!");
+    return layer;
+};
+
+export const getTriggerLayerRender = function() {
+    let layer = getLayer();
+    return layer.requestFrame;
 };
 
 export const setupDrawable = function ({ assign }: Partial<DrawableContext>): ({ draw }: { draw: () => DrawableFunction }) => () => any {

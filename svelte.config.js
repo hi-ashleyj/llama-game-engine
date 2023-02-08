@@ -8,7 +8,7 @@ const config = {
         adapter: adapter(),
         alias: {
             "@hi-ashleyj/llama": "./src/lib"
-        }
+        },
     },
     compilerOptions: {
 		dev: true,

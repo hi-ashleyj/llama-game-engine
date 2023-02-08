@@ -4,7 +4,7 @@ import { Controller } from "../components/controller";
 import { Mouse } from "../components/mouse";
 
 export type GameContext = { 
-    assign: (context: { draw: Function }) => () => any,
+    assign: (context: { draw: Function, isStatic: () => boolean }) => () => any,
     width: Writable<number>, 
     height: Writable<number>, 
     background: Writable<string>,
@@ -25,6 +25,7 @@ export type GameContext = {
 
 export type LayerContext = {
     assign: (context: { draw: Function }) => () => any
+    requestFrame: () => any;
 };
 
 export type DrawableFunction = ({}: { width: number, height: number, ctx: CanvasRenderingContext2D }, ...more: any[] ) => any;

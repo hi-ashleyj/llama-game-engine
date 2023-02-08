@@ -5,6 +5,8 @@
     import { onMount } from "svelte";
 
     export let zIndex = 0;
+    export let staticMode: boolean = false;
+    let hasRenderedOnce = false;
 
     let canvas: HTMLCanvasElement | undefined;
     $: ctx = (typeof canvas !== "undefined") ? canvas.getContext("2d") : null;
@@ -22,13 +24,16 @@
     let register = setupLayer({
         assign: (ctx) => {
             targets.add(ctx);
-
             return () => { targets.delete(ctx) }
+        },
+        requestFrame: () => {
+            if (!staticMode) return;
+            draw();
         }
     });
 
     onMount(() => {
-        return register({ draw });
+        return register({ draw, isStatic: () => { if (!hasRenderedOnce) {hasRenderedOnce = true; draw()} return staticMode; } });
     })
 
 </script>

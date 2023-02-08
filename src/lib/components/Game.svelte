@@ -24,10 +24,11 @@
     $: { $heightStore = height }
     $: { $backgroundStore = background }
 
-    const layers = new Set<{ draw: Function }>();
+    const layers = new Set<{ draw: Function, isStatic: () => boolean }>();
 
     const draw = function(delta: number, time: DOMHighResTimeStamp) {
         for (let layer of layers) {
+            if (layer.isStatic()) continue;
             layer.draw(delta, time);
         }
     };
