@@ -4,9 +4,12 @@ import type { Writable } from "svelte/store";
 export enum MOUSE_ACTION {
     DOWN = "down",
     UP = "up",
-    CLICK = "click",
+    // CLICK = "click",
     MOVE = "move"
 }
+
+type MouseEventBoolean = "mouse_left" | "mouse_middle" | "mouse_right";
+type MouseEventNumber = "mouse_x" | "mouse_y";
 
 export class Mouse {
     constructor() {
@@ -16,52 +19,52 @@ export class Mouse {
     }
 
     events: Set<{ key: string | null, action: MOUSE_ACTION, call: (e: { key: string | null, action: MOUSE_ACTION }) => any | void }>;
-    mouseState: Map<string, boolean | number>;
-    mouseStores: Map<string, Writable<boolean | number>>;
+    mouseState: Map<MouseEventBoolean | MouseEventNumber, boolean | number>;
+    mouseStores: Map<MouseEventBoolean | MouseEventNumber, Writable<boolean | number>>;
     innerWidth: number = 0;
     innerHeight: number = 0;
     
     start() {
         window.addEventListener("pointerdown", (e: PointerEvent) => {
             e.preventDefault();
-            let eklc: string;
+            let eKeyLowCase: MouseEventBoolean;
             switch (e.button) {
-                case (0): { eklc = "mouse_left"; break; }
-                case (1): { eklc = "mouse_right"; break; }
-                case (2): { eklc = "mouse_middle"; break; }
+                case (0): { eKeyLowCase = "mouse_left"; break; }
+                case (2): { eKeyLowCase = "mouse_right"; break; }
+                case (1): { eKeyLowCase = "mouse_middle"; break; }
                 default: return;
             }
 
-            this.mouseState.set(eklc, true);
+            this.mouseState.set(eKeyLowCase, true);
 
             this.events.forEach(({ key, action, call }) => {
-                if ((key === eklc || key === null) && action === MOUSE_ACTION.DOWN) call({ key: eklc, action });
+                if ((key === eKeyLowCase || key === null) && action === MOUSE_ACTION.DOWN) call({ key: eKeyLowCase, action });
             })
 
-            if (this.mouseStores.has(eklc)) {
-                this.mouseStores.get(eklc)?.set(true);
+            if (this.mouseStores.has(eKeyLowCase)) {
+                this.mouseStores.get(eKeyLowCase)?.set(true);
             }
         });
 
         window.addEventListener("pointerup", (e: PointerEvent) => {
             e.preventDefault();
 
-            let eklc: string;
+            let eKeyLowCase: MouseEventBoolean;
             switch (e.button) {
-                case (0): { eklc = "mouse_left"; break; }
-                case (1): { eklc = "mouse_right"; break; }
-                case (2): { eklc = "mouse_middle"; break; }
+                case (0): { eKeyLowCase = "mouse_left"; break; }
+                case (1): { eKeyLowCase = "mouse_right"; break; }
+                case (2): { eKeyLowCase = "mouse_middle"; break; }
                 default: return;
             }
 
-            this.mouseState.set(eklc, false);
+            this.mouseState.set(eKeyLowCase, false);
 
             this.events.forEach(({ key, action, call }) => {
-                if ((key === eklc || key === null) && action === MOUSE_ACTION.UP) call({ key: eklc, action });
+                if ((key === eKeyLowCase || key === null) && action === MOUSE_ACTION.UP) call({ key: eKeyLowCase, action });
             })
 
-            if (this.mouseStores.has(eklc)) {
-                this.mouseStores.get(eklc)?.set(false);
+            if (this.mouseStores.has(eKeyLowCase)) {
+                this.mouseStores.get(eKeyLowCase)?.set(false);
             }
         });
 
@@ -107,7 +110,7 @@ export class Mouse {
         })
     }
 
-    on(key: string | null, action: MOUSE_ACTION, callback: (e: { key: string | null, action: MOUSE_ACTION }) => any | void): () => any {
+    on(key: MouseEventBoolean | MouseEventNumber | null, action: MOUSE_ACTION, callback: (e: { key: string | null, action: MOUSE_ACTION }) => any | void): () => any {
         let obj = { key, action, call: callback };
         this.events.add(obj);
 
@@ -116,27 +119,30 @@ export class Mouse {
         }
     }
 
-    getStore(key: "mouse_x" | "mouse_y" | string): Writable<typeof key extends "mouse_x" | "mouse_y" ? number : boolean> {
+    getStore<T extends (MouseEventBoolean | MouseEventNumber)>(key: T): Writable<T extends MouseEventNumber ? number : boolean> {
         if (this.mouseStores.has(key)) {
-            return this.mouseStores.get(key) as ReturnType<typeof this.getStore>;
+            return this.mouseStores.get(key) as Writable<T extends MouseEventNumber ? number : boolean>;
         }
 
-        let wr;
         if (key === "mouse_x" || key === "mouse_y") {
-            wr = writable(this.mouseState.get(key) ?? false);
-        } else {
-            wr = writable(this.mouseState.get(key) ?? false);
+            let wr = writable((this.mouseState.get(key) as number | undefined) ?? 0);
+            this.mouseStores.set(key, wr);
+            return wr as Writable<T extends MouseEventNumber ? number : never>;
         }
 
+
+        let wr = writable((this.mouseState.get(key) as boolean | undefined) ?? false);
         this.mouseStores.set(key, wr);
-        return wr as ReturnType<typeof this.getStore>;
+        return wr as Writable<T extends MouseEventNumber ? never : boolean>;
+
     }
 
-    isPressed(key: string): boolean {
+    isPressed(key: MouseEventBoolean): boolean {
         return this.mouseState.get(key) as boolean ?? false;
+
     }
 
-    getPosition(key: "mouse_x" | "mouse_y"): number {
+    getPosition(key: MouseEventNumber): number {
         return this.mouseState.get(key) as number ?? 0;
     }
 

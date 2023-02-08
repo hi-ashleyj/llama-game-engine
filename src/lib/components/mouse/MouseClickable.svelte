@@ -28,6 +28,7 @@
             if (x < tx || x > tx + tw) return;
             let y = context.getMousePosition("mouse_y");
             if (y < ty || y > ty + th) return;
+            console.log(key);
             dispatch("click");
             switch (key) {
                 case ("mouse_left"): { dispatch("left"); dispatch("leftorright"); return; }

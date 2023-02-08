@@ -1,10 +1,8 @@
 <script lang="ts">
 
-    import { Game, Layer, GameObject, MouseLeftClick } from "../../../lib";
-    import { Rectangle, Text } from "../../../lib/drawables";
+    import { Game, Layer, GameObject, MouseLeftClick, MouseClickable, MouseEventArea } from "../../../lib";
+    import { Rectangle } from "../../../lib/drawables";
     import Follow from "./Follow.svelte";
-    import MouseClickable from "$lib/components/mouse/MouseClickable.svelte";
-    import MouseEventArea from "$lib/components/mouse/MouseEventArea.svelte";
 
     let leftFill = "#aa0000";
     let rightFill = "#aa0000";
@@ -33,7 +31,7 @@
             </GameObject>
             <GameObject x={960} y={540} w={500} h={60} centered={true}>
                 <Rectangle fill={pickerFill} />
-                <MouseClickable on:left={() => pickerFill = "#00aa00"} on:right={() => pickerFill = "#0000aa"} />
+                <MouseClickable on:left={() => pickerFill = "#00aa00"} on:right={() => pickerFill = "#0000aa"} on:middle={() => pickerFill = "#aa0000"} />
             </GameObject>
             <GameObject x={960} y={640} w={500} h={60} opacity={hoveringOne ? 1 : 0.6} centered={true}>
                 <Rectangle fill="white" />
