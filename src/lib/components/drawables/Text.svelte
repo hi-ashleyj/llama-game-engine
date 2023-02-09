@@ -15,7 +15,7 @@
 
     $: computedFont = ((style) ? style + " ": "") + size + "px " + font;
     
-    const draw: DrawableFunction = function({ ctx }, { x, y }: { x: number, y: number, w: number, h: number }) {
+    const draw: DrawableFunction = function({ ctx }, { x, y, w, h }: { x: number, y: number, w: number, h: number }) {
         if (!text) return;
         
         ctx.beginPath();
@@ -23,13 +23,16 @@
         ctx.textBaseline = alignV;
         ctx.font = computedFont;
 
+        let actualX = x + (alignH === "right" ? w : alignH === "center" ? w / 2 : 0);
+        let actualY = y + (alignV === "bottom" ? h : alignV === "middle" ? (h / 2) + (size * 0.10) : 0);
+
         if (fill) {
             ctx.fillStyle = fill;
-            ctx.fillText(text, x, y);
+            ctx.fillText(text, actualX, actualY);
         }
         if (stroke) {
             ctx.strokeStyle = stroke;
-            ctx.strokeText(text, x, y);
+            ctx.strokeText(text, actualX, actualY);
         }
     };
 

@@ -1,7 +1,7 @@
 <script lang="ts">
 
     import { Game, Layer, GameObject, MouseLeftClick, MouseClickable, MouseEventArea } from "../../../lib";
-    import { Rectangle } from "../../../lib/drawables";
+    import { Rectangle, Text } from "../../../lib/drawables";
     import Follow from "./Follow.svelte";
 
     let leftFill = "#aa0000";
@@ -23,22 +23,27 @@
         <Layer zIndex={1}>
             <GameObject x={960} y={340} w={500} h={60} centered={true}>
                 <Rectangle fill={leftFill} />
+                <Text text="Left Click Only" size={20} font="Roboto" fill="white" alignH="center" alignV="middle" />
                 <MouseLeftClick on:click={() => leftFill = "#00aa00"} />
             </GameObject>
             <GameObject x={960} y={440} w={500} h={60} centered={true}>
                 <Rectangle fill={rightFill} />
+                <Text text="Right Click Only" size={30} font="Roboto" fill="white" alignH="center" alignV="middle" />
                 <MouseClickable on:right={() => rightFill = "#00aa00"} />
             </GameObject>
             <GameObject x={960} y={540} w={500} h={60} centered={true}>
                 <Rectangle fill={pickerFill} />
+                <Text text="Colour Depends on Click" size={40} font="Roboto" fill="white" alignH="center" alignV="middle" />
                 <MouseClickable on:left={() => pickerFill = "#00aa00"} on:right={() => pickerFill = "#0000aa"} on:middle={() => pickerFill = "#aa0000"} />
             </GameObject>
             <GameObject x={960} y={640} w={500} h={60} opacity={hoveringOne ? 1 : 0.6} centered={true}>
                 <Rectangle fill="white" />
+                <Text text="Hover Check" size={60} font="Roboto" fill="black" alignH="center" alignV="middle" />
                 <MouseEventArea bind:hover={hoveringOne} />
             </GameObject>
-            <GameObject x={960} y={740} w={500} h={60} opacity={hoveringTwo ? 1 : 0.6} centered={true}>
+            <GameObject x={960} y={740} w={500} h={100} opacity={hoveringTwo ? 1 : 0.6} centered={true}>
                 <Rectangle fill={hoverTwoFill} />
+                <Text text="Hover + Any Click" size={50} font="Roboto" fill="white" alignH="center" alignV="middle" />
                 <MouseEventArea on:click={() => hoverTwoFill = "#00aa00"} bind:hover={hoveringTwo} />
             </GameObject>
             <Follow />
