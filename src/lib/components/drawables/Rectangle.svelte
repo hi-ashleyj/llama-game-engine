@@ -6,6 +6,7 @@
 
     export let fill: string | null = null;
     export let stroke: string | null = null;
+    export let strokeWidth: number | null = null;
     
     const draw: DrawableFunction = function({ ctx }, { x, y, w, h }: { x: number, y: number, w: number, h: number }) {
         ctx.beginPath();
@@ -16,7 +17,7 @@
             ctx.fill();
         }
 
-        if (stroke) {
+        if (stroke && strokeWidth) {
             ctx.strokeStyle = stroke;
             ctx.stroke();
         }

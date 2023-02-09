@@ -6,6 +6,7 @@
 
     export let fill: string | null = null;
     export let stroke: string | null = null;
+    export let strokeWidth: number | null = null;
 
     const TWO_PI = Math.PI * 2;
     
@@ -20,8 +21,9 @@
             ctx.fill();
         }
 
-        if (stroke) {
+        if (stroke && strokeWidth) {
             ctx.strokeStyle = stroke;
+            ctx.lineWidth = strokeWidth;
             ctx.stroke();
         }
     };

@@ -7,18 +7,11 @@
     export let fill: string | null = null;
     export let stroke: string | null = null;
     export let strokeWidth: number | null = null;
-    export let startAngle: number;
-    export let endAngle: number;
-
-    $: sd = (startAngle - 90) * Math.PI / 180;
-    $: ed = (endAngle - 90) * Math.PI / 180;
+    export let radius: number | [ number ] | [ number, number ] | [ number, number, number ] | [ number, number, number, number ] = 0;
     
     const draw: DrawableFunction = function({ ctx }, { x, y, w, h }: { x: number, y: number, w: number, h: number }) {
-        let r = (w + h) / 4
-        
         ctx.beginPath();
-        ctx.arc(x + r, y + r, r, sd, ed);
-        ctx.lineTo(x + r, y + r);
+        ctx.roundRect(x, y, w, h, radius);
         
         if (fill) {
             ctx.fillStyle = fill;
@@ -31,10 +24,11 @@
             ctx.stroke();
         }
     };
-
+    
     let register = setupDrawable({});
 
     onMount(() => {
         return register({ draw });
     })
+
 </script>

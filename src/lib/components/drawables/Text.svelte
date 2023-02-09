@@ -10,6 +10,7 @@
     export let style: string | undefined = undefined;
     export let fill: string | undefined = undefined;
     export let stroke: string | undefined = undefined;
+    export let strokeWidth: number | null = null;
     export let alignH: "left" | "center" | "right" = "left";
     export let alignV: "top" | "middle" | "bottom" | "alphabetic" = "top";
 
@@ -30,8 +31,9 @@
             ctx.fillStyle = fill;
             ctx.fillText(text, actualX, actualY);
         }
-        if (stroke) {
+        if (stroke && strokeWidth) {
             ctx.strokeStyle = stroke;
+            ctx.lineWidth = strokeWidth;
             ctx.strokeText(text, actualX, actualY);
         }
     };
