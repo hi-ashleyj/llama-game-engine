@@ -5,11 +5,11 @@ export enum MOUSE_ACTION {
     DOWN = "down",
     UP = "up",
     // CLICK = "click",
-    MOVE = "move"
+    MOVE = "move",
 }
 
 type MouseEventBoolean = "mouse_left" | "mouse_middle" | "mouse_right";
-type MouseEventNumber = "mouse_x" | "mouse_y";
+type MouseEventNumber = "mouse_x" | "mouse_y" | "mouse_scroll_y" | "mouse_scroll_x";
 
 export class Mouse {
     constructor() {
@@ -105,6 +105,16 @@ export class Mouse {
             }
         });
 
+        window.addEventListener("wheel", (e: WheelEvent) => {
+            let rawX = e.deltaX;
+            let rawY = e.deltaY;
+
+            this.events.forEach(({ key, action, call }) => {
+                if ((key === "mouse_scroll_x" || key === null) && action === MOUSE_ACTION.MOVE && Math.abs(rawX) > 0) call({ key: "mouse_scroll_x", action });
+                if ((key === "mouse_scroll_y" || key === null) && action === MOUSE_ACTION.MOVE && Math.abs(rawY) > 0) call({ key: "mouse_scroll_y", action });
+            })
+        });
+
         window.addEventListener("contextmenu", (e) => {
             e.preventDefault();
         })
@@ -124,7 +134,7 @@ export class Mouse {
             return this.mouseStores.get(key) as Writable<T extends MouseEventNumber ? number : boolean>;
         }
 
-        if (key === "mouse_x" || key === "mouse_y") {
+        if (key === "mouse_x" || key === "mouse_y" || key === "mouse_scroll_x" || key === "mouse_scroll_y") {
             let wr = writable((this.mouseState.get(key) as number | undefined) ?? 0);
             this.mouseStores.set(key, wr);
             return wr as Writable<T extends MouseEventNumber ? number : never>;
