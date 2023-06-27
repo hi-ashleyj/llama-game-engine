@@ -1,6 +1,6 @@
 <script lang="ts">
 
-    import { setupLayer, getGame } from "../setup";
+    import { setupLayer, getGame } from "../setup.js";
     import type { DrawableFunction } from "../types";
     import { onMount } from "svelte";
 

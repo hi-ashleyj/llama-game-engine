@@ -2,12 +2,12 @@
     
     import { writable } from "svelte/store";
     import { onMount } from "svelte";
-    import { setupGame } from "../setup";
+    import { setupGame } from "../setup.js";
     import type { GameContext } from "../types";
-    import { Timing } from "./motions";
-    import { Controller } from "./controller";
+    import { Timing } from "./motions.js";
+    import { Controller } from "./controller.js";
     import type { Writable } from "svelte/store";
-    import { Mouse } from "./mouse";
+    import { Mouse } from "./mouse.js";
 
     export let width = 1920;
     export let height = 1080;

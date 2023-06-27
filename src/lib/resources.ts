@@ -1,1 +1,1 @@
-export { default as images } from "./components/resources/images";
+export { default as images } from "./components/resources/images.js";

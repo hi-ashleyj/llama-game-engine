@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { setupDrawable } from "$lib/setup";
+    import { setupDrawable } from "$lib/setup.js";
     import type { DrawableFunction } from "$lib/types/contexts";
     import { onMount } from "svelte";
 

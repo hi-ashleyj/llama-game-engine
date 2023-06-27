@@ -1,9 +1,9 @@
 <script lang="ts">
 
-    import { setupDrawable, getGame } from "$lib/setup";
+    import { setupDrawable, getGame } from "$lib/setup.js";
     import type { DrawableFunction } from "$lib/types/contexts";
     import { onMount, createEventDispatcher } from "svelte";
-    import { MOUSE_ACTION } from "../mouse";
+    import { MOUSE_ACTION } from "../mouse.js";
 
     let tx = 0;
     let ty = 0;
