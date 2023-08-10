@@ -12,12 +12,12 @@
 
 <div class="game-wrapper">
     <Game>
-        <Layer zIndex={0}>
+        <Layer zIndex={0} name="bg">
             <GameObject x={0} y={0} w={1920} h={1080} >
                 <Rectangle fill="#333333" />
             </GameObject>
         </Layer>
-        <Layer zIndex={1}>
+        <Layer zIndex={1} name="oh">
             <Spinning />
             <LoadingText />
             <BurstTest />

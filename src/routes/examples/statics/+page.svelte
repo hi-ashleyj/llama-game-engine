@@ -18,10 +18,10 @@
 
 <div class="game-wrapper">
     <Game bind:context={context}>
-        <Layer zIndex={0} staticMode={true}>
+        <Layer zIndex={0} staticMode={true} name="bg">
             <BackgroundLayer hue={$timerStore}/>
         </Layer>
-        <Layer zIndex={1}>
+        <Layer zIndex={1} name="help">
             <OtherLayer hue={$timerStore} />
         </Layer>
     </Game>

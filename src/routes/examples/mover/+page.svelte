@@ -1,8 +1,7 @@
 <script lang="ts">
 
-    import { Game, Layer, GameObject } from "../../../lib";
+    import { Game, Layer, GameObject, type GameContext } from "../../../lib";
     import { Rectangle } from "../../../lib/drawables";
-    import type { GameContext } from "../../../lib/types";
 
     import { onMount } from "svelte";
     import MovingBox from "./MovingBox.svelte";
@@ -14,7 +13,7 @@
         xStore = context.createTimer({ duration: 1000, repeats: 0 });
     });
 
-    $: xPosition = 960 + (($xStore - 0.5) * 200);
+    $: xPosition = 960 + (($xStore! - 0.5) * 200);
 
     let frame = () => {};
 
@@ -22,12 +21,12 @@
 
 <div class="game-wrapper">
     <Game bind:context={context}>
-        <Layer zIndex={0}>
+        <Layer zIndex={0} name="bg">
             <GameObject x={0} y={0} w={1920} h={1080} >
                 <Rectangle fill="#333333" />
             </GameObject>
         </Layer>
-        <Layer zIndex={1}>
+        <Layer zIndex={1} name="ui">
             <MovingBox />
         </Layer>
     </Game>

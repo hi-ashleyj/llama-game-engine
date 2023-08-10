@@ -1,30 +1,30 @@
 <script lang="ts">
 
-    import { Game, Layer, GameObject, MouseLeftClick, MouseClickable, MouseEventArea } from "../../../lib";
+    import { Game, Layer, GameObject, MouseClickable, MouseEventArea } from "../../../lib";
     import { RoundedRectangle as Rectangle, Text } from "../../../lib/drawables";
     import Follow from "./Follow.svelte";
 
     let leftFill = "#aa0000";
     let rightFill = "#aa0000";
     let pickerFill = "#aa0000";
-    let hoveringOne;
+    let hoveringOne: boolean;
     let hoverTwoFill = "#aa0000";
-    let hoveringTwo;
+    let hoveringTwo: boolean;
 
 </script>
 
 <div class="game-wrapper">
     <Game>
-        <Layer zIndex={0}>
+        <Layer zIndex={0} name="bg">
             <GameObject x={0} y={0} w={1920} h={1080} >
                 <Rectangle fill="#1e1e1e" radius={10} />
             </GameObject>
         </Layer>
-        <Layer zIndex={1}>
+        <Layer zIndex={1} name="ui">
             <GameObject x={960} y={340} w={500} h={60} centered={true}>
                 <Rectangle fill={leftFill} radius={10} />
                 <Text text="Left Click Only" size={20} font="Roboto" fill="white" alignH="center" alignV="middle" />
-                <MouseLeftClick on:click={() => leftFill = "#00aa00"} />
+                <MouseClickable on:left={() => leftFill = "#00aa00"} />
             </GameObject>
             <GameObject x={960} y={440} w={500} h={60} centered={true}>
                 <Rectangle fill={rightFill} radius={10} />
