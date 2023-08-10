@@ -21,3 +21,8 @@ export { resolve as resolveImage } from "./resources/images.js";
 
 // EXTRAS
 export { default as SensibleDefaultStyles } from "./extras/SensibleDefaultStyles.svelte";
+export { default as Empty } from "./extras/Empty.svelte";
+export { default as LayerPortal } from "./extras/LayerPortal.svelte";
+export { changeScene } from "./extras/scenes.js";
+export { default as SceneSwitcher } from "./extras/SceneSwitcher.svelte";
+export { default as SceneTransition } from "./extras/SceneTransition.svelte";
