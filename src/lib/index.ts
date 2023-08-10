@@ -26,3 +26,4 @@ export { default as LayerPortal } from "./extras/LayerPortal.svelte";
 export { changeScene } from "./extras/scenes.js";
 export { default as SceneSwitcher } from "./extras/SceneSwitcher.svelte";
 export { default as SceneTransition } from "./extras/SceneTransition.svelte";
+export { default as Rotate } from "./extras/Rotate.svelte";
