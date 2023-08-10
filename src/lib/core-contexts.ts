@@ -24,9 +24,9 @@ export type GameContext = {
     isMousePressed: Mouse["isPressed"],
     getMousePosition: Mouse["getPosition"],
     getMouseStore: Mouse["getStore"],
-    onFrame: (callback: Function) => () => any,
-    onBeforeFrame: (callback: Function) => () => any,
-    onAfterFrame: (callback: Function) => () => any,
+    onFrame: (callback: (info: { delta: number, time: number }) => any | void) => () => any,
+    onBeforeFrame: (callback: (info: { delta: number, time: number }) => any | void) => () => any,
+    onAfterFrame: (callback: (info: { delta: number, time: number }) => any | void) => () => any,
     getLayerByName: (name: string) => LayerContext | null,
 };
 
@@ -45,7 +45,7 @@ export const getGame = function() {
 const LAYER = Symbol();
 
 export type LayerContext = Required<DrawableContext<null>> & {
-    requestFrame: () => any;
+    requestFrame: (...optional: any[]) => any;
 };
 
 export type LayerDrawable = {

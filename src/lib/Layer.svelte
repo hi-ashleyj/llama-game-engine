@@ -41,7 +41,7 @@
                 if (shouldRenderNextFrame) { shouldRenderNextFrame = false; draw(); } 
                 return staticMode; 
             },
-            name: "",
+            name: name,
         });
     })
 

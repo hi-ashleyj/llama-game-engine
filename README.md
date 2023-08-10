@@ -7,7 +7,7 @@ This thing isn't ready - and probably will never be fully done. This is just as 
 I'd recommend starting with a sveltekit project configured with TS. That's what I use basically 100% of the time.  
 To get started:  
 
-```svelte
+```html
 /// +page.svelte
 <script lang="ts">
 
@@ -15,7 +15,8 @@ To get started:
 
 </script>
 
-<SensibleDefaultStyles> // Auto-configures a wrapper and some global styles. Optional.
+// Auto-configure a wrapper and some global styles. Optional.
+<SensibleDefaultStyles> 
 
     <Game>
         

@@ -43,9 +43,9 @@
     const keyboard = new Keyboard();
     const mouse = new Mouse();
 
-    const frameEvents: Set<Function> = new Set();
-    const frameBeforeEvents: Set<Function> = new Set();
-    const frameAfterEvents: Set<Function> = new Set();
+    const frameEvents: Set<(info: { delta: number, time: number }) => any | void> = new Set();
+    const frameBeforeEvents: Set<(info: { delta: number, time: number }) => any | void> = new Set();
+    const frameAfterEvents: Set<(info: { delta: number, time: number }) => any | void> = new Set();
 
     export const context: GameContext = {
         width: widthStore,
@@ -62,15 +62,15 @@
         isMousePressed: mouse.isPressed.bind(mouse),
         getMousePosition: mouse.getPosition.bind(mouse),
         getMouseStore: mouse.getStore.bind(mouse),
-        onFrame: (callback: Function) => {
+        onFrame: (callback) => {
             frameEvents.add(callback);
             return () => frameEvents.delete(callback);
         },
-        onBeforeFrame: (callback: Function) => {
+        onBeforeFrame: (callback) => {
             frameBeforeEvents.add(callback);
             return () => frameBeforeEvents.delete(callback);
         },
-        onAfterFrame: (callback: Function) => {
+        onAfterFrame: (callback) => {
             frameAfterEvents.add(callback);
             return () => frameAfterEvents.delete(callback);
         },
