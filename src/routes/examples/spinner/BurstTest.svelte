@@ -4,7 +4,7 @@
     import { Rectangle } from "../../../lib/drawables";
     import { getGame } from "../../../lib";
     import { onDestroy } from "svelte";
-    import { CONTROLLER_ACTION } from "@hi-ashleyj/llama/components/controller";
+    import { CONTROLLER_ACTION } from "@hi-ashleyj/llama/controllers/keyboard";
 
     const context = getGame();
 

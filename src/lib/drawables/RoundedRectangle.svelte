@@ -1,7 +1,6 @@
 <script lang="ts">
 
-    import { setupDrawable } from "$lib/setup.js";
-    import type { DrawableFunction } from "$lib/types/contexts";
+    import { setupDrawable, type DrawFunction } from "$lib/drawable.js";
     import { onMount } from "svelte";
 
     export let fill: string | null = null;
@@ -9,7 +8,7 @@
     export let strokeWidth: number | null = null;
     export let radius: number | [ number ] | [ number, number ] | [ number, number, number ] | [ number, number, number, number ] = 0;
     
-    const draw: DrawableFunction = function({ ctx }, { x, y, w, h }: { x: number, y: number, w: number, h: number }) {
+    const draw: DrawFunction<{x: number, y: number, w: number, h: number}> = function({ ctx }, { x, y, w, h }: { x: number, y: number, w: number, h: number }) {
         ctx.beginPath();
         ctx.roundRect(x, y, w, h, radius);
         
@@ -25,7 +24,7 @@
         }
     };
     
-    let register = setupDrawable({});
+    let register = setupDrawable<{x: number, y: number, w: number, h: number}, null>({});
 
     onMount(() => {
         return register({ draw });

@@ -1,7 +1,6 @@
 <script lang="ts">
 
-    import { setupDrawable } from "../setup.js";
-    import type { DrawableFunction } from "../types/contexts";
+    import { setupDrawable, type DrawFunction } from "./drawable.js";
     import { onMount } from "svelte";
 
     export let x = 0;
@@ -18,9 +17,9 @@
     $: ax = (centered) ? x - (w / 2) : x;
     $: ay = (centered) ? y - (h / 2) : y;
 
-    const targets = new Set<{ draw: DrawableFunction }>();
+    const targets = new Set<{ draw: DrawFunction<{x: number, y: number, w: number, h: number}> }>();
 
-    const draw: DrawableFunction = function ( { width, height, ctx } ) {
+    const draw: DrawFunction<null> = function ( { width, height, ctx } ) {
         if (opacity <= 0) return;
         if (opacity < 1) {
             ctx.globalAlpha = opacity;
@@ -31,7 +30,7 @@
         }
     };
 
-    let register = setupDrawable({
+    let register = setupDrawable<null, {x: number, y: number, w: number, h: number}>({
         assign: (ctx) => {
             targets.add(ctx);
             return () => {

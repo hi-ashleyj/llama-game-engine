@@ -1,7 +1,7 @@
 <script lang="ts">
 
-    import { setupLayer, getGame } from "../setup.js";
-    import type { DrawableFunction } from "../types";
+    import { setupLayer, getGame } from "./core-contexts.js";
+    import type { DrawFunction } from "./drawable.js";
     import { onMount } from "svelte";
 
     export let zIndex = 0;
@@ -11,15 +11,15 @@
     let canvas: HTMLCanvasElement | undefined;
     $: ctx = (typeof canvas !== "undefined") ? canvas.getContext("2d") : null;
 
-    let targets = new Set<{ draw: DrawableFunction }>();
+    let targets = new Set<{ draw: DrawFunction<null> }>();
+    
+    const { width, height } = getGame();
 
     const draw = () => {
         if (ctx === null) return;
         ctx.clearRect(0, 0, $width, $height);
-        targets.forEach(f => f.draw({ width: $width, height: $height, ctx }));
+        targets.forEach(f => f.draw({ width: $width, height: $height, ctx: ctx! }));
     }
-
-    let { width, height } = getGame();
 
     let register = setupLayer({
         assign: (ctx) => {
@@ -33,7 +33,13 @@
     });
 
     onMount(() => {
-        return register({ draw, isStatic: () => { if (shouldRenderNextFrame) {shouldRenderNextFrame = false; draw()} return staticMode; } });
+        return register({ 
+            draw, 
+            isStatic: () => { 
+                if (shouldRenderNextFrame) { shouldRenderNextFrame = false; draw(); } 
+                return staticMode; 
+            } 
+        });
     })
 
 </script>

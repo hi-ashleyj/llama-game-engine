@@ -1,6 +1,6 @@
 <script lang="ts">
-    import { setupDrawable } from "$lib/setup.js";
-    import type { DrawableFunction } from "$lib/types/contexts";
+
+    import { setupDrawable, type DrawFunction } from "$lib/drawable.js";
     import { onMount } from "svelte";
 
     export let text: string;
@@ -24,7 +24,7 @@
             ? ((splits?.length || 1) - 1) * size * spacing * 0.5
             : 0;
 
-    const draw: DrawableFunction = function (
+    const draw: DrawFunction<{x: number, y: number, w: number, h: number}> = function (
         { ctx },
         { x, y }: { x: number; y: number; w: number; h: number }
     ) {
@@ -50,7 +50,7 @@
         }
     };
 
-    let register = setupDrawable({});
+    let register = setupDrawable<{x: number, y: number, w: number, h: number}, null>({});
 
     onMount(() => {
         return register({ draw });

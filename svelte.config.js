@@ -5,10 +5,7 @@ import { vitePreprocess } from '@sveltejs/kit/vite';
 const config = {
     preprocess: vitePreprocess(),
     kit: {
-        adapter: adapter(),
-        alias: {
-            "@hi-ashleyj/llama": "./src/lib"
-        },
+        adapter: adapter()
     },
     compilerOptions: {
 		dev: true,

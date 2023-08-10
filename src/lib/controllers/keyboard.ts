@@ -1,20 +1,20 @@
 import { writable } from "svelte/store";
 import type { Writable } from "svelte/store";
 
-export enum CONTROLLER_ACTION {
+export enum KEYBOARD_ACTION {
     DOWN = "down",
     UP = "up",
     PRESS = "press"
 }
 
-export class Controller {
+export class Keyboard {
     constructor() {
         this.events = new Set();
         this.keyState = new Map();
         this.keyStores = new Map();
     }
 
-    events: Set<{ key: string | null, action: CONTROLLER_ACTION, call: (e: { key: string | null, action: CONTROLLER_ACTION }) => any | void }>;
+    events: Set<{ key: string | null, action: KEYBOARD_ACTION, call: (e: { key: string | null, action: KEYBOARD_ACTION }) => any | void }>;
     keyState: Map<string, boolean>;
     keyStores: Map<string, Writable<boolean>>;
     
@@ -24,7 +24,7 @@ export class Controller {
             this.keyState.set(eklc, true);
 
             this.events.forEach(({ key, action, call }) => {
-                if ((key === eklc || key === null) && action === CONTROLLER_ACTION.DOWN) call({ key: eklc, action });
+                if ((key === eklc || key === null) && action === KEYBOARD_ACTION.DOWN) call({ key: eklc, action });
             })
 
             if (this.keyStores.has(eklc)) {
@@ -37,7 +37,7 @@ export class Controller {
             this.keyState.set(eklc, false);
 
             this.events.forEach(({ key, action, call }) => {
-                if ((key === eklc || key === null) && action === CONTROLLER_ACTION.UP) call({ key: eklc, action });
+                if ((key === eklc || key === null) && action === KEYBOARD_ACTION.UP) call({ key: eklc, action });
             })
 
             if (this.keyStores.has(eklc)) {
@@ -46,7 +46,7 @@ export class Controller {
         });
     }
 
-    on(key: string | null, action: CONTROLLER_ACTION, callback: (e: { key: string | null, action: CONTROLLER_ACTION }) => any | void): () => any {
+    on(key: string | null, action: KEYBOARD_ACTION, callback: (e: { key: string | null, action: KEYBOARD_ACTION }) => any | void): () => any {
         let obj = { key, action, call: callback };
         this.events.add(obj);
 

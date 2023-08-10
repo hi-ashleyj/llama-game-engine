@@ -4,7 +4,7 @@
     import { Text } from "../../../lib/drawables";
     import { getGame } from "../../../lib";
     import { onDestroy } from "svelte";
-    import MultiLineText from "@hi-ashleyj/llama/components/drawables/MultiLineText.svelte";
+    import MultiLineText from "@hi-ashleyj/llama/drawables/MultiLineText.svelte";
 
     const context = getGame();
 

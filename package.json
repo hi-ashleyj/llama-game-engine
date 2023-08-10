@@ -31,7 +31,15 @@
   "peerDependencies": {
     "svelte": "^4.0.0"
   },
+  "files": [ "dist" ],
   "exports": {
-    
+    ".": {
+      "types": "./dist/index.d.ts",
+      "svelte": "./dist/index.js"
+    },
+    "./drawables": {
+      "types": "./dist/drawables/index.d.ts",
+      "svelte": "./dist/drawables/index.js"
+    }
   }
 }

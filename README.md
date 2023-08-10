@@ -3,4 +3,32 @@ This thing isn't ready - and probably will never be fully done. This is just as 
 
 ## Seriously, don't use this yet.
 
+## A Good Starting point.
+I'd recommend starting with a sveltekit project configured with TS. That's what I use basically 100% of the time.  
+To get started:  
+
+```svelte
+/// +page.svelte
+<script lang="ts">
+
+    import { SensibleDefaultStyles, Game } from "@hi-ashleyj/llama";
+
+</script>
+
+<SensibleDefaultStyles> // Auto-configures a wrapper and some global styles. Optional.
+
+    <Game>
+        
+    </Game>
+
+</SensibleDefaultStyles>
+
+<style>
+
+    @font-face {
+        // ...define fonts
+    }
+
+</style>
+```
 

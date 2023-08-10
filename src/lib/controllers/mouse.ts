@@ -4,8 +4,8 @@ import type { Writable } from "svelte/store";
 export enum MOUSE_ACTION {
     DOWN = "down",
     UP = "up",
-    // CLICK = "click",
     MOVE = "move",
+    // CLICK = "click",
 }
 
 type MouseEventBoolean = "mouse_left" | "mouse_middle" | "mouse_right";
@@ -23,6 +23,8 @@ export class Mouse {
     mouseStores: Map<MouseEventBoolean | MouseEventNumber, Writable<boolean | number>>;
     innerWidth: number = 0;
     innerHeight: number = 0;
+    drawWidth: number = 1920;
+    drawHeight: number = 1080;
     
     start() {
         window.addEventListener("pointerdown", (e: PointerEvent) => {
@@ -77,14 +79,14 @@ export class Mouse {
 
             if (this.innerWidth / this.innerHeight > 16 / 9) {
                 // TODO: De Hard-code this
-                const scaleFactor = 1080 / this.innerHeight;
-                const realCanvasSize = 1920 / scaleFactor;
+                const scaleFactor = this.drawHeight / this.innerHeight;
+                const realCanvasSize = this.drawWidth / scaleFactor;
                 adjustedY = rawY * scaleFactor;
                 adjustedX = (rawX - ((this.innerWidth - realCanvasSize) / 2)) * scaleFactor;
             } else {
                 // TODO: De Hard-code this
-                const scaleFactor = 1920 / this.innerWidth;
-                const realCanvasSize = 1080 / scaleFactor;
+                const scaleFactor = this.drawWidth / this.innerWidth;
+                const realCanvasSize = this.drawHeight / scaleFactor;
                 adjustedX = rawX * scaleFactor;
                 adjustedY = (rawY - ((this.innerHeight - realCanvasSize) / 2)) * scaleFactor;
             }
@@ -159,5 +161,13 @@ export class Mouse {
     changeWindowDimensions(width: number, height: number) {
         this.innerHeight = height;
         this.innerWidth = width;
+    }
+
+    setWidth(width: number) {
+        this.drawWidth = width;
+    }
+
+    setHeight(height: number) {
+        this.drawHeight = height;
     }
 }

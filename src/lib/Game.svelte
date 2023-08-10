@@ -2,40 +2,37 @@
     
     import { writable } from "svelte/store";
     import { onMount } from "svelte";
-    import { setupGame } from "../setup.js";
-    import type { GameContext } from "../types";
-    import { Timing } from "./motions.js";
-    import { Controller } from "./controller.js";
+    import { setupGame, type GameContext, type LayerContext, type LayerDrawable } from "./core-contexts.js";
+    import { Timing } from "./controllers/motions.js";
+    import { Controller } from "./controllers/keyboard.js";
     import type { Writable } from "svelte/store";
-    import { Mouse } from "./mouse.js";
+    import { Mouse } from "./components/mouse.js";
 
     export let width = 1920;
     export let height = 1080;
     export let background = "#000000";
 
-    // noinspection JSUnusedAssignment
     const widthStore: Writable<number> = writable(1920);
-    // noinspection JSUnusedAssignment
     const heightStore: Writable<number> = writable(1080);
-    // noinspection JSUnusedAssignment
     const backgroundStore: Writable<string> = writable("#000000");
 
     $: { $widthStore = width }
     $: { $heightStore = height }
     $: { $backgroundStore = background }
 
-    const layers = new Set<{ draw: Function, isStatic: () => boolean }>();
+    const layerDrawables = new Set<LayerDrawable>();
+    const layerAssignments = new Map<string, LayerContext>();
 
-    const draw = function(delta: number, time: DOMHighResTimeStamp) {
-        for (let layer of layers) {
+    const draw = function() {
+        for (let layer of layerDrawables) {
             if (layer.isStatic()) continue;
-            layer.draw(delta, time);
+            layer.draw();
         }
     };
 
-    const assign = function(ctx: any) {
-        layers.add(ctx);
-        return () => layers.delete(ctx);
+    const assign = function(ctx: LayerDrawable) {
+        layerDrawables.add(ctx);
+        return () => layerDrawables.delete(ctx);
     };
 
     const timing = new Timing();
@@ -46,7 +43,6 @@
     const frameBeforeEvents: Set<Function> = new Set();
     const frameAfterEvents: Set<Function> = new Set();
 
-    // noinspection JSUnusedGlobalSymbols
     export const context: GameContext = {
         width: widthStore,
         height: heightStore,
@@ -97,7 +93,7 @@
 
         frameEvents.forEach((callback) => callback({ delta, time }));
 
-        draw(delta, time);
+        draw();
 
         frameAfterEvents.forEach((callback) => callback({ delta, time }));
 
@@ -116,6 +112,14 @@
 
     $: {
         mouse.changeWindowDimensions(wiw, wih);
+    }
+
+    $: {
+        mouse.setHeight(height);
+    }
+
+    $: {
+        mouse.setWidth(width);
     }
 
 </script>
