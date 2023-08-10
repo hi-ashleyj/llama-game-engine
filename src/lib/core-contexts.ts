@@ -11,7 +11,7 @@ export type RegisterFunction<T> = (run: T) => DestroyFunction;
 const GAME = Symbol();
 
 export type GameContext = { 
-    assign: RegisterFunction<LayerDrawable>,
+    assign: (ctx: LayerContext, obj: LayerDrawable) => DestroyFunction,
     width: Writable<number>, 
     height: Writable<number>, 
     background: Writable<string>,
@@ -27,6 +27,7 @@ export type GameContext = {
     onFrame: (callback: Function) => () => any,
     onBeforeFrame: (callback: Function) => () => any,
     onAfterFrame: (callback: Function) => () => any,
+    getLayerByName: (name: string) => LayerContext | null,
 };
 
 export const setupGame = function (context: GameContext) {
@@ -50,6 +51,7 @@ export type LayerContext = Required<DrawableContext<null>> & {
 export type LayerDrawable = {
     draw: () => any | void
     isStatic: () => boolean,
+    name: string
 };
 
 export const setupLayer = function (context: LayerContext): RegisterFunction<LayerDrawable> {
@@ -63,7 +65,7 @@ export const setupLayer = function (context: LayerContext): RegisterFunction<Lay
     setupDrawable({ assign: context.assign });
 
     return (obj) => {
-        return game.assign(obj);
+        return game.assign(context, obj);
     }
 };
 

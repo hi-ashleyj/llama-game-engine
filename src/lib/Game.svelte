@@ -4,9 +4,9 @@
     import { onMount } from "svelte";
     import { setupGame, type GameContext, type LayerContext, type LayerDrawable } from "./core-contexts.js";
     import { Timing } from "./controllers/motions.js";
-    import { Controller } from "./controllers/keyboard.js";
+    import { Keyboard } from "./controllers/keyboard.js";
     import type { Writable } from "svelte/store";
-    import { Mouse } from "./components/mouse.js";
+    import { Mouse } from "./controllers/mouse.js";
 
     export let width = 1920;
     export let height = 1080;
@@ -30,13 +30,17 @@
         }
     };
 
-    const assign = function(ctx: LayerDrawable) {
-        layerDrawables.add(ctx);
-        return () => layerDrawables.delete(ctx);
+    const assign = function(ctx: LayerContext, obj: LayerDrawable) {
+        layerDrawables.add(obj);
+        layerAssignments.set(obj.name, ctx);
+        return () => { 
+            layerDrawables.delete(obj);
+            layerAssignments.delete(obj.name); 
+        };
     };
 
     const timing = new Timing();
-    const controller = new Controller();
+    const keyboard = new Keyboard();
     const mouse = new Mouse();
 
     const frameEvents: Set<Function> = new Set();
@@ -47,12 +51,13 @@
         width: widthStore,
         height: heightStore,
         background: backgroundStore,
+        getLayerByName: (name) => layerAssignments.get(name) ?? null,
         assign,
         createTimer: timing.createTimer.bind(timing),
         createBurst: timing.createBurst.bind(timing),
-        onKeyboardEvent: controller.on.bind(controller),
-        isKeyboardPressed: controller.isPressed.bind(controller),
-        getKeyboardStore: controller.getStore.bind(controller),
+        onKeyboardEvent: keyboard.on.bind(keyboard),
+        isKeyboardPressed: keyboard.isPressed.bind(keyboard),
+        getKeyboardStore: keyboard.getStore.bind(keyboard),
         onMouseEvent: mouse.on.bind(mouse),
         isMousePressed: mouse.isPressed.bind(mouse),
         getMousePosition: mouse.getPosition.bind(mouse),
@@ -103,7 +108,7 @@
 
     onMount(() => {
         requestAnimationFrame(loop);
-        controller.start();
+        keyboard.start();
         mouse.start();
     });
 

@@ -32,13 +32,16 @@
         }
     });
 
+    export let name: string;
+
     onMount(() => {
         return register({ 
             draw, 
             isStatic: () => { 
                 if (shouldRenderNextFrame) { shouldRenderNextFrame = false; draw(); } 
                 return staticMode; 
-            } 
+            },
+            name: "",
         });
     })
 
