@@ -27,3 +27,4 @@ export { changeScene } from "./extras/scenes.js";
 export { default as SceneSwitcher } from "./extras/SceneSwitcher.svelte";
 export { default as SceneTransition } from "./extras/SceneTransition.svelte";
 export { default as Rotate } from "./extras/Rotate.svelte";
+export { default as Tweened } from "./extras/Tweened.svelte";
