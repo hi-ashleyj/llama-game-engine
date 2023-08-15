@@ -1,7 +1,7 @@
 {
   "name": "@hi-ashleyj/llama",
   "description": "A (Very Incomplete) 2D Canvas Game Engine powered by Svelte",
-  "version": "0.10.1",
+  "version": "0.10.2",
   "type": "module",
   "scripts": {
     "dev": "vite dev",
@@ -38,13 +38,7 @@
     "dist"
   ],
   "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "svelte": "./dist/index.js"
-    },
-    "./drawables": {
-      "types": "./dist/drawables/index.d.ts",
-      "svelte": "./dist/drawables/index.js"
-    }
+    ".": "./dist/index.js",
+    "./drawables": "./dist/drawables/index.js"
   }
 }
