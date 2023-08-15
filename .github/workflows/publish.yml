@@ -25,7 +25,6 @@ jobs:
       - run: npm run package
         name: Build Package
       - run: npm publish --access public
-        working-directory: package
         name: Publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_AUTOMATION_TOKEN}}
