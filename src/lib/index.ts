@@ -18,6 +18,8 @@ export * as Drawables from "./drawables/index.js";
 
 // RESOURCES
 export { resolve as resolveImage } from "./resources/images.js";
+export { useTileSet, getTile } from "./resources/tileset.js";
+export type { TileSet } from "./resources/tileset.d.ts";
 
 // EXTRAS
 export { default as SensibleDefaultStyles } from "./extras/SensibleDefaultStyles.svelte";
