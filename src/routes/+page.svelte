@@ -6,6 +6,7 @@
 <a href="/examples/mover" >Jump to Mover</a><br />
 <a href="/examples/hover" >Jump to Hover</a><br />
 <a href="/examples/statics" >Jump to Statics</a><br />
+<a href="/examples/tilemap" >Jump to Tilemap</a><br />
 
 <style lang="scss">
 

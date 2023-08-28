@@ -6,6 +6,7 @@
 
     export let zIndex = 0;
     export let staticMode: boolean = false;
+    export let scaleMode: "pixelated" | "smooth" = "pixelated";
     let shouldRenderNextFrame = true;
 
     let canvas: HTMLCanvasElement | undefined;
@@ -18,6 +19,7 @@
     const draw = () => {
         if (ctx === null) return;
         ctx.clearRect(0, 0, $width, $height);
+        ctx.imageSmoothingEnabled = scaleMode === "smooth";
         targets.forEach(f => f.draw({ width: $width, height: $height, ctx: ctx! }));
     }
 
