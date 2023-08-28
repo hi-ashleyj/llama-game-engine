@@ -2,7 +2,7 @@
 
     import {jumpSignal, effectiveScene} from "./scenes.js";
     import {SvelteComponent, onMount} from "svelte";
-    import {getTriggerLayerRender} from "@hi-ashleyj/llama";
+    import {getTriggerLayerRender} from "../core-contexts.js";
 
     const triggerRender = getTriggerLayerRender();
     let scene: string;

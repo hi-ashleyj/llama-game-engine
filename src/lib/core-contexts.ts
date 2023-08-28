@@ -1,9 +1,9 @@
 import type { Writable } from 'svelte/store';
-import type { Timing } from "./controllers/motions";
-import type { Keyboard } from "./controllers/keyboard";
-import type { Mouse } from "./controllers/mouse";
+import type { Timing } from "./controllers/motions.js";
+import type { Keyboard } from "./controllers/keyboard.js";
+import type { Mouse } from "./controllers/mouse.js";
 import { getContext, setContext } from 'svelte';
-import { setupDrawable, type DrawableContext, type DrawFunction } from './drawable';
+import { setupDrawable, type DrawableContext, type DrawFunction } from './drawable.js';
 
 export type DestroyFunction = () => any;
 export type RegisterFunction<T> = (run: T) => DestroyFunction;

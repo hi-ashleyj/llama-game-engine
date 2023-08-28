@@ -1,7 +1,7 @@
 <script lang="ts">
 
-    import {jumpSignal, sceneAnimating} from "./scenes";
-    import {getGame, getTriggerLayerRender } from "@hi-ashleyj/llama";
+    import {jumpSignal, sceneAnimating} from "./scenes.js";
+    import {getGame, getTriggerLayerRender } from "../core-contexts.js";
     import { onDestroy } from "svelte";
 
     const context = getGame();
