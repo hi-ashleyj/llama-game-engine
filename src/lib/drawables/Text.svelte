@@ -1,11 +1,12 @@
 <script lang="ts">
 
     import { setupDrawable, type DrawFunction } from "$lib/drawable.js";
+    import { getGame } from "$lib";
     import { onMount } from "svelte";
 
     export let text: string;
     export let size: number;
-    export let font: string;
+    export let font: string | undefined;
     export let style: string | undefined = undefined;
     export let fill: string | undefined = undefined;
     export let stroke: string | undefined = undefined;
@@ -13,7 +14,10 @@
     export let alignH: "left" | "center" | "right" = "left";
     export let alignV: "top" | "middle" | "bottom" | "alphabetic" = "top";
 
-    $: computedFont = ((style) ? style + " ": "") + size + "px " + font;
+    const { defaultTextFontFace } = getGame();
+
+    $: effectiveFont = font ? font : typeof $defaultTextFontFace === "string" ? $defaultTextFontFace : "sans-serif";
+    $: computedFont = ((style) ? style + " ": "") + size + "px " + effectiveFont;
     
     const draw: DrawFunction<{x: number, y: number, w: number, h: number}> = function({ ctx }, { x, y, w, h }: { x: number, y: number, w: number, h: number }) {
         if (!text) return;

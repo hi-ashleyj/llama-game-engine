@@ -2,6 +2,7 @@
 
     import { setupDrawable, type DrawFunction } from "$lib/drawable.js";
     import { onMount } from "svelte";
+    import { getGame } from "$lib/core-contexts.js";
 
     export let text: string;
     export let size: number;
@@ -14,6 +15,9 @@
     export let alignH: "left" | "center" | "right" = "left";
     export let alignV: "top" | "middle" | "bottom" | "alphabetic" = "top";
 
+    const { defaultTextFontFace } = getGame();
+
+    $: effectiveFont = font ? font : typeof $defaultTextFontFace === "string" ? $defaultTextFontFace : "sans-serif";
     $: computedFont = (style ? style + " " : "") + size + "px " + font;
     $: splits = text?.split("\n") || [];
 

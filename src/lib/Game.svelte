@@ -74,6 +74,7 @@
             frameAfterEvents.add(callback);
             return () => frameAfterEvents.delete(callback);
         },
+        defaultTextFontFace: writable(null)
     }
 
     setupGame(context);

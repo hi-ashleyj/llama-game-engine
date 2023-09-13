@@ -3,7 +3,7 @@ export { default as Game } from "./Game.svelte";
 export { default as Layer } from "./Layer.svelte";
 export { default as GameObject } from "./GameObject.svelte";
 export { getGame, getLayer, getTriggerLayerRender } from "./core-contexts.js";
-export type { GameContext, LayerContext, LayerDrawable } from "./core-contexts.d.ts";
+export type { GameContext, LayerContext, LayerDrawable } from "./core-contexts.js";
 
 // CONTROLLERS
 export { default as MouseClickable } from "./controllers/MouseClickable.svelte";
@@ -12,14 +12,12 @@ export { MOUSE_ACTION } from "./controllers/mouse.js";
 export { KEYBOARD_ACTION } from "./controllers/keyboard.js";
 
 // DRAWABLES
-export { setupDrawable } from "./drawable.js";
-export type { DrawableContext, DrawableObject, DrawFunction } from "./drawable.d.ts";
+export { setupDrawable, type DrawableContext, type DrawFunction, type DrawableObject } from "./drawable.js";
 export * as Drawables from "./drawables/index.js";
 
 // RESOURCES
 export { resolve as resolveImage } from "./resources/images.js";
-export { useTileSet, getTile } from "./resources/tileset.js";
-export type { TileSet } from "./resources/tileset.d.ts";
+export { useTileSet, getTile, type TileSet } from "./resources/tileset.js";
 
 // EXTRAS
 export { default as SensibleDefaultStyles } from "./extras/SensibleDefaultStyles.svelte";
@@ -30,3 +28,4 @@ export { default as SceneSwitcher } from "./extras/SceneSwitcher.svelte";
 export { default as SceneTransition } from "./extras/SceneTransition.svelte";
 export { default as Rotate } from "./extras/Rotate.svelte";
 export { default as Tweened } from "./extras/Tweened.svelte";
+export { default as DefaultFontFace } from "./extras/DefaultFontFace.svelte";
