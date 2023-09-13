@@ -3,6 +3,7 @@
     import { setupDrawable, type DrawFunction } from "$lib/drawable.js";
     import { onMount } from "svelte";
     import { getGame } from "$lib/core-contexts.js";
+    import { effectiveScene } from "$lib/extras/scenes.js";
 
     export let text: string;
     export let size: number;
@@ -18,7 +19,7 @@
     const { defaultTextFontFace } = getGame();
 
     $: effectiveFont = font ? font : typeof $defaultTextFontFace === "string" ? $defaultTextFontFace : "sans-serif";
-    $: computedFont = (style ? style + " " : "") + size + "px " + font;
+    $: computedFont = (style ? style + " " : "") + size + "px " + effectiveFont;
     $: splits = text?.split("\n") || [];
 
     $: offset =

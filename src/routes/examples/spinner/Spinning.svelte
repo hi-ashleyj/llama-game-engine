@@ -1,8 +1,7 @@
 <script lang="ts">
 
-    import { GameObject } from "../../../lib";
+    import { GameObject, getGame } from "../../../lib";
     import { Arc } from "../../../lib/drawables";
-    import { getGame } from "../../../lib";
     import { onDestroy } from "svelte";
 
     const context = getGame();

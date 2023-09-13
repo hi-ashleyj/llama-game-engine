@@ -1,12 +1,10 @@
 <script lang="ts">
 
-    import { Game, Layer, GameObject } from "../../../lib";
+    import { Game, Layer, GameObject, DefaultFontFace } from "../../../lib";
     import { Rectangle } from "../../../lib/drawables";
 
     import Spinning from "./Spinning.svelte";
     import LoadingText from "./LoadingText.svelte";
-    import BurstTest from "./BurstTest.svelte";
-
 
 </script>
 
@@ -20,7 +18,6 @@
         <Layer zIndex={1} name="oh">
             <Spinning />
             <LoadingText />
-            <BurstTest />
         </Layer>
     </Game>
 </div>
