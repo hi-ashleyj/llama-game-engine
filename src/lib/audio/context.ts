@@ -6,7 +6,7 @@ export type DisconnectFunction = () => any;
 const CONNECTOR = Symbol();
 
 export type AudioSvelteContext = {
-    connect: (node: AudioNode) => any
+    connect: (node: AudioNode) => DisconnectFunction
 };
 
 export const getSetupAudio = function (connect: (node: AudioNode) => DisconnectFunction) {

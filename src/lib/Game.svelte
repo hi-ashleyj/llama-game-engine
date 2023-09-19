@@ -115,8 +115,8 @@
     let audio: AudioContext | null = null;
     getSetupAudio((node) => {
         if (!audio) throw new Error("Audio Is Not Yet Created!")
-        audio.destination.connect(node);
-        return () => audio.destination.disconnect(node);
+        node.connect(audio.destination);
+        return () => audio && node.disconnect(audio.destination);
     })
 
     onMount(() => {
@@ -142,8 +142,8 @@
     }
 
     const resumeAudioContext = () => {
-        if (audio.state === "suspended") {
-            audio.resume();
+        if (audio?.state === "suspended") {
+            audio?.resume();
         }
     }
 
