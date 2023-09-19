@@ -7,6 +7,11 @@
     import { Keyboard } from "./controllers/keyboard.js";
     import type { Writable } from "svelte/store";
     import { Mouse } from "./controllers/mouse.js";
+    import { getSetupAudio } from "$lib/audio/context.js";
+
+    const raise = (err: string) => {
+        throw new Error(err);
+    }
 
     export let width = 1920;
     export let height = 1080;
@@ -74,11 +79,11 @@
             frameAfterEvents.add(callback);
             return () => frameAfterEvents.delete(callback);
         },
-        defaultTextFontFace: writable(null)
+        defaultTextFontFace: writable(null),
+        getAudioContext: () => audio ? audio : raise("There Is No AudioContext"),
     }
 
     setupGame(context);
-
     let last = -1;
 
     const loop = function(time: DOMHighResTimeStamp) {
@@ -107,7 +112,15 @@
         last = time;
     };
 
+    let audio: AudioContext | null = null;
+    getSetupAudio((node) => {
+        if (!audio) throw new Error("Audio Is Not Yet Created!")
+        audio.destination.connect(node);
+        return () => audio.destination.disconnect(node);
+    })
+
     onMount(() => {
+        audio = new AudioContext();
         requestAnimationFrame(loop);
         keyboard.start();
         mouse.start();
@@ -128,13 +141,19 @@
         mouse.setWidth(width);
     }
 
+    const resumeAudioContext = () => {
+        if (audio.state === "suspended") {
+            audio.resume();
+        }
+    }
+
 </script>
 
 <div class="game" style:background-color={background}>
     <slot />
 </div>
 
-<svelte:window bind:innerHeight={wih} bind:innerWidth={wiw}></svelte:window>
+<svelte:window bind:innerHeight={wih} bind:innerWidth={wiw} on:click={resumeAudioContext} on:keydown={resumeAudioContext}></svelte:window>
 
 <style>
     .game {
