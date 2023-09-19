@@ -29,7 +29,8 @@ export type GameContext = {
     onAfterFrame: (callback: (info: { delta: number, time: number }) => any | void) => () => any,
     getLayerByName: (name: string) => LayerContext | null,
     defaultTextFontFace: Writable<string | null>
-};
+    audioContext: Writable<AudioContext>
+} ;
 
 export const setupGame = function (context: GameContext) {
     if (getContext(GAME)) {
