@@ -33,7 +33,7 @@
         output = audioCtx.createGain();
         sourceNode.connect(output);
         return connect(output);
-    });
+    })
 
 </script>
 
