@@ -1,19 +1,30 @@
-const audios = new Map<string, HTMLAudioElement>();
+const encodedBinaryBuffers = new Map<string, ArrayBuffer>();
+const decodedBuffers = new Map<string, AudioBuffer>();
 
-export const pushMediaAsset = (url: string, element: HTMLAudioElement) => {
-    audios.set(url, element);
-}
+let instantDecode: AudioContext | null = null;
 
 export const pushBufferAsset = (url: string) => {
-
+    fetch(url).then(response => {
+        return response.arrayBuffer();
+    }).then(buffer => {
+        encodedBinaryBuffers.set(url, buffer);
+        if (instantDecode) {
+            instantDecode.decodeAudioData(buffer).then(audio => {
+                decodedBuffers.set(url, audio);
+            })
+        } // otherwise there's no audioContext
+    });
 }
 
-export const resolve = (url: string) => {
-    if (audios.has(url)) {
-        return audios.get(url);
+export const decodeAllBuffers = (context: AudioContext) => {
+    instantDecode = context;
+    for (let [url, binary] of encodedBinaryBuffers.entries()) {
+        instantDecode.decodeAudioData(binary).then(audio => {
+            decodedBuffers.set(url, audio);
+        })
     }
-    const img = document.createElement("img");
-    img.src = url;
-    audios.set(url, img);
-    return img;
+}
+
+export const resolveBuffer = async (url: string) => {
+
 }
