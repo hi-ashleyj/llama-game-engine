@@ -1,3 +1,5 @@
+<script lang="ts"></script>
+
 <div class="game-wrapper">
     <slot />
 </div>

@@ -1,3 +1,5 @@
+<script lang="ts"></script>
+
 <div class="-llama-asset-pool--">
     <slot />
 </div>

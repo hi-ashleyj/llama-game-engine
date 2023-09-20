@@ -22,9 +22,9 @@
   },
   "homepage": "https://github.com/hi-ashleyj/llama-game-engine#readme",
   "devDependencies": {
-    "@sveltejs/adapter-static": "latest",
-    "@sveltejs/kit": "latest",
-    "@sveltejs/package": "latest",
+    "@sveltejs/adapter-static": "^2.0.3",
+    "@sveltejs/kit": "^1.25.0",
+    "@sveltejs/package": "^2.2.2",
     "sass": "^1.58.0",
     "svelte": "^3.44.0",
     "svelte-check": "^3.4.6",
