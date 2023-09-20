@@ -12,7 +12,7 @@
 
     $: {
         if (output) {
-            output.gain.value = volume;
+            output.gain.setTargetAtTime(volume, output.context.currentTime, 0.004);
         }
     }
 

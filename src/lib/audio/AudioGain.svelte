@@ -4,13 +4,13 @@
     import { onMount } from "svelte";
     const audioContext = getAudioContext();
 
-    export let gain: number = 0;
+    export let gain: number = 1;
 
     let output: GainNode;
 
     $: {
         if (output) {
-            output.gain.value = gain;
+            output.gain.setTargetAtTime(gain, output.context.currentTime, 0.004);
         }
     }
 
@@ -20,8 +20,8 @@
     });
 
     onMount(() => {
-        const audioCtx = audioContext();
-        output = audioCtx.createGain();
+        const audioCTX = audioContext();
+        output = audioCTX.createGain();
         return connect(output);
     })
 

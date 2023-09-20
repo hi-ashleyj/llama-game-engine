@@ -29,16 +29,16 @@
 
     $: {
         if (output) {
-            output.gain.value = volume;
+            output.gain.setTargetAtTime(volume, output.context.currentTime, 0.004);
         }
     }
 
     const connect = getConnector();
 
     onMount(() => {
-        const audioCtx = audioContext();
-        sourceNode = audioCtx.createMediaElementSource(element);
-        output = audioCtx.createGain();
+        const audioCTX = audioContext();
+        sourceNode = audioCTX.createMediaElementSource(element);
+        output = audioCTX.createGain();
         sourceNode.connect(output);
         return connect(output);
     });
