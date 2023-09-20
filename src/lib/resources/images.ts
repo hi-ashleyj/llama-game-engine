@@ -1,11 +1,15 @@
-let list: Map<string, HTMLImageElement> = new Map();
+const assets = new Map<string, HTMLImageElement>();
 
-export const resolve = function(src: string): HTMLImageElement {
-    if (list.has(src)) return list.get(src) as HTMLImageElement;
+export const pushAsset = (url: string, element: HTMLImageElement) => {
+    assets.set(url, element);
+}
 
-    let img = document.createElement("img");
-    img.src = src;
-    list.set(src, img);
-
+export const resolve = (url: string) => {
+    if (assets.has(url)) {
+        return assets.get(url);
+    }
+    const img = document.createElement("img");
+    img.src = url;
+    assets.set(url, img);
     return img;
-};
+}
