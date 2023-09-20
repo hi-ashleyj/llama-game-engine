@@ -1,6 +1,6 @@
 <script lang="ts">
 
-    import { getAudioContext, getConnector } from "$lib/audio/context.js";
+    import { getAudioContext, getConnector } from "./context.js";
     import { onMount } from "svelte";
     const audioContext = getAudioContext();
 
@@ -13,6 +13,14 @@
     export const playFromStart = () => {
         playbackPosition = 0;
         paused = false;
+    }
+
+    export const play = () => {
+        paused = false;
+    }
+
+    export const pause = () => {
+        paused = true;
     }
 
     let output: GainNode;
@@ -37,4 +45,4 @@
 
 </script>
 
-<audio src={url} hidden loop={loop} bind:paused={paused} bind:currentTime={playbackPosition} bind:this={element}/>
+<audio src={url} hidden loop={loop} bind:paused={paused} bind:currentTime={playbackPosition} bind:this={element} />

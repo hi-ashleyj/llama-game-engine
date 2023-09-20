@@ -7,7 +7,8 @@
     import { Keyboard } from "./controllers/keyboard.js";
     import type { Writable } from "svelte/store";
     import { Mouse } from "./controllers/mouse.js";
-    import { getSetupAudio } from "$lib/audio/context.js";
+    import { getSetupAudio } from "./audio/context.js";
+    import { decodeAllBuffers } from "./resources/audio.js";
 
     const raise = (err: string) => {
         throw new Error(err);
@@ -121,6 +122,7 @@
 
     onMount(() => {
         audio = new AudioContext();
+        decodeAllBuffers(audio);
         requestAnimationFrame(loop);
         keyboard.start();
         mouse.start();

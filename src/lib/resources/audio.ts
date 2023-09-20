@@ -26,5 +26,12 @@ export const decodeAllBuffers = (context: AudioContext) => {
 }
 
 export const resolveBuffer = async (url: string) => {
-
+    if (decodedBuffers.has(url)) return decodedBuffers.get(url);
+    if (encodedBinaryBuffers.has(url)) {
+        if (instantDecode) {
+            const audio = await instantDecode.decodeAudioData(encodedBinaryBuffers.get(url)!);
+            decodedBuffers.set(url, audio);
+            return audio;
+        }
+    }
 }
