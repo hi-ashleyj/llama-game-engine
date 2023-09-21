@@ -3,12 +3,11 @@
     import { setupDrawable, type DrawFunction } from "$lib/drawable.js";
     import { onMount } from "svelte";
     import { getGame } from "$lib/core-contexts.js";
-    import { effectiveScene } from "$lib/extras/scenes.js";
 
     export let text: string;
     export let size: number;
     export let spacing: number = 1.4;
-    export let font: string;
+    export let font: string | null = null;
     export let style: string | undefined = undefined;
     export let fill: string | undefined = undefined;
     export let stroke: string | undefined = undefined;

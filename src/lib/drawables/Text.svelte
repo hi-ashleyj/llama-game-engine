@@ -1,12 +1,12 @@
 <script lang="ts">
 
     import { setupDrawable, type DrawFunction } from "$lib/drawable.js";
-    import { getGame } from "$lib";
+    import { getGame } from "$lib/core-contexts.js";
     import { onMount } from "svelte";
 
     export let text: string;
     export let size: number;
-    export let font: string | undefined;
+    export let font: string | null = null;
     export let style: string | undefined = undefined;
     export let fill: string | undefined = undefined;
     export let stroke: string | undefined = undefined;

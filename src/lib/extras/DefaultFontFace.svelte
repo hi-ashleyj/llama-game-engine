@@ -1,6 +1,6 @@
 <script lang="ts">
 
-    import { getGame } from "$lib";
+    import { getGame } from "$lib/core-contexts.js";
     import { onMount, createEventDispatcher } from "svelte";
     const { defaultTextFontFace } = getGame();
 
@@ -16,7 +16,7 @@
      * WRAPPING INSIDE A {key} MAY FIX THIS (not recommended)
      * IF CHANGING FONTS, PRELOAD THEM ALL IN CSS AND UPDATE font PROP ONLY WITHIN {key} BLOCK
      */
-    export let url: string | undefined;
+    export let url: string | null = null;
 
     onMount(() => {
         defaultTextFontFace.set(font);
