@@ -17,7 +17,7 @@
         scene = $effectiveScene;
     });
 
-    export let scenes: Record<string, typeof SvelteComponent> = {};
+    export let scenes: Record<string, typeof SvelteComponent<any,any,any>> = {};
 
 </script>
 
