@@ -1,7 +1,9 @@
-<script lang="ts"></script>
+<script lang="ts">
+    let x: HTMLDivElement;
+</script>
 
-<div class="game-wrapper">
-    <slot />
+<div class="game-wrapper" bind:this={x}>
+    <slot wrapper={x} />
 </div>
 
 <style>
