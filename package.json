@@ -1,7 +1,7 @@
 {
   "name": "@hi-ashleyj/llama",
   "description": "A (Very Incomplete) 2D Canvas Game Engine powered by Svelte",
-  "version": "0.12.1",
+  "version": "0.12.2",
   "type": "module",
   "scripts": {
     "dev": "vite dev",
@@ -26,8 +26,8 @@
     "@sveltejs/kit": "^1.25.0",
     "@sveltejs/package": "^2.2.2",
     "sass": "^1.58.0",
-    "svelte": "^3.44.0",
-    "svelte-check": "^3.4.6",
+    "svelte": "^4.2.1",
+    "svelte-check": "^3.5.2",
     "typescript": "^4.7.4",
     "vite": "^4.0.0"
   },
