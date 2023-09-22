@@ -34,6 +34,7 @@ export { default as SceneTransition } from "./extras/SceneTransition.svelte";
 export { default as Rotate } from "./extras/Rotate.svelte";
 export { default as Tweened } from "./extras/Tweened.svelte";
 export { default as DefaultFontFace } from "./extras/DefaultFontFace.svelte";
+export { default as FullScreenEventHandler } from "./extras/FullScreenEventHandler.svelte";
 
 // AUDIO
 export { getAudioContext, getConnector as getAudioConnector } from "./audio/context.js";
