@@ -18,6 +18,7 @@
 
         if (stroke && strokeWidth) {
             ctx.strokeStyle = stroke;
+            ctx.lineWidth = strokeWidth;
             ctx.stroke();
         }
     };
