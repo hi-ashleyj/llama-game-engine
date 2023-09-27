@@ -8,8 +8,8 @@
     // ONLY OBSERVED ON MOUNT. NOT REACTIVE (good practice anyway)
     export let key = "f";
     export let usesShift = true;
-    export let usesCtrl = true;
-    export let usesAlt = true;
+    export let usesCtrl = false;
+    export let usesAlt = false;
     export let wrapper: HTMLDivElement;
 
     onMount(() => {
