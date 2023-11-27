@@ -6,3 +6,4 @@ export { default as Text } from "./Text.svelte";
 export { default as MultiLineText } from "./MultiLineText.svelte";
 export { default as RoundedRectangle } from "./RoundedRectangle.svelte";
 export { default as Tiled } from "./Tiled.svelte";
+export { setupDrawable, type DrawableContext, type DrawFunction, type DrawableObject } from "../drawable.js";

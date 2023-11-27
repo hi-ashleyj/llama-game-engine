@@ -10,5 +10,7 @@ ports:
     onOpen: notify
     visibility: public
 
-
+tasks:
+  - name: Install
+    command: npm ci
 
