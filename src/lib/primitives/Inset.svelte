@@ -14,8 +14,8 @@
         targets.forEach(f => f.draw({ width, height, ctx }, { 
             x: o.x + left, 
             y: o.y + top, 
-            w: o.x - left - right, 
-            h: o.y - top - bottom,
+            w: o.w - (left + right), 
+            h: o.h - (top + bottom),
         }));
     };
 
