@@ -7,18 +7,21 @@ on:
   workflow_dispatch:
   release:
     types: [created]
-  
+
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
   publish-npm:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         name: Checkout Source
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v6
         name: Setup Node
         with:
-          node-version: 16
+          node-version: 24
           registry-url: https://registry.npmjs.org/
       - run: npm ci
         name: Install dependencies
@@ -26,5 +29,3 @@ jobs:
         name: Build Package
       - run: npm publish --access public
         name: Publish
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_AUTOMATION_TOKEN}}
