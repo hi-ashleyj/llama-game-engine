@@ -3,14 +3,24 @@
     import { setupDrawable, type DrawFunction } from "$lib/drawable.js";
     import { onMount } from "svelte";
 
-    export let fill: string | null = null;
-    export let stroke: string | null = null;
-    export let strokeWidth: number | null = null;
-    export let startAngle: number;
-    export let endAngle: number;
+    interface Props {
+        fill?: string | null;
+        stroke?: string | null;
+        strokeWidth?: number | null;
+        startAngle: number;
+        endAngle: number;
+    }
 
-    $: sd = (startAngle - 90) * Math.PI / 180;
-    $: ed = (endAngle - 90) * Math.PI / 180;
+    let {
+        fill = null,
+        stroke = null,
+        strokeWidth = null,
+        startAngle,
+        endAngle
+    }: Props = $props();
+
+    let sd = $derived((startAngle - 90) * Math.PI / 180);
+    let ed = $derived((endAngle - 90) * Math.PI / 180);
     
     const draw: DrawFunction<{x: number, y: number, w: number, h: number}> = function({ ctx }, { x, y, w, h }: { x: number, y: number, w: number, h: number }) {
         let r = (w + h) / 4

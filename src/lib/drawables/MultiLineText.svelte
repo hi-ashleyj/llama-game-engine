@@ -4,29 +4,44 @@
     import { onMount } from "svelte";
     import { getGame } from "$lib/core-contexts.js";
 
-    export let text: string;
-    export let size: number;
-    export let spacing: number = 1.4;
-    export let font: string | null = null;
-    export let style: string | undefined = undefined;
-    export let fill: string | undefined = undefined;
-    export let stroke: string | undefined = undefined;
-    export let strokeWidth: number | null = null;
-    export let alignH: "left" | "center" | "right" = "left";
-    export let alignV: "top" | "middle" | "bottom" | "alphabetic" = "top";
+    interface Props {
+        text: string;
+        size: number;
+        spacing?: number;
+        font?: string | null;
+        style?: string | undefined;
+        fill?: string | undefined;
+        stroke?: string | undefined;
+        strokeWidth?: number | null;
+        alignH?: "left" | "center" | "right";
+        alignV?: "top" | "middle" | "bottom" | "alphabetic";
+    }
+
+    let {
+        text,
+        size,
+        spacing = 1.4,
+        font = null,
+        style = undefined,
+        fill = undefined,
+        stroke = undefined,
+        strokeWidth = null,
+        alignH = "left",
+        alignV = "top"
+    }: Props = $props();
 
     const { defaultTextFontFace } = getGame();
 
-    $: effectiveFont = font ? font : typeof $defaultTextFontFace === "string" ? $defaultTextFontFace : "sans-serif";
-    $: computedFont = (style ? style + " " : "") + size + "px " + effectiveFont;
-    $: splits = text?.split("\n") || [];
+    let effectiveFont = $derived(font ? font : typeof $defaultTextFontFace === "string" ? $defaultTextFontFace : "sans-serif");
+    let computedFont = $derived((style ? style + " " : "") + size + "px " + effectiveFont);
+    let splits = $derived(text?.split("\n") || []);
 
-    $: offset =
-        alignV === "bottom"
+    let offset =
+        $derived(alignV === "bottom"
             ? ((splits?.length || 1) - 1) * size * spacing
             : alignV === "middle"
             ? ((splits?.length || 1) - 1) * size * spacing * 0.5
-            : 0;
+            : 0);
 
     const draw: DrawFunction<{x: number, y: number, w: number, h: number}> = function (
         { ctx },

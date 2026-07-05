@@ -4,13 +4,10 @@
     import type { DrawFunction } from "./drawable.js";
     import { onMount } from "svelte";
 
-    export let zIndex = 0;
-    export let staticMode: boolean = false;
-    export let scaleMode: "pixelated" | "smooth" = "pixelated";
     let shouldRenderNextFrame = true;
 
-    let canvas: HTMLCanvasElement | undefined;
-    $: ctx = (typeof canvas !== "undefined") ? canvas.getContext("2d") : null;
+    let canvas: HTMLCanvasElement | undefined = $state();
+    let ctx = $derived((typeof canvas !== "undefined") ? canvas.getContext("2d") : null);
 
     let targets = new Set<{ draw: DrawFunction<null> }>();
     
@@ -34,7 +31,21 @@
         }
     });
 
-    export let name: string;
+    interface Props {
+        zIndex?: number;
+        staticMode?: boolean;
+        scaleMode?: "pixelated" | "smooth";
+        name: string;
+        children?: import('svelte').Snippet;
+    }
+
+    let {
+        zIndex = 0,
+        staticMode = false,
+        scaleMode = "pixelated",
+        name,
+        children
+    }: Props = $props();
 
     onMount(() => {
         return register({ 
@@ -50,7 +61,7 @@
 </script>
 
 <canvas width={$width} height={$height} bind:this={canvas} style:z-index={zIndex}></canvas>
-<slot />
+{@render children?.()}
 
 <style>
     canvas {

@@ -16,7 +16,26 @@
     let mouseX = context.getMouseStore("mouse_x");
     let mouseY = context.getMouseStore("mouse_y");
 
-    export let hover = false;
+    type Click = () => void;
+    interface Props {
+        hover?: boolean;
+        children?: import('svelte').Snippet<[any]>;
+        onleft: Click;
+        onright: Click;
+        onleftorright: Click;
+        onclick: Click;
+        onmiddle: Click;
+        onother: Click;
+    }
+
+    let { hover = $bindable(false), children,
+        onleft,
+        onright,
+        onleftorright,
+        onclick,
+        onmiddle,
+        onother
+    }: Props = $props();
 
     const draw: DrawFunction<{x: number, y: number, w: number, h: number}> = function(_info, { x, y, w, h }) {
         tx = x;
@@ -35,13 +54,13 @@
         let event = context.onMouseEvent(null, MOUSE_ACTION.DOWN, ({ key }) => {
             if ($mouseX < tx || $mouseX > tx + tw) return;
             if ($mouseY < ty || $mouseY > ty + th) return;
-            dispatch("click");
+            onclick();
             switch (key) {
-                case ("mouse_left"): { dispatch("left"); dispatch("leftorright"); return; }
-                case ("mouse_right"): { dispatch("right"); dispatch("leftorright"); return; }
-                case ("mouse_middle"): { dispatch("middle"); }
+                case ("mouse_left"): { onleft(); onleftorright(); return; }
+                case ("mouse_right"): { onright(); onleftorright(); return; }
+                case ("mouse_middle"): { onmiddle; }
             }
-            dispatch("other");
+            onother();
         });
         let deregister = register({ draw });
         return () => {
@@ -52,4 +71,4 @@
 
 </script>
 
-<slot {hover} />
+{@render children?.({ hover, })}

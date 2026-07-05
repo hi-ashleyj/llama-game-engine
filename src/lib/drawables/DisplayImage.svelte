@@ -3,8 +3,12 @@
     import { setupDrawable, type DrawFunction} from "$lib/drawable.js";
     import { onMount } from "svelte";
 
-    export let image: HTMLImageElement | null = null;
-    export let crop: { x: number, y: number, w: number, h: number } | null = null;
+    interface Props {
+        image?: HTMLImageElement | null;
+        crop?: { x: number, y: number, w: number, h: number } | null;
+    }
+
+    let { image = null, crop = null }: Props = $props();
     
     const draw: DrawFunction<{x: number, y: number, w: number, h: number}> = function({ ctx }, { x, y, w, h }: { x: number, y: number, w: number, h: number }) {
         if (!image) return;

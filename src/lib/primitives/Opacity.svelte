@@ -3,7 +3,12 @@
     import { setupDrawable, type DrawFunction } from "../drawable.js";
     import { onMount } from "svelte";
 
-    export let opacity: number;
+    interface Props {
+        opacity: number;
+        children?: import('svelte').Snippet;
+    }
+
+    let { opacity, children }: Props = $props();
 
     const targets = new Set<{ draw: DrawFunction<unknown> }>();
 
@@ -29,4 +34,4 @@
 
 </script>
 
-<slot/>
+{@render children?.()}

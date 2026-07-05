@@ -5,12 +5,17 @@
     import { onDestroy } from "svelte";
 
     const context = getGame();
-    export let duration = 1000;
+    interface Props {
+        duration?: number;
+        children?: import('svelte').Snippet<[any]>;
+    }
+
+    let { duration = 1000, children }: Props = $props();
     let burst = context.createBurst({duration: duration});
     let triggerRender = getTriggerLayerRender();
     onDestroy(burst.stop);
 
-    let halfAnimationTriggered = false;
+    let halfAnimationTriggered = $state(false);
 
     const startAnimation = () => {
         burst.trigger();
@@ -26,21 +31,21 @@
         $sceneAnimating = false;
     };
 
-    $: {
+    $effect(() => {
         if ($sceneAnimating) startAnimation();
-    }
-
-    $: {
+    })
+    $effect(() => {
         if ($burst > 0.5 && !halfAnimationTriggered) halfAnimation();
         if ($burst == 1) completeAnimation();
-    }
+    })
 
-    $: normalized = 1 - (Math.abs($burst - 0.5) * 2) 
-
-    $: { triggerRender($burst) }
+    let normalized = $derived(1 - (Math.abs($burst - 0.5) * 2))
+    $effect(() => {
+        triggerRender($burst)
+    })
 
 </script>
 
 {#if $burst > 0 && $burst < 1}
-    <slot progress={$burst} normalized={normalized} />
+    {@render children?.({ progress: $burst, normalized, })}
 {/if}

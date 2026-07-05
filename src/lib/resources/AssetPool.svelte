@@ -1,7 +1,12 @@
-<script lang="ts"></script>
+<script lang="ts">
+    interface Props {
+        children?: import('svelte').Snippet;
+    }
+
+    let { children }: Props = $props();</script>
 
 <div class="-llama-asset-pool--">
-    <slot />
+    {@render children?.()}
 </div>
 
 <style>

@@ -3,7 +3,11 @@
     import { GameObject, MouseClickable } from "../../../lib";
     import { Rectangle } from "../../../lib/drawables";
 
-    export let hue: number = 0;
+    interface Props {
+        hue?: number;
+    }
+
+    let { hue = 0 }: Props = $props();
 
 </script>
 

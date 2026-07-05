@@ -1,9 +1,14 @@
 <script lang="ts">
-    let x: HTMLDivElement;
+    interface Props {
+        children?: import('svelte').Snippet<[any]>;
+    }
+
+    let { children }: Props = $props();
+    let x: HTMLDivElement | undefined = $state();
 </script>
 
 <div class="game-wrapper" bind:this={x}>
-    <slot wrapper={x} />
+    {@render children?.({ wrapper: x, })}
 </div>
 
 <style>

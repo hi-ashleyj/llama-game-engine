@@ -6,11 +6,21 @@
 
     const context = getGame();
     // ONLY OBSERVED ON MOUNT. NOT REACTIVE (good practice anyway)
-    export let key = "f";
-    export let usesShift = true;
-    export let usesCtrl = false;
-    export let usesAlt = false;
-    export let wrapper: HTMLDivElement;
+    interface Props {
+        key?: string;
+        usesShift?: boolean;
+        usesCtrl?: boolean;
+        usesAlt?: boolean;
+        wrapper: HTMLDivElement;
+    }
+
+    let {
+        key = "f",
+        usesShift = true,
+        usesCtrl = false,
+        usesAlt = false,
+        wrapper
+    }: Props = $props();
 
     onMount(() => {
         return context.onKeyboardEvent(key, KEYBOARD_ACTION.DOWN, () => {

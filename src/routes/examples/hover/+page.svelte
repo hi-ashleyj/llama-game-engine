@@ -4,12 +4,12 @@
     import { RoundedRectangle as Rectangle, Text } from "../../../lib/drawables";
     import Follow from "./Follow.svelte";
 
-    let leftFill = "#aa0000";
-    let rightFill = "#aa0000";
-    let pickerFill = "#aa0000";
-    let hoveringOne: boolean;
-    let hoverTwoFill = "#aa0000";
-    let hoveringTwo: boolean;
+    let leftFill = $state("#aa0000");
+    let rightFill = $state("#aa0000");
+    let pickerFill = $state("#aa0000");
+    let hoveringOne: boolean = $state();
+    let hoverTwoFill = $state("#aa0000");
+    let hoveringTwo: boolean = $state();
 
 </script>
 

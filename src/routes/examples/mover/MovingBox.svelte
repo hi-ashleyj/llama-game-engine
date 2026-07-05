@@ -7,8 +7,8 @@
 
     let { width, height, getKeyboardStore, onFrame } = getGame();
 
-    let x = $width / 2;
-    let y = $height / 2;
+    let x = $state($width / 2);
+    let y = $state($height / 2);
 
 
     const speed = 100;

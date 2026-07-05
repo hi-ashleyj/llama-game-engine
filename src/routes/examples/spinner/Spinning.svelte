@@ -12,7 +12,7 @@
         timing.stop();
     })
 
-    $: angle = $timing * 360;
+    let angle = $derived($timing * 360);
 
 </script>
 

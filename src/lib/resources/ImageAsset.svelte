@@ -2,8 +2,12 @@
 
     import {pushAsset} from "./images.js";
     import { onMount } from "svelte";
-    export let url;
-    let element;
+    interface Props {
+        url: any;
+    }
+
+    let { url }: Props = $props();
+    let element = $state();
 
     onMount(() => {
         if (!element) return;

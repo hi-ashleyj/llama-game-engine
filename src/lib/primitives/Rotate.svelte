@@ -1,12 +1,18 @@
 <script lang="ts">
     import { setupDrawable, type DrawFunction } from "../drawable.js";
     import { onMount } from "svelte";
-    /**
+    
+    interface Props {
+        /**
      * FALSE = ANCHOR TOP LEFT
      * TRUE = ANCHOR CENTER
      */
-    export let centered = false;
-    export let degrees: number;
+        centered?: boolean;
+        degrees: number;
+        children?: import('svelte').Snippet;
+    }
+
+    let { centered = false, degrees, children }: Props = $props();
     const targets = new Set<{ draw: DrawFunction<{ x: number, y: number, w: number, h: number }> }>();
     const draw: DrawFunction<{ x: number, y: number, w: number, h: number }> = function ( { width, height, ctx }, { x, y, w, h} ) {
         ctx.translate(x, y);
@@ -27,4 +33,4 @@
     });
 </script>
 
-<slot/>
+{@render children?.()}

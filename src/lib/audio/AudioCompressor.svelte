@@ -4,32 +4,47 @@
     import { onMount } from "svelte";
     const audioContext = getAudioContext();
 
-    export let preGain: number = 1;
-    export let postGain: number = 1;
-
     type Millisecond = number;
     type Decibel = number;
-    export let attack: Millisecond = 10;
-    export let threshold: Decibel = -6;
-    export let blend: Decibel = 3;
-    export let ratio: number = 2;
-    export let release: Millisecond = 150;
+    interface Props {
+        preGain?: number;
+        postGain?: number;
+        attack?: Millisecond;
+        threshold?: Decibel;
+        blend?: Decibel;
+        ratio?: number;
+        release?: Millisecond;
+        children?: import('svelte').Snippet;
+    }
 
-    let output: GainNode;
-    let input: GainNode;
-    let process: DynamicsCompressorNode;
+    let {
+        preGain = 1,
+        postGain = 1,
+        attack = 10,
+        threshold = -6,
+        blend = 3,
+        ratio = 2,
+        release = 150,
+        children
+    }: Props = $props();
 
-    $: {
+    let output: GainNode = $state();
+    let input: GainNode = $state();
+    let process: DynamicsCompressorNode = $state();
+
+    $effect(() => {
+
         if (output) {
             output.gain.setTargetAtTime(postGain, audioCTX.currentTime, 0.004);
         }
-    }
-    $: {
+    })
+
+    $effect(() => {
         if (input) {
             input.gain.setTargetAtTime(preGain, audioCTX.currentTime, 0.004);
         }
-    }
-    $: {
+    });
+    $effect(() => {
         if (process) {
             process.attack.setTargetAtTime(attack / 1000, audioCTX.currentTime, 0.004);
             process.threshold.setTargetAtTime(threshold, audioCTX.currentTime, 0.004);
@@ -37,7 +52,7 @@
             process.ratio.setTargetAtTime(ratio, audioCTX.currentTime, 0.004);
             process.release.setTargetAtTime(release / 1000, audioCTX.currentTime, 0.004);
         }
-    }
+    });
 
     const connect = getConnector((node) => {
         node.connect(output);
@@ -54,4 +69,4 @@
 
 </script>
 
-<slot />
+{@render children?.()}

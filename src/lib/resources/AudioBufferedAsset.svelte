@@ -2,7 +2,11 @@
     import { onMount } from "svelte";
     import { pushBufferAsset } from "./audio.js";
 
-    export let url;
+    interface Props {
+        url: any;
+    }
+
+    let { url }: Props = $props();
 
     onMount(() => {
         pushBufferAsset(url);

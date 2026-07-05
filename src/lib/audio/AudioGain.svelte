@@ -4,15 +4,20 @@
     import { onMount } from "svelte";
     const audioContext = getAudioContext();
 
-    export let gain: number = 1;
+    interface Props {
+        gain?: number;
+        children?: import('svelte').Snippet;
+    }
 
-    let output: GainNode;
+    let { gain = 1, children }: Props = $props();
 
-    $: {
+    let output: GainNode = $state();
+
+    $effect(() => {
         if (output) {
             output.gain.setTargetAtTime(gain, output.context.currentTime, 0.004);
         }
-    }
+    });
 
     const connect = getConnector((node) => {
         node.connect(output);
@@ -27,4 +32,4 @@
 
 </script>
 
-<slot />
+{@render children?.()}

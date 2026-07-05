@@ -1,5 +1,4 @@
 <script lang="ts">
-    
     import { writable } from "svelte/store";
     import { onMount } from "svelte";
     import { setupGame, type GameContext, type LayerContext, type LayerDrawable } from "./core-contexts.js";
@@ -14,17 +13,27 @@
         throw new Error(err);
     }
 
-    export let width = 1920;
-    export let height = 1080;
-    export let background = "#000000";
+    interface Props {
+        width?: number;
+        height?: number;
+        background?: string;
+        children?: import('svelte').Snippet;
+    }
+
+    let {
+        width = 1920,
+        height = 1080,
+        background = "#000000",
+        children
+    }: Props = $props();
 
     const widthStore: Writable<number> = writable(1920);
     const heightStore: Writable<number> = writable(1080);
     const backgroundStore: Writable<string> = writable("#000000");
 
-    $: { $widthStore = width }
-    $: { $heightStore = height }
-    $: { $backgroundStore = background }
+    $effect(() => { $widthStore = width })
+    $effect(() => { $heightStore = height })
+    $effect(() => { $backgroundStore = background })
 
     const layerDrawables = new Set<LayerDrawable>();
     const layerAssignments = new Map<string, LayerContext>();
@@ -128,20 +137,12 @@
         mouse.start();
     });
 
-    let wiw = 0;
-    let wih = 0;
+    let wiw = $state(0);
+    let wih = $state(0);
 
-    $: {
-        mouse.changeWindowDimensions(wiw, wih);
-    }
-
-    $: {
-        mouse.setHeight(height);
-    }
-
-    $: {
-        mouse.setWidth(width);
-    }
+    $effect(() => mouse.changeWindowDimensions(wiw, wih));
+    $effect(() => mouse.setHeight(height));
+    $effect(() => mouse.setWidth(width));
 
     const resumeAudioContext = () => {
         if (audio?.state === "suspended") {
@@ -152,10 +153,10 @@
 </script>
 
 <div class="game" style:background-color={background}>
-    <slot />
+    {@render children?.()}
 </div>
 
-<svelte:window bind:innerHeight={wih} bind:innerWidth={wiw} on:click={resumeAudioContext} on:keydown={resumeAudioContext}></svelte:window>
+<svelte:window bind:innerHeight={wih} bind:innerWidth={wiw} onclick={resumeAudioContext} onkeydown={resumeAudioContext}></svelte:window>
 
 <style>
     .game {

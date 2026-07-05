@@ -6,8 +6,8 @@
 
     let { width, height, getKeyboardStore, onFrame } = getGame();
 
-    let x = 0;
-    let y = 0;
+    let x = $state(0);
+    let y = $state(0);
 
     const speed = 250;
     const size = 50;
@@ -18,7 +18,7 @@
     const dPressed = getKeyboardStore("d");
 
     let image;
-    let tiles: TileSet;
+    let tiles: TileSet = $state();
 
     const tileAlias: ComponentProps<Drawables.Tiled>["alias"] = {
         "k": [0, 0]

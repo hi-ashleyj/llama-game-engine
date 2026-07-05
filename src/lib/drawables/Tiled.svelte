@@ -4,15 +4,26 @@
     import { setupDrawable, type DrawFunction } from "../drawable.js";
     import { onMount } from "svelte";
 
-    export let shiftX: number;
-    export let shiftY: number;
-    export let drawSize: number;
-    export let tileSet: TileSet;
-    export let alias: Record<string, [ number, number ]>;
-    export let map: string[];
+    interface Props {
+        shiftX: number;
+        shiftY: number;
+        drawSize: number;
+        tileSet: TileSet;
+        alias: Record<string, [ number, number ]>;
+        map: string[];
+    }
 
-    $: mapWidth = map[0]?.length ?? 0;
-    $: mapHeight = map.length ?? 0;
+    let {
+        shiftX,
+        shiftY,
+        drawSize,
+        tileSet,
+        alias,
+        map
+    }: Props = $props();
+
+    let mapWidth = $derived(map[0]?.length ?? 0);
+    let mapHeight = $derived(map.length ?? 0);
 
     const draw: DrawFunction<{x: number, y: number, w: number, h: number}> = ({ ctx, width, height }, { x, y, w, h }) => {
 

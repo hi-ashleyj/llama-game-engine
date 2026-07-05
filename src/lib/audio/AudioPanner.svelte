@@ -4,15 +4,20 @@
     import { onMount } from "svelte";
     const audioContext = getAudioContext();
 
-    export let pan: number = 0;
+    interface Props {
+        pan?: number;
+        children?: import('svelte').Snippet;
+    }
 
-    let output: StereoPannerNode;
+    let { pan = 0, children }: Props = $props();
 
-    $: {
+    let output: StereoPannerNode = $state();
+
+    $effect(() => {
         if (output) {
             output.pan.value = pan;
         }
-    }
+    });
 
     const connect = getConnector((node) => {
         node.connect(output);
@@ -27,4 +32,4 @@
 
 </script>
 
-<slot />
+{@render children?.()}

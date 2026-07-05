@@ -11,7 +11,7 @@
         timing.stop();
     })
 
-    $: dots = ".".repeat(Math.floor($timing * 4));
+    let dots = $derived(".".repeat(Math.floor($timing * 4)));
 
 </script>
 

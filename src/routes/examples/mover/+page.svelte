@@ -6,14 +6,14 @@
     import { onMount } from "svelte";
     import MovingBox from "./MovingBox.svelte";
 
-    let context: GameContext;
+    let context: GameContext = $state();
     let xStore;
 
     onMount(() => {
         xStore = context.createTimer({ duration: 1000, repeats: 0 });
     });
 
-    $: xPosition = 960 + (($xStore! - 0.5) * 200);
+    let xPosition = $derived(960 + (($xStore! - 0.5) * 200));
 
     let frame = () => {};
 

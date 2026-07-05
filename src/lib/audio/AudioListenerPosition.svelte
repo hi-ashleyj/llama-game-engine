@@ -1,18 +1,10 @@
 <script lang="ts">
 
-    export let position: [ number, number, number ] = [0, 0, 0];
     // Roll, Pitch, Yaw. All between -180 - 180. [ 0, 0, 0 ] faces directly along the X coordinate standing upright.
     // Roll rotates the viewport leftward as it goes negative.
     // Pitch looks downwards as it goes negative.
     // Yaw rotates leftwards as it goes negative (toward -Z)
-    export let orientation: [ number, number, number ] = [0, 0, 0];
 
-    $: positionX = position[0];
-    $: positionY = position[1];
-    $: positionZ = position[2];
-    $: roll = orientation[0];
-    $: pitch = orientation[1];
-    $: yaw = orientation[2];
 
     const dot = ([i, j, k]: number[], [x, y, z]: number[]): number => {
         return i * x + j * y + k * z;
@@ -50,27 +42,39 @@
         ]
     }
 
-    $: quaterion = buildQuaternion(roll, pitch, yaw);
-    $: forward = rotatedVector([1, 0, 0], quaterion);
-    $: up = rotatedVector([0, 1, 0], quaterion);
 
     import { getAudioContext } from "$lib/audio/context.js";
     import { onMount } from "svelte";
-    const audioContext = getAudioContext();
-    let audioCTX: AudioContext | null = null;
+    interface Props {
+        position?: [ number, number, number ];
+        orientation?: [ number, number, number ];
+    }
 
-    $: { if (audioCTX) audioCTX.listener.positionX.value = positionX }
-    $: { if (audioCTX) audioCTX.listener.positionY.value = positionY }
-    $: { if (audioCTX) audioCTX.listener.positionZ.value = positionZ }
-    $: { if (audioCTX) audioCTX.listener.forwardX.value = forward[0] }
-    $: { if (audioCTX) audioCTX.listener.forwardY.value = forward[1] }
-    $: { if (audioCTX) audioCTX.listener.forwardZ.value = forward[2] }
-    $: { if (audioCTX) audioCTX.listener.upX.value = up[0] }
-    $: { if (audioCTX) audioCTX.listener.upY.value = up[1] }
-    $: { if (audioCTX) audioCTX.listener.upZ.value = up[2] }
+    let { position = [0, 0, 0], orientation = [0, 0, 0] }: Props = $props();
+    const audioContext = getAudioContext();
+    let audioCTX: AudioContext | null = $state(null);
+
 
     onMount(() => {
         audioCTX = audioContext();
     })
 
+    let positionX = $derived(position[0]);
+    let positionY = $derived(position[1]);
+    let positionZ = $derived(position[2]);
+    let roll = $derived(orientation[0]);
+    let pitch = $derived(orientation[1]);
+    let yaw = $derived(orientation[2]);
+    let quaterion = $derived(buildQuaternion(roll, pitch, yaw));
+    let forward = $derived(rotatedVector([1, 0, 0], quaterion));
+    let up = $derived(rotatedVector([0, 1, 0], quaterion));
+    $effect(() => { if (audioCTX) audioCTX.listener.positionX.value = positionX });
+    $effect(() => { if (audioCTX) audioCTX.listener.positionY.value = positionY });
+    $effect(() => { if (audioCTX) audioCTX.listener.positionZ.value = positionZ });
+    $effect(() => { if (audioCTX) audioCTX.listener.forwardX.value = forward[0] });
+    $effect(() => { if (audioCTX) audioCTX.listener.forwardY.value = forward[1] });
+    $effect(() => { if (audioCTX) audioCTX.listener.forwardZ.value = forward[2] });
+    $effect(() => { if (audioCTX) audioCTX.listener.upX.value = up[0] });
+    $effect(() => { if (audioCTX) audioCTX.listener.upY.value = up[1] });
+    $effect(() => { if (audioCTX) audioCTX.listener.upZ.value = up[2] });
 </script>

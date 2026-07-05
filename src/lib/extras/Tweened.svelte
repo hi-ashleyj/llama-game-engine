@@ -1,18 +1,30 @@
 <script lang="ts">
     import { linear } from "svelte/easing";
-    import { tweened, type TweenedOptions } from "svelte/motion";
+    import { Tween, type TweenOptions } from "svelte/motion";
 
     type Milliseconds = number;
 
-    export let duration: Milliseconds = 200;
-    export let value: number = 0;
-    export let easing: TweenedOptions<number>["easing"] = linear;
+    interface Props {
+        duration?: Milliseconds;
+        value?: number;
+        easing?: TweenOptions<number>["easing"];
+        children?: import('svelte').Snippet<[{ smooth: number }]>;
+    }
+
+    let {
+        duration = 200,
+        value = 0,
+        easing = linear,
+        children
+    }: Props = $props();
 
     //@ts-ignore
-    const tweening = tweened<number>(null, { duration, easing });
+    const tween = new Tween<number>(value, { duration, easing });
 
-    $: tweening.set(value, { duration, easing })
+    $effect(() => {
+        tween.set(value, { duration, easing });
+    });
 
 </script>
 
-<slot smooth={$tweening} />
+{@render children?.({ smooth: tween.current })}

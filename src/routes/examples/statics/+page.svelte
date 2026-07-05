@@ -6,7 +6,7 @@
     import BackgroundLayer from "./BackgroundLayer.svelte";
     import OtherLayer from "./OtherLayer.svelte";
 
-    let context: GameContext;
+    let context: GameContext = $state();
     let timerStore: Writable<number> & { stop: () => any }
 
     onMount(() => {

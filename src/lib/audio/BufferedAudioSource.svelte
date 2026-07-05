@@ -4,17 +4,21 @@
     import { onMount } from "svelte";
     const audioContext = getAudioContext();
 
-    export let volume: number = 1;
-    export let audioBuffer: AudioBuffer;
+    interface Props {
+        volume?: number;
+        audioBuffer: AudioBuffer;
+    }
 
-    let output: GainNode;
+    let { volume = 1, audioBuffer }: Props = $props();
+
+    let output: GainNode = $state();
     let audioCTX: AudioContext;
 
-    $: {
+    $effect(() => {
         if (output) {
             output.gain.setTargetAtTime(volume, output.context.currentTime, 0.004);
         }
-    }
+    });
 
     const playing = new Set<AudioBufferSourceNode>();
 

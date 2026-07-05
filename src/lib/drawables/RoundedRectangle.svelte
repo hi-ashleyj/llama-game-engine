@@ -3,10 +3,19 @@
     import { setupDrawable, type DrawFunction } from "$lib/drawable.js";
     import { onMount } from "svelte";
 
-    export let fill: string | null = null;
-    export let stroke: string | null = null;
-    export let strokeWidth: number | null = null;
-    export let radius: number | [ number ] | [ number, number ] | [ number, number, number ] | [ number, number, number, number ] = 0;
+    interface Props {
+        fill?: string | null;
+        stroke?: string | null;
+        strokeWidth?: number | null;
+        radius?: number | [ number ] | [ number, number ] | [ number, number, number ] | [ number, number, number, number ];
+    }
+
+    let {
+        fill = null,
+        stroke = null,
+        strokeWidth = null,
+        radius = 0
+    }: Props = $props();
     
     const draw: DrawFunction<{x: number, y: number, w: number, h: number}> = function({ ctx }, { x, y, w, h }: { x: number, y: number, w: number, h: number }) {
         ctx.beginPath();

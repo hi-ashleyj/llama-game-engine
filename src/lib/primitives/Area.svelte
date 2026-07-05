@@ -3,16 +3,27 @@
     import { setupDrawable, type DrawFunction } from "../drawable.js";
     import { onMount } from "svelte";
 
-    export let x = 0;
-    export let y = 0;
-    export let w: number;
-    export let h: number;
-
-    /**
+    interface Props {
+        x?: number;
+        y?: number;
+        w: number;
+        h: number;
+        /**
      * TRUE = ALIGN CENTER
      * FALSE (default) = ALIGN TOP LEFT
      */
-    export let center = false;
+        center?: boolean;
+        children?: import('svelte').Snippet;
+    }
+
+    let {
+        x = 0,
+        y = 0,
+        w,
+        h,
+        center = false,
+        children
+    }: Props = $props();
 
     const targets = new Set<{ draw: DrawFunction<{x: number, y: number, w: number, h: number}> }>();
 
@@ -35,4 +46,4 @@
 
 </script>
 
-<slot/>
+{@render children?.()}

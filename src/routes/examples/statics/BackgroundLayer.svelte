@@ -4,7 +4,11 @@
     import { Rectangle } from "../../../lib/drawables";
 
     const triggerRender = getTriggerLayerRender();
-    export let hue: number = 0;
+    interface Props {
+        hue?: number;
+    }
+
+    let { hue = 0 }: Props = $props();
 
 </script>
 
