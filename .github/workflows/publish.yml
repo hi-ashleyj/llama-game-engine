@@ -23,7 +23,7 @@ jobs:
         with:
           node-version: 24
           registry-url: https://registry.npmjs.org/
-      - run: npm ci
+      - run: npm install
         name: Install dependencies
       - run: npm run package
         name: Build Package
