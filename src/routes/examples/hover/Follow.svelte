@@ -1,19 +1,12 @@
 <script lang="ts">
 
-    import { GameObject } from "../../../lib";
-    import { Rectangle } from "../../../lib/drawables";
-    import { getGame } from "../../../lib";
-
+    import { Primitives, getGame, Drawables } from "$lib/index.js";
     let { getMouseStore } = getGame();
     const mouseX = getMouseStore("mouse_x");
     const mouseY = getMouseStore("mouse_y");
 
 </script>
 
-<GameObject x={$mouseX} y={$mouseY} w={50} h={50} centered={true}>
-    <Rectangle fill="white" />
-</GameObject>
-
-<style lang="scss">
-
-</style>
+<Primitives.Area x={$mouseX} y={$mouseY} w={50} h={50} center={true}>
+    <Drawables.Rectangle fill="white" />
+</Primitives.Area>

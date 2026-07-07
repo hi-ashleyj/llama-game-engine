@@ -1,7 +1,7 @@
 <script lang="ts">
 
-    import { GameObject, MouseClickable, getTriggerLayerRender } from "../../../lib";
-    import { Rectangle } from "../../../lib/drawables";
+    import { Primitives, MouseClickable, getTriggerLayerRender } from "$lib/index.js";
+    import { Rectangle } from "$lib/drawables/index.js";
 
     const triggerRender = getTriggerLayerRender();
     interface Props {
@@ -12,7 +12,7 @@
 
 </script>
 
-<GameObject x={960} y={0} w={960} h={1080} >
+<Primitives.Area x={960} y={0} w={960} h={1080} >
     <Rectangle fill={`hsl(${hue * 360}, 50%, 50%`} />
-    <MouseClickable on:left={() => triggerRender() } />
-</GameObject>
+    <MouseClickable onleft={() => triggerRender() } />
+</Primitives.Area>

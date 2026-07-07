@@ -19,12 +19,12 @@
     interface Props {
         hover?: boolean;
         children?: import('svelte').Snippet<[{ hover: boolean }]>;
-        onleft: Click;
-        onright: Click;
-        onleftorright: Click;
-        onclick: Click;
-        onmiddle: Click;
-        onother: Click;
+        onleft?: Click;
+        onright?: Click;
+        onleftorright?: Click;
+        onclick?: Click;
+        onmiddle?: Click;
+        onother?: Click;
     }
 
     let { hover = $bindable(false), children, onleft, onright, onleftorright, onclick, onmiddle, onother }: Props = $props();
@@ -46,13 +46,13 @@
         let event = context.onMouseEvent(null, MOUSE_ACTION.DOWN, ({ key }) => {
             if ($mouseX < tx || $mouseX > tx + tw) return;
             if ($mouseY < ty || $mouseY > ty + th) return;
-            onclick();
+            onclick?.();
             switch (key) {
-                case ("mouse_left"): { onleft(); onleftorright(); return; }
-                case ("mouse_right"): { onright(); onleftorright(); return; }
-                case ("mouse_middle"): { onmiddle; }
+                case ("mouse_left"): { onleft?.(); onleftorright?.(); return; }
+                case ("mouse_right"): { onright?.(); onleftorright?.(); return; }
+                case ("mouse_middle"): { onmiddle?.(); }
             }
-            onother();
+            onother?.();
         });
         let deregister = register({ draw });
         return () => {

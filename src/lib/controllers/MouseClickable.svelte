@@ -13,14 +13,14 @@
     let context = getGame();
 
     type Click = () => void;
-    type Events = {
+    type Events = Partial<{
         onleft: Click,
         onright: Click,
         onleftorright: Click,
         onclick: Click,
         onmiddle: Click,
         onother: Click,
-    }
+    }>
 
     let { onleft, onright, onleftorright, onclick, onmiddle, onother }: Events = $props();
 
@@ -39,13 +39,13 @@
             if (x < tx || x > tx + tw) return;
             let y = context.getMousePosition("mouse_y");
             if (y < ty || y > ty + th) return;
-            onclick();
+            onclick?.();
             switch (key) {
-                case ("mouse_left"): { onleft(); onleftorright(); return; }
-                case ("mouse_right"): { onright(); onleftorright(); return; }
-                case ("mouse_middle"): { onmiddle; }
+                case ("mouse_left"): { onleft?.(); onleftorright?.(); return; }
+                case ("mouse_right"): { onright?.(); onleftorright?.(); return; }
+                case ("mouse_middle"): { onmiddle?.(); }
             }
-            onother();
+            onother?.();
         });
         let deregister = register({ draw });
         return () => {
