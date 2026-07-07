@@ -1,7 +1,7 @@
 <script lang="ts">
 
-    import { Game, Layer, GameObject, DefaultFontFace } from "../../../lib";
-    import { Rectangle } from "../../../lib/drawables";
+    import { Game, Layer, Drawables, Primitives } from "$lib/index.js";
+    import { Rectangle } from "$lib/drawables/index.js";
 
     import Spinning from "./Spinning.svelte";
     import LoadingText from "./LoadingText.svelte";
@@ -11,9 +11,9 @@
 <div class="game-wrapper">
     <Game>
         <Layer zIndex={0} name="bg">
-            <GameObject x={0} y={0} w={1920} h={1080} >
-                <Rectangle fill="#333333" />
-            </GameObject>
+            <Primitives.Area x={0} y={0} w={1920} h={1080} >
+                <Drawables.Rectangle fill="#333333" />
+            </Primitives.Area>
         </Layer>
         <Layer zIndex={1} name="oh">
             <Spinning />

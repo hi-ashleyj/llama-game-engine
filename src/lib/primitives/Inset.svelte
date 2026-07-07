@@ -1,6 +1,6 @@
 <script lang="ts">
 
-    import { setupDrawable, type DrawFunction } from "../drawable.js";
+    import { setupDrawable } from "../drawable.js";
     import { onMount } from "svelte";
 
     interface Props {
@@ -19,28 +19,19 @@
         children
     }: Props = $props();
 
-    const targets = new Set<{ draw: DrawFunction<{x: number, y: number, w: number, h: number}> }>();
-
-    const draw: DrawFunction<{x: number, y: number, w: number, h: number}> = function ( { width, height, ctx }, o ) {
-        targets.forEach(f => f.draw({ width, height, ctx }, { 
-            x: o.x + left, 
-            y: o.y + top, 
-            w: o.w - (left + right), 
-            h: o.h - (top + bottom),
-        }));
-    };
-
-    let register = setupDrawable<{x: number, y: number, w: number, h: number}, {x: number, y: number, w: number, h: number}>({
-        assign: (ctx) => {
-            targets.add(ctx);
-            return () => {
-                targets.delete(ctx);
-            };
-        },
-    });
+    let register = setupDrawable<{x: number, y: number, w: number, h: number}, {x: number, y: number, w: number, h: number}>({ hasChildren: true });
 
     onMount(() => {
-        return register({ draw });
+        return register({
+            draw: ({ width, height, children, ctx }, o) => {
+                children.forEach(f => f.draw({ width, height, ctx, children: []}, {
+                    x: o.x + left, 
+                    y: o.y + top, 
+                    w: o.w - (left + right), 
+                    h: o.h - (top + bottom),
+                }))
+            }    
+        });
     });
 
 </script>

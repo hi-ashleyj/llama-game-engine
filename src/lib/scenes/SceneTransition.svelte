@@ -1,51 +1,24 @@
 <script lang="ts">
 
-    import {jumpSignal, sceneAnimating} from "./scenes.js";
-    import {getGame, getTriggerLayerRender } from "../core-contexts.js";
-    import { onDestroy } from "svelte";
+    import { useScenes } from "./scenes.svelte.js";
+    import { getTriggerLayerRender } from "../core-contexts.js";
 
-    const context = getGame();
+    const scenedata = useScenes();
+
     interface Props {
-        duration?: number;
         children?: import('svelte').Snippet<[any]>;
     }
-
-    let { duration = 1000, children }: Props = $props();
-    let burst = context.createBurst({duration: duration});
+    let { children }: Props = $props();
+    
+    let normalized = $derived(1 - (Math.abs(scenedata.animationState - 0.5) * 2))
     let triggerRender = getTriggerLayerRender();
-    onDestroy(burst.stop);
-
-    let halfAnimationTriggered = $state(false);
-
-    const startAnimation = () => {
-        burst.trigger();
-        halfAnimationTriggered = false;
-    };
-
-    const halfAnimation = () => {
-        halfAnimationTriggered = true;
-        $jumpSignal = !$jumpSignal;
-    };
-
-    const completeAnimation = () => {
-        $sceneAnimating = false;
-    };
 
     $effect(() => {
-        if ($sceneAnimating) startAnimation();
-    })
-    $effect(() => {
-        if ($burst > 0.5 && !halfAnimationTriggered) halfAnimation();
-        if ($burst == 1) completeAnimation();
-    })
-
-    let normalized = $derived(1 - (Math.abs($burst - 0.5) * 2))
-    $effect(() => {
-        triggerRender($burst)
+        triggerRender(normalized)
     })
 
 </script>
 
-{#if $burst > 0 && $burst < 1}
-    {@render children?.({ progress: $burst, normalized, })}
+{#if scenedata.animationState > 0 && scenedata.animationState < 1}
+    {@render children?.({ normalized })}
 {/if}

@@ -72,7 +72,7 @@
         }
     }
 
-    const register = setupDrawable<{x: number, y: number, w: number, h: number}, null>({});
+    const register = setupDrawable<{x: number, y: number, w: number, h: number}, null>({ hasChildren: false });
 
     onMount(() => {
         return register({ draw })

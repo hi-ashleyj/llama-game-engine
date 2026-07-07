@@ -2,7 +2,7 @@
 
     import { getGame } from "../core-contexts.js";
     import { setupDrawable, type DrawFunction } from "../drawable.js";
-    import { onMount, createEventDispatcher } from "svelte";
+    import { onMount } from "svelte";
     import { MOUSE_ACTION } from "./mouse.js";
 
     let tx = 0;
@@ -10,7 +10,6 @@
     let tw = 0;
     let th = 0;
 
-    let dispatch = createEventDispatcher();
     let context = getGame();
 
     let mouseX = context.getMouseStore("mouse_x");
@@ -19,7 +18,7 @@
     type Click = () => void;
     interface Props {
         hover?: boolean;
-        children?: import('svelte').Snippet<[any]>;
+        children?: import('svelte').Snippet<[{ hover: boolean }]>;
         onleft: Click;
         onright: Click;
         onleftorright: Click;
@@ -28,16 +27,9 @@
         onother: Click;
     }
 
-    let { hover = $bindable(false), children,
-        onleft,
-        onright,
-        onleftorright,
-        onclick,
-        onmiddle,
-        onother
-    }: Props = $props();
+    let { hover = $bindable(false), children, onleft, onright, onleftorright, onclick, onmiddle, onother }: Props = $props();
 
-    const draw: DrawFunction<{x: number, y: number, w: number, h: number}> = function(_info, { x, y, w, h }) {
+    const draw: DrawFunction<{x: number, y: number, w: number, h: number}> = function(_, { x, y, w, h }) {
         tx = x;
         ty = y;
         tw = w;
@@ -48,7 +40,7 @@
         hover = true;
     };
 
-    let register = setupDrawable<{x: number, y: number, w: number, h: number}, null>({});
+    let register = setupDrawable<{x: number, y: number, w: number, h: number}, null>({ hasChildren: false });
 
     onMount(() => {
         let event = context.onMouseEvent(null, MOUSE_ACTION.DOWN, ({ key }) => {
@@ -71,4 +63,4 @@
 
 </script>
 
-{@render children?.({ hover, })}
+{@render children?.({ hover })}

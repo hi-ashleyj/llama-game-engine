@@ -9,7 +9,7 @@
     let canvas: HTMLCanvasElement | undefined = $state();
     let ctx = $derived((typeof canvas !== "undefined") ? canvas.getContext("2d") : null);
 
-    let targets = new Set<{ draw: DrawFunction<null> }>();
+    let targets = new Set<{ draw: DrawFunction<null, null> }>();
     
     const { width, height } = getGame();
 
@@ -17,7 +17,7 @@
         if (ctx === null) return;
         ctx.clearRect(0, 0, $width, $height);
         ctx.imageSmoothingEnabled = scaleMode === "smooth";
-        targets.forEach(f => f.draw({ width: $width, height: $height, ctx: ctx! }));
+        targets.forEach(f => f.draw({ width: $width, height: $height, ctx: ctx!, children: [] }, null));
     }
 
     let register = setupLayer({

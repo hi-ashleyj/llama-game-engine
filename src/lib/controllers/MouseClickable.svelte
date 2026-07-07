@@ -13,30 +13,25 @@
     let context = getGame();
 
     type Click = () => void;
-    let {
-        onleft,
-        onright,
-        onleftorright,
-        onclick,
-        onmiddle,
-        onother
-    }: {
+    type Events = {
         onleft: Click,
         onright: Click,
         onleftorright: Click,
         onclick: Click,
         onmiddle: Click,
         onother: Click,
-    } = $props();
+    }
 
-    const draw: DrawFunction<{x: number, y: number, w: number, h: number}> = function(_info, { x, y, w, h }) {
+    let { onleft, onright, onleftorright, onclick, onmiddle, onother }: Events = $props();
+
+    const draw: DrawFunction<{x: number, y: number, w: number, h: number}> = function(_, { x, y, w, h }) {
         tx = x;
         ty = y;
         tw = w;
         th = h;
     };
 
-    let register = setupDrawable<{x: number, y: number, w: number, h: number}, null>({});
+    let register = setupDrawable<{x: number, y: number, w: number, h: number}, null>({ hasChildren: false });
 
     onMount(() => {
         let event = context.onMouseEvent(null, MOUSE_ACTION.DOWN, ({ key }) => {

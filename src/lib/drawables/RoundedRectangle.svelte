@@ -33,7 +33,7 @@
         }
     };
     
-    let register = setupDrawable<{x: number, y: number, w: number, h: number}, null>({});
+    let register = setupDrawable<{x: number, y: number, w: number, h: number}, null>({ hasChildren: false });
 
     onMount(() => {
         return register({ draw });

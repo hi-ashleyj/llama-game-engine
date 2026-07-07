@@ -1,7 +1,7 @@
 <script lang="ts">
 
     import { onDestroy } from "svelte";
-    import { Drawables, GameObject, getGame } from "$lib";
+    import { Drawables, Primitives, getGame } from "$lib/index.js";
 
     const context = getGame();
 
@@ -15,6 +15,6 @@
 
 </script>
 
-<GameObject x={960} y={540 + 200} w={0} h={0} centered={false} >
+<Primitives.Area x={960} y={540 + 200} w={0} h={0} center={true}>
     <Drawables.MultiLineText text={`loading${dots}\nor whatever`} size={30} alignH="center" fill="white" />
-</GameObject>
+</Primitives.Area>

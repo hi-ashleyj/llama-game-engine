@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { setupDrawable, type DrawFunction } from "../drawable.js";
+    import { setupDrawable } from "../drawable.js";
     import { onMount } from "svelte";
     
     interface Props {
@@ -11,25 +11,18 @@
         degrees: number;
         children?: import('svelte').Snippet;
     }
-
     let { centered = false, degrees, children }: Props = $props();
-    const targets = new Set<{ draw: DrawFunction<{ x: number, y: number, w: number, h: number }> }>();
-    const draw: DrawFunction<{ x: number, y: number, w: number, h: number }> = function ( { width, height, ctx }, { x, y, w, h} ) {
-        ctx.translate(x, y);
-        ctx.rotate(degrees * Math.PI / 180 )
-        targets.forEach(f => f.draw({ width, height, ctx }, { x: (centered) ? w * -0.5 : 0, y: (centered) ? h * -0.5 : 0, w, h }));
-        ctx.resetTransform();
-    };
-    let register = setupDrawable<{ x: number, y: number, w: number, h: number }, { x: number, y: number, w: number, h: number }>({
-        assign: (ctx) => {
-            targets.add(ctx);
-            return () => {
-                targets.delete(ctx);
-            };
-        },
-    });
+
+    let register = setupDrawable<{ x: number, y: number, w: number, h: number }, { x: number, y: number, w: number, h: number }>({ hasChildren: true });
     onMount(() => {
-        return register({ draw });
+        return register({
+            draw: ({ width, height, ctx, children }, { x, y, w, h }) => {
+                ctx.translate(x, y);
+                ctx.rotate(degrees * Math.PI / 180 )
+                children.forEach(f => f.draw({ width, height, ctx, children: [] }, { x: (centered) ? w * -0.5 : 0, y: (centered) ? h * -0.5 : 0, w, h }));
+                ctx.resetTransform();
+            }
+        });
     });
 </script>
 
