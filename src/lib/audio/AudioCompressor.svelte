@@ -28,35 +28,34 @@
         children
     }: Props = $props();
 
-    let output: GainNode = $state();
-    let input: GainNode = $state();
-    let process: DynamicsCompressorNode = $state();
+    let output: GainNode | undefined = $state();
+    let input: GainNode | undefined = $state();
+    let process: DynamicsCompressorNode | undefined = $state();
 
     $effect(() => {
-
         if (output) {
-            output.gain.setTargetAtTime(postGain, audioCTX.currentTime, 0.004);
+            output.gain.setTargetAtTime(postGain, output.context.currentTime, 0.004);
         }
     })
 
     $effect(() => {
         if (input) {
-            input.gain.setTargetAtTime(preGain, audioCTX.currentTime, 0.004);
+            input.gain.setTargetAtTime(preGain, input.context.currentTime, 0.004);
         }
     });
     $effect(() => {
         if (process) {
-            process.attack.setTargetAtTime(attack / 1000, audioCTX.currentTime, 0.004);
-            process.threshold.setTargetAtTime(threshold, audioCTX.currentTime, 0.004);
-            process.knee.setTargetAtTime(Math.min(threshold + blend, 0), audioCTX.currentTime, 0.004);
-            process.ratio.setTargetAtTime(ratio, audioCTX.currentTime, 0.004);
-            process.release.setTargetAtTime(release / 1000, audioCTX.currentTime, 0.004);
+            process.attack.setTargetAtTime(attack / 1000, process.context.currentTime, 0.004);
+            process.threshold.setTargetAtTime(threshold, process.context.currentTime, 0.004);
+            process.knee.setTargetAtTime(Math.min(threshold + blend, 0), process.context.currentTime, 0.004);
+            process.ratio.setTargetAtTime(ratio, process.context.currentTime, 0.004);
+            process.release.setTargetAtTime(release / 1000, process.context.currentTime, 0.004);
         }
     });
 
     const connect = getConnector((node) => {
-        node.connect(output);
-        return () => node.disconnect(output);
+        node.connect(output!);
+        return () => node.disconnect(output!);
     });
 
     onMount(() => {

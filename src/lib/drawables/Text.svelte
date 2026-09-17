@@ -28,9 +28,9 @@
         alignV = "top"
     }: Props = $props();
 
-    const { defaultTextFontFace } = getGame();
+    const { font: defaultFont } = getGame();
 
-    let effectiveFont = $derived(font ? font : typeof defaultTextFontFace() === "string" ? defaultTextFontFace() : "sans-serif");
+    let effectiveFont = $derived(font ? font : typeof defaultFont() === "string" ? defaultFont() : "sans-serif");
     let computedFont = $derived(((style) ? style + " ": "") + size + "px " + effectiveFont);
     
     const draw: DrawFunction<{x: number, y: number, w: number, h: number}> = function({ ctx }, { x, y, w, h }: { x: number, y: number, w: number, h: number }) {

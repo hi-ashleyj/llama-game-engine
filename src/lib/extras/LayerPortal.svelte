@@ -15,8 +15,8 @@
     const targets = new Set<DrawableObject<null>>();
     
 
-    const draw: DrawFunction<null> = (core) => {
-        targets.forEach(t => t.draw(core));
+    const draw: DrawFunction<null> = (core, ...more) => {
+        targets.forEach(t => t.draw(core, ...more));
     }
 
     setupDrawable<null, null>({
@@ -27,7 +27,7 @@
     });
 
     onMount(() => {
-        const context = game.getLayerByName(name);
+        const context = game.layer(name);
         if (!context) return;
 
         return context.assign({ draw });

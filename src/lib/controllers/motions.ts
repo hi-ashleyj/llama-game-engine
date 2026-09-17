@@ -65,5 +65,4 @@ export class Timing {
             t.store.set((t.current / t.duration) % 1);
         })
     }
-
 }

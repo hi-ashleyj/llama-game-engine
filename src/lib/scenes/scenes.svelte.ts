@@ -14,7 +14,7 @@ export const setupScenes = ( transition: number ) => {
     const game = getGame();
     let active = $state("default");
     let wanted = $state("default");
-    const signal = game.createBurst({ duration: transition, initialTrigger: false });
+    const signal = game.burst({ duration: transition, initialTrigger: false });
 
     let current = $state(1);
     signal.subscribe((v) => {

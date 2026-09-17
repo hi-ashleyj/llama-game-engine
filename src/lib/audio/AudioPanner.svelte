@@ -11,7 +11,7 @@
 
     let { pan = 0, children }: Props = $props();
 
-    let output: StereoPannerNode = $state();
+    let output: StereoPannerNode | undefined = $state();
 
     $effect(() => {
         if (output) {
@@ -20,8 +20,8 @@
     });
 
     const connect = getConnector((node) => {
-        node.connect(output);
-        return () => node.disconnect(output);
+        node.connect(output!);
+        return () => node.disconnect(output!);
     });
 
     onMount(() => {

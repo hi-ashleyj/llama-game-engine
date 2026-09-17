@@ -11,12 +11,7 @@
         children?: import('svelte').Snippet<[{ smooth: number }]>;
     }
 
-    let {
-        duration = 200,
-        value = 0,
-        easing = linear,
-        children
-    }: Props = $props();
+    let { duration = 200, value = 0, easing = linear, children }: Props = $props();
 
     //@ts-ignore
     const tween = new Tween<number>(value, { duration, easing });

@@ -7,7 +7,7 @@
     }
 
     let { url }: Props = $props();
-    let element = $state();
+    let element: HTMLImageElement | undefined = $state();
 
     onMount(() => {
         if (!element) return;

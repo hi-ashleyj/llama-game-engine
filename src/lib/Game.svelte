@@ -2,7 +2,7 @@
     import { onMount } from "svelte";
     import { setupGame, type GameContext, type LayerContext, type LayerDrawable } from "./core-contexts.js";
     import { Timing } from "./controllers/motions.js";
-    import { Keyboard } from "./controllers/keyboard.js";
+    import { Keyboard } from "./controllers/keyboard.svelte.js";
     import { Mouse } from "./controllers/mouse.svelte.js";
     import { getSetupAudio } from "./audio/context.js";
     import { decodeAllBuffers } from "./resources/audio.js";
@@ -52,32 +52,35 @@
         width: () => width,
         height: () => height,
         background: () => background,
-        getLayerByName: (name) => layerAssignments.get(name) ?? null,
+        layer: (name) => layerAssignments.get(name) ?? null,
         assign,
-        createTimer: timing.createTimer.bind(timing),
-        createBurst: timing.createBurst.bind(timing),
-        onKeyboardEvent: keyboard.on.bind(keyboard),
-        isKeyboardPressed: keyboard.isPressed.bind(keyboard),
-        getKeyboardStore: keyboard.getStore.bind(keyboard),
-        onMouseEvent: mouse.on.bind(mouse),
+        timer: timing.createTimer.bind(timing),
+        burst: timing.createBurst.bind(timing),
+        onKeyboard: keyboard.on.bind(keyboard),
+        keyboard: keyboard.info,
+        onMouse: mouse.on.bind(mouse),
         mouse: mouse.info,
-        onFrame: (callback) => {
-            frameEvents.add(callback);
-            return () => frameEvents.delete(callback);
+        on: (type, callback) => {
+            switch (type) {
+                case "frame": {
+                    frameEvents.add(callback);
+                    return () => frameEvents.delete(callback);
+                }
+                case "before": {
+                    frameBeforeEvents.add(callback);
+                    return () => frameBeforeEvents.delete(callback);
+                }
+                case "after": {
+                    frameAfterEvents.add(callback);
+                    return () => frameAfterEvents.delete(callback);
+                }
+            }
         },
-        onBeforeFrame: (callback) => {
-            frameBeforeEvents.add(callback);
-            return () => frameBeforeEvents.delete(callback);
-        },
-        onAfterFrame: (callback) => {
-            frameAfterEvents.add(callback);
-            return () => frameAfterEvents.delete(callback);
-        },
-        defaultTextFontFace: (setter) => {
+        font: (setter) => {
             if (setter === null || typeof setter === "string") fontFace = setter;
             return fontFace
         },
-        getAudioContext: () => audio ? audio : raise("There Is No AudioContext"),
+        audio: () => audio ? audio : raise("There Is No AudioContext"),
     }
 
     setupGame(context);
@@ -93,14 +96,10 @@
             return last = time;
         }
 
-        // TODO: NEW TIMEOUT LOGIC
-
         frameBeforeEvents.forEach((callback) => callback({ delta, time }));
-
         timing.update(delta);
 
         frameEvents.forEach((callback) => callback({ delta, time }));
-
         draw();
 
         frameAfterEvents.forEach((callback) => callback({ delta, time }));
@@ -114,7 +113,7 @@
         if (!audio) throw new Error("Audio Is Not Yet Created!")
         node.connect(audio.destination);
         return () => audio && node.disconnect(audio.destination);
-    })
+    });
 
     onMount(() => {
         audio = new AudioContext();

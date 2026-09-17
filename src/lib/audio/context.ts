@@ -20,7 +20,7 @@ export const getSetupAudio = function (connect: (node: AudioNode) => DisconnectF
 };
 
 export const getAudioContext = (): () => AudioContext => {
-    return getGame().getAudioContext;
+    return getGame().audio;
 }
 
 export const getConnector = (connect?: (node: AudioNode) => DisconnectFunction) => {

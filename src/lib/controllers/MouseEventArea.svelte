@@ -35,7 +35,7 @@
     let register = setupDrawable<{x: number, y: number, w: number, h: number}, null>({ hasChildren: false });
 
     onMount(() => {
-        let event = context.onMouseEvent("press", (key, state) => {
+        let event = context.onMouse("press", (key, state) => {
             if (!state || !hover) return;
             onclick?.();
             switch (key) {

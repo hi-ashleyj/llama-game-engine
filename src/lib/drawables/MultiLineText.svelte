@@ -30,9 +30,9 @@
         alignV = "top"
     }: Props = $props();
 
-    const { defaultTextFontFace } = getGame();
+    const { font: defaultFont } = getGame();
 
-    let effectiveFont = $derived(font ? font : typeof defaultTextFontFace() === "string" ? defaultTextFontFace() : "sans-serif");
+    let effectiveFont = $derived(font ? font : typeof defaultFont() === "string" ? defaultFont() : "sans-serif");
     let computedFont = $derived((style ? style + " " : "") + size + "px " + effectiveFont);
     let splits = $derived(text?.split("\n") || []);
 

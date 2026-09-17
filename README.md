@@ -3,6 +3,10 @@ This thing isn't ready - and probably will never be fully done. This is just as 
 
 ## Seriously, don't use this yet.
 
+>[!CAUTION]
+>This document is current as of 0.15.1, NOT 0.16 +
+
+
 ## A Good Starting point.
 I'd recommend starting with a sveltekit project configured with TS. That's what I use basically 100% of the time.  
 To get started:  

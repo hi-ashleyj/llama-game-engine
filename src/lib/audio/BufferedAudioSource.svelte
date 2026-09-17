@@ -7,11 +7,12 @@
     interface Props {
         volume?: number;
         audioBuffer: AudioBuffer;
+        paused?: boolean;
     }
 
-    let { volume = 1, audioBuffer }: Props = $props();
+    let { volume = 1, audioBuffer, paused = $bindable(true) }: Props = $props();
 
-    let output: GainNode = $state();
+    let output: GainNode | undefined = $state();
     let audioCTX: AudioContext;
 
     $effect(() => {
@@ -22,22 +23,31 @@
 
     const playing = new Set<AudioBufferSourceNode>();
 
-    export const play = () => {
+    let cancel: (() => void) | undefined = $state();
+    $effect(() => {
+        if (paused && cancel) {
+            cancel();
+            cancel = undefined;
+        }
+        else if (!paused) cancel = play();
+    })
+
+    const play = () => {
         if (!audioBuffer) return;
         const source = audioCTX.createBufferSource();
         source.buffer = audioBuffer;
         source.addEventListener("ended", () => {
-            source.disconnect(output);
+            source.disconnect(output!);
             playing.delete(source);
         });
 
-        source.connect(output);
+        source.connect(output!);
         playing.add(source);
         source.start();
         return () => {
             if (playing.has(source)) {
                 source.stop();
-                source.disconnect(output);
+                source.disconnect(output!);
                 playing.delete(source);
             }
         }
@@ -47,13 +57,13 @@
 
     onMount(() => {
         audioCTX = audioContext();
-        output = audioCtx.createGain();
+        output = audioCTX.createGain();
 
         const disconnect = connect(output);
         return () => {
             for (let node of playing) {
                 node.stop();
-                node.disconnect(output);
+                node.disconnect(output!);
             }
             disconnect();
         }

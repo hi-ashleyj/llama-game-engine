@@ -98,15 +98,9 @@ export class Mouse {
             let rawX = e.deltaX;
             let rawY = e.deltaY;
 
-            if (Math.abs(rawX) > 0) {
-                this.fire("scroll_x", rawX);
-            }
-            if (Math.abs(rawY) > 0) {
-                this.fire("scroll_y", rawY);
-            }
-            if (Math.abs(rawX) + Math.abs(rawY) > 0) {
-                this.fire("scroll", rawX, rawY);
-            }
+            if (Math.abs(rawX) > 0) this.fire("scroll_x", rawX);
+            if (Math.abs(rawY) > 0) this.fire("scroll_y", rawY);
+            this.fire("scroll", rawX, rawY);
         });
 
         window.addEventListener("contextmenu", (e) => {
@@ -115,7 +109,7 @@ export class Mouse {
     }
 
     on<T extends keyof Events = keyof Events>(action: T, call: (...params: Events[T]) => void): () => void {
-        const handle = { action, call } as Event<keyof Events>;
+        const handle = { action, call } as Event;
 
         this.events.add(handle);
         return () => { this.events.delete(handle); }

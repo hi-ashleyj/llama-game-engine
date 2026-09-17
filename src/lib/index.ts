@@ -7,7 +7,6 @@ export type { GameContext, LayerContext, LayerDrawable } from "./core-contexts.j
 // CONTROLLERS
 export { default as MouseClickable } from "./controllers/MouseClickable.svelte";
 export { default as MouseEventArea } from "./controllers/MouseEventArea.svelte";
-export { KEYBOARD_ACTION } from "./controllers/keyboard.js";
 
 // DRAWABLES
 export * as Drawables from "./drawables/index.js";

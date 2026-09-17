@@ -5,7 +5,6 @@
     // Pitch looks downwards as it goes negative.
     // Yaw rotates leftwards as it goes negative (toward -Z)
 
-
     const dot = ([i, j, k]: number[], [x, y, z]: number[]): number => {
         return i * x + j * y + k * z;
     }
@@ -43,38 +42,48 @@
     }
 
 
-    import { getAudioContext } from "$lib/audio/context.js";
+    import { getAudioContext, getConnector } from "$lib/audio/context.js";
     import { onMount } from "svelte";
     interface Props {
         position?: [ number, number, number ];
         orientation?: [ number, number, number ];
+        cone?: [ number, number ];
+        /**
+         * Distance Model, Rolloff Factor, Ref Distance, Max Distance
+         */
+        falloff?: [ "inverse" | "linear" | "exponential", number, number, number ];
     }
 
-    let { position = [0, 0, 0], orientation = [0, 0, 0] }: Props = $props();
+    let { position = [0, 0, 0], orientation = [0, 0, 0], cone = [ 360, 0 ], falloff = [ "inverse", 1, 1, 10000 ] }: Props = $props();
     const audioContext = getAudioContext();
-    let audioCTX: AudioContext | null = $state(null);
+    let output: PannerNode | undefined = $state();
 
+    const connect = getConnector((node) => {
+        node.connect(output!);
+        return () => node.disconnect(output!);
+    })
 
     onMount(() => {
-        audioCTX = audioContext();
+        const audioCTX = audioContext();
+        output = audioCTX.createPanner();
+        return connect(output);
     })
 
     let positionX = $derived(position[0]);
     let positionY = $derived(position[1]);
     let positionZ = $derived(position[2]);
-    let roll = $derived(orientation[0]);
-    let pitch = $derived(orientation[1]);
-    let yaw = $derived(orientation[2]);
-    let quaterion = $derived(buildQuaternion(roll, pitch, yaw));
+    let quaterion = $derived(buildQuaternion(...orientation));
     let forward = $derived(rotatedVector([1, 0, 0], quaterion));
-    let up = $derived(rotatedVector([0, 1, 0], quaterion));
-    $effect(() => { if (audioCTX) audioCTX.listener.positionX.value = positionX });
-    $effect(() => { if (audioCTX) audioCTX.listener.positionY.value = positionY });
-    $effect(() => { if (audioCTX) audioCTX.listener.positionZ.value = positionZ });
-    $effect(() => { if (audioCTX) audioCTX.listener.forwardX.value = forward[0] });
-    $effect(() => { if (audioCTX) audioCTX.listener.forwardY.value = forward[1] });
-    $effect(() => { if (audioCTX) audioCTX.listener.forwardZ.value = forward[2] });
-    $effect(() => { if (audioCTX) audioCTX.listener.upX.value = up[0] });
-    $effect(() => { if (audioCTX) audioCTX.listener.upY.value = up[1] });
-    $effect(() => { if (audioCTX) audioCTX.listener.upZ.value = up[2] });
+    $effect(() => { if (output) output.positionX.value = positionX });
+    $effect(() => { if (output) output.positionY.value = positionY });
+    $effect(() => { if (output) output.positionZ.value = positionZ });
+    $effect(() => { if (output) output.orientationX.value = forward[0] });
+    $effect(() => { if (output) output.orientationY.value = forward[1] });
+    $effect(() => { if (output) output.orientationZ.value = forward[2] });
+    $effect(() => { if (output) output.coneInnerAngle = cone[0] });
+    $effect(() => { if (output) output.coneOuterAngle = cone[1] });
+    $effect(() => { if (output) output.distanceModel = falloff[0] });
+    $effect(() => { if (output) output.rolloffFactor = falloff[1] });
+    $effect(() => { if (output) output.refDistance = falloff[2] });
+    $effect(() => { if (output) output.maxDistance = falloff[3] });
 </script>

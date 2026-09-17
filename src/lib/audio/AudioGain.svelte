@@ -11,7 +11,7 @@
 
     let { gain = 1, children }: Props = $props();
 
-    let output: GainNode = $state();
+    let output: GainNode | undefined = $state();
 
     $effect(() => {
         if (output) {
@@ -20,8 +20,8 @@
     });
 
     const connect = getConnector((node) => {
-        node.connect(output);
-        return () => node.disconnect(output);
+        node.connect(output!);
+        return () => node.disconnect(output!);
     });
 
     onMount(() => {

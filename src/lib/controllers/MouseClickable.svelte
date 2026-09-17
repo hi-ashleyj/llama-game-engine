@@ -26,7 +26,7 @@
     const register = setupDrawable<{x: number, y: number, w: number, h: number}, null>({ hasChildren: false });
 
     onMount(() => {
-        const event = context.onMouseEvent<"press">("press", (key, state) => {
+        const event = context.onMouse<"press">("press", (key, state) => {
             if (!state) return;
             const x = context.mouse.x;
             if (x < c.x || x > c.x + c.w) return;

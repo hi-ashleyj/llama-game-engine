@@ -1,5 +1,4 @@
-import type DisplayImage from "$lib/drawables/DisplayImage.svelte";
-import type { ComponentProps } from "svelte";
+import { type Props as DisplayImage } from "$lib/drawables/DisplayImage.svelte";
 
 export type TileSet = {
     width: number;
@@ -19,7 +18,7 @@ export const useTileSet = (image: HTMLImageElement, width: number, height: numbe
     } as TileSet;
 }
 
-export const getTile = (tileset: TileSet, x: number, y: number): ComponentProps<DisplayImage> => {
+export const getTile = (tileset: TileSet, x: number, y: number): DisplayImage => {
     if (x < 0 || y < 0) throw new Error("Cannot pick tile with index < 0");
     if (x > tileset.width || y > tileset.height) throw new Error("Cannot pick tile with index > max");
     return {

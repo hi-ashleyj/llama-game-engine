@@ -2,7 +2,7 @@
 
     import { getGame } from "$lib/core-contexts.js";
     import { onMount } from "svelte";
-    const { defaultTextFontFace } = getGame();
+    const { font: defaultFont } = getGame();
 
     interface Props {
         /**
@@ -21,7 +21,7 @@
     let { font, url = null, onload }: Props = $props();
 
     onMount(() => {
-        defaultTextFontFace(font);
+        defaultFont(font);
 
         if (url) {
             const face = new FontFace(font, `url(${url})`);

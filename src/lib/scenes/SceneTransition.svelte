@@ -5,10 +5,7 @@
 
     const scenedata = useScenes();
 
-    interface Props {
-        children?: import('svelte').Snippet<[any]>;
-    }
-    let { children }: Props = $props();
+    let { children }: { children?: import('svelte').Snippet<[{ normalized: number }]> } = $props();
     
     let normalized = $derived(1 - (Math.abs(scenedata.animationState - 0.5) * 2))
     let triggerRender = getTriggerLayerRender();

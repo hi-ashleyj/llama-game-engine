@@ -1,12 +1,13 @@
+<script lang="ts" module>
+    export interface Props {
+        image?: HTMLImageElement | null;
+        crop?: { x: number, y: number, w: number, h: number } | null;
+    }
+</script>
 <script lang="ts">
 
     import { setupDrawable } from "$lib/drawable.js";
     import { onMount } from "svelte";
-
-    interface Props {
-        image?: HTMLImageElement | null;
-        crop?: { x: number, y: number, w: number, h: number } | null;
-    }
 
     let { image = null, crop = null }: Props = $props();
     let register = setupDrawable<{x: number, y: number, w: number, h: number}, null>({ hasChildren: false });

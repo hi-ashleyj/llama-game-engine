@@ -12,30 +12,11 @@
         loop?: boolean;
     }
 
-    let {
-        url,
-        volume = 1,
-        paused = $bindable(true),
-        playbackPosition = $bindable(),
-        loop = false
-    }: Props = $props();
+    let { url, volume = 1, paused = $bindable(true), playbackPosition = $bindable(), loop = false }: Props = $props();
 
-    export const playFromStart = () => {
-        playbackPosition = 0;
-        paused = false;
-    }
-
-    export const play = () => {
-        paused = false;
-    }
-
-    export const pause = () => {
-        paused = true;
-    }
-
-    let output: GainNode = $state();
+    let output: GainNode | undefined = $state();
     let sourceNode: MediaElementAudioSourceNode
-    let element: HTMLAudioElement = $state();
+    let element: HTMLAudioElement | undefined = $state();
 
     $effect(() => {
         if (output) {
@@ -46,6 +27,7 @@
     const connect = getConnector();
 
     onMount(() => {
+        if (!element) { throw new Error("Failed to mount Audio Element"); }
         const audioCTX = audioContext();
         sourceNode = audioCTX.createMediaElementSource(element);
         output = audioCTX.createGain();

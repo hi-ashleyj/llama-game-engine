@@ -1,8 +1,8 @@
 import type { Timing } from "./controllers/motions.js";
-import type { Keyboard } from "./controllers/keyboard.js";
+import type { Keyboard } from "./controllers/keyboard.svelte.js";
 import type { Mouse } from "./controllers/mouse.svelte.js";
 import { getContext, setContext } from 'svelte';
-import { setupDrawable, type DrawableContext, type DrawFunction } from './drawable.js';
+import { setupDrawable, type DrawableContext } from './drawable.js';
 
 export type DestroyFunction = () => any;
 export type RegisterFunction<T> = (run: T) => DestroyFunction;
@@ -14,19 +14,16 @@ export type GameContext = {
     width: () => number, 
     height: () => number, 
     background: () => string,
-    createTimer: Timing["createTimer"],
-    createBurst: Timing["createBurst"],
-    onKeyboardEvent: Keyboard["on"],
-    isKeyboardPressed: Keyboard["isPressed"],
-    getKeyboardStore: Keyboard["getStore"],
-    onMouseEvent: Mouse["on"],
+    timer: Timing["createTimer"],
+    burst: Timing["createBurst"],
+    on: (type: "frame" | "before" | "after", callback: (info: { delta: number, time: number }) => any | void) => () => any,
+    onKeyboard: Keyboard["on"],
+    onMouse: Mouse["on"],
+    keyboard: Keyboard["info"],
     mouse: Mouse["info"],
-    onFrame: (callback: (info: { delta: number, time: number }) => any | void) => () => any,
-    onBeforeFrame: (callback: (info: { delta: number, time: number }) => any | void) => () => any,
-    onAfterFrame: (callback: (info: { delta: number, time: number }) => any | void) => () => any,
-    getLayerByName: (name: string) => LayerContext | null,
-    defaultTextFontFace: (set?: string | null) => string | null,
-    getAudioContext: () => AudioContext
+    layer: (name: string) => LayerContext | null,
+    font: (set?: string | null) => string | null,
+    audio: () => AudioContext
 } ;
 
 export const setupGame = function (context: GameContext) {
