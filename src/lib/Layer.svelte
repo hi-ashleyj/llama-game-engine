@@ -1,10 +1,10 @@
 <script lang="ts">
 
-    import { setupLayer, getGame } from "./core-contexts.js";
     import type { DrawFunction } from "./drawable.js";
+    import { setupLayer, getGame } from "./core-contexts.js";
     import { onMount } from "svelte";
 
-    let shouldRenderNextFrame = true;
+    let shouldRenderNextFrame = $state(true);
 
     let canvas: HTMLCanvasElement | undefined = $state();
     let ctx = $derived((typeof canvas !== "undefined") ? canvas.getContext("2d") : null);
@@ -15,9 +15,9 @@
 
     const draw = () => {
         if (ctx === null) return;
-        ctx.clearRect(0, 0, $width, $height);
+        ctx.clearRect(0, 0, width(), height());
         ctx.imageSmoothingEnabled = scaleMode === "smooth";
-        targets.forEach(f => f.draw({ width: $width, height: $height, ctx: ctx!, children: [] }, null));
+        targets.forEach(f => f.draw({ width: width(), height: height(), ctx: ctx!, children: [] }, null));
     }
 
     let register = setupLayer({
@@ -60,7 +60,7 @@
 
 </script>
 
-<canvas width={$width} height={$height} bind:this={canvas} style:z-index={zIndex}></canvas>
+<canvas width={width()} height={height()} bind:this={canvas} style:z-index={zIndex}></canvas>
 {@render children?.()}
 
 <style>

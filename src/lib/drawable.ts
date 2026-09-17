@@ -1,5 +1,5 @@
 import { getContext, setContext } from "svelte";
-import type { RegisterFunction } from "./core-contexts.ts";
+import type { RegisterFunction } from "./core-contexts.js";
 
 const DRAWABLE = Symbol();
 

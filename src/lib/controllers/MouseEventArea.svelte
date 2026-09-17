@@ -3,17 +3,9 @@
     import { getGame } from "../core-contexts.js";
     import { setupDrawable, type DrawFunction } from "../drawable.js";
     import { onMount } from "svelte";
-    import { MOUSE_ACTION } from "./mouse.js";
 
-    let tx = 0;
-    let ty = 0;
-    let tw = 0;
-    let th = 0;
-
-    let context = getGame();
-
-    let mouseX = context.getMouseStore("mouse_x");
-    let mouseY = context.getMouseStore("mouse_y");
+    const context = getGame();
+    let c = $state({ x: 0, y: 0, w: 0, h: 0 });
 
     type Click = () => void;
     interface Props {
@@ -30,27 +22,26 @@
     let { hover = $bindable(false), children, onleft, onright, onleftorright, onclick, onmiddle, onother }: Props = $props();
 
     const draw: DrawFunction<{x: number, y: number, w: number, h: number}> = function(_, { x, y, w, h }) {
-        tx = x;
-        ty = y;
-        tw = w;
-        th = h;
+        c = { x, y, w, h };
 
-        if ($mouseX < tx || $mouseX > tx + tw) return hover = false;
-        if ($mouseY < ty || $mouseY > ty + th) return hover = false;
+        const mx = context.mouse.x;
+        const my = context.mouse.y;
+
+        if (mx < x || mx > x + w) return hover = false;
+        if (my < y || my > y + h) return hover = false;
         hover = true;
     };
 
     let register = setupDrawable<{x: number, y: number, w: number, h: number}, null>({ hasChildren: false });
 
     onMount(() => {
-        let event = context.onMouseEvent(null, MOUSE_ACTION.DOWN, ({ key }) => {
-            if ($mouseX < tx || $mouseX > tx + tw) return;
-            if ($mouseY < ty || $mouseY > ty + th) return;
+        let event = context.onMouseEvent("press", (key, state) => {
+            if (!state || !hover) return;
             onclick?.();
             switch (key) {
-                case ("mouse_left"): { onleft?.(); onleftorright?.(); return; }
-                case ("mouse_right"): { onright?.(); onleftorright?.(); return; }
-                case ("mouse_middle"): { onmiddle?.(); }
+                case ("left"): { onleft?.(); onleftorright?.(); return; }
+                case ("right"): { onright?.(); onleftorright?.(); return; }
+                case ("middle"): { onmiddle?.(); }
             }
             onother?.();
         });

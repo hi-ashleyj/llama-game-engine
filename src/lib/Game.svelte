@@ -1,11 +1,9 @@
 <script lang="ts">
-    import { writable } from "svelte/store";
     import { onMount } from "svelte";
     import { setupGame, type GameContext, type LayerContext, type LayerDrawable } from "./core-contexts.js";
     import { Timing } from "./controllers/motions.js";
     import { Keyboard } from "./controllers/keyboard.js";
-    import type { Writable } from "svelte/store";
-    import { Mouse } from "./controllers/mouse.js";
+    import { Mouse } from "./controllers/mouse.svelte.js";
     import { getSetupAudio } from "./audio/context.js";
     import { decodeAllBuffers } from "./resources/audio.js";
 
@@ -20,20 +18,8 @@
         children?: import('svelte').Snippet;
     }
 
-    let {
-        width = 1920,
-        height = 1080,
-        background = "#000000",
-        children
-    }: Props = $props();
-
-    const widthStore: Writable<number> = writable(1920);
-    const heightStore: Writable<number> = writable(1080);
-    const backgroundStore: Writable<string> = writable("#000000");
-
-    $effect(() => { $widthStore = width })
-    $effect(() => { $heightStore = height })
-    $effect(() => { $backgroundStore = background })
+    let { width = 1920, height = 1080, background = "#000000", children }: Props = $props();
+    let fontFace: string | null = $state(null);
 
     const layerDrawables = new Set<LayerDrawable>();
     const layerAssignments = new Map<string, LayerContext>();
@@ -63,9 +49,9 @@
     const frameAfterEvents: Set<(info: { delta: number, time: number }) => any | void> = new Set();
 
     export const context: GameContext = {
-        width: widthStore,
-        height: heightStore,
-        background: backgroundStore,
+        width: () => width,
+        height: () => height,
+        background: () => background,
         getLayerByName: (name) => layerAssignments.get(name) ?? null,
         assign,
         createTimer: timing.createTimer.bind(timing),
@@ -74,9 +60,7 @@
         isKeyboardPressed: keyboard.isPressed.bind(keyboard),
         getKeyboardStore: keyboard.getStore.bind(keyboard),
         onMouseEvent: mouse.on.bind(mouse),
-        isMousePressed: mouse.isPressed.bind(mouse),
-        getMousePosition: mouse.getPosition.bind(mouse),
-        getMouseStore: mouse.getStore.bind(mouse),
+        mouse: mouse.info,
         onFrame: (callback) => {
             frameEvents.add(callback);
             return () => frameEvents.delete(callback);
@@ -89,7 +73,10 @@
             frameAfterEvents.add(callback);
             return () => frameAfterEvents.delete(callback);
         },
-        defaultTextFontFace: writable(null),
+        defaultTextFontFace: (setter) => {
+            if (setter === null || typeof setter === "string") fontFace = setter;
+            return fontFace
+        },
         getAudioContext: () => audio ? audio : raise("There Is No AudioContext"),
     }
 
@@ -141,8 +128,7 @@
     let wih = $state(0);
 
     $effect(() => mouse.changeWindowDimensions(wiw, wih));
-    $effect(() => mouse.setHeight(height));
-    $effect(() => mouse.setWidth(width));
+    $effect(() => mouse.setGameSize(width, height));
 
     const resumeAudioContext = () => {
         if (audio?.state === "suspended") {

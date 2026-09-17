@@ -21,7 +21,7 @@
     let { font, url = null, onload }: Props = $props();
 
     onMount(() => {
-        defaultTextFontFace.set(font);
+        defaultTextFontFace(font);
 
         if (url) {
             const face = new FontFace(font, `url(${url})`);

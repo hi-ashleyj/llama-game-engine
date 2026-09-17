@@ -32,7 +32,7 @@
 
     const { defaultTextFontFace } = getGame();
 
-    let effectiveFont = $derived(font ? font : typeof $defaultTextFontFace === "string" ? $defaultTextFontFace : "sans-serif");
+    let effectiveFont = $derived(font ? font : typeof defaultTextFontFace() === "string" ? defaultTextFontFace() : "sans-serif");
     let computedFont = $derived((style ? style + " " : "") + size + "px " + effectiveFont);
     let splits = $derived(text?.split("\n") || []);
 

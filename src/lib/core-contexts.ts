@@ -1,7 +1,6 @@
-import type { Writable } from 'svelte/store';
 import type { Timing } from "./controllers/motions.js";
 import type { Keyboard } from "./controllers/keyboard.js";
-import type { Mouse } from "./controllers/mouse.js";
+import type { Mouse } from "./controllers/mouse.svelte.js";
 import { getContext, setContext } from 'svelte';
 import { setupDrawable, type DrawableContext, type DrawFunction } from './drawable.js';
 
@@ -12,23 +11,21 @@ const GAME = Symbol();
 
 export type GameContext = { 
     assign: (ctx: LayerContext, obj: LayerDrawable) => DestroyFunction,
-    width: Writable<number>, 
-    height: Writable<number>, 
-    background: Writable<string>,
+    width: () => number, 
+    height: () => number, 
+    background: () => string,
     createTimer: Timing["createTimer"],
     createBurst: Timing["createBurst"],
     onKeyboardEvent: Keyboard["on"],
     isKeyboardPressed: Keyboard["isPressed"],
     getKeyboardStore: Keyboard["getStore"],
     onMouseEvent: Mouse["on"],
-    isMousePressed: Mouse["isPressed"],
-    getMousePosition: Mouse["getPosition"],
-    getMouseStore: Mouse["getStore"],
+    mouse: Mouse["info"],
     onFrame: (callback: (info: { delta: number, time: number }) => any | void) => () => any,
     onBeforeFrame: (callback: (info: { delta: number, time: number }) => any | void) => () => any,
     onAfterFrame: (callback: (info: { delta: number, time: number }) => any | void) => () => any,
     getLayerByName: (name: string) => LayerContext | null,
-    defaultTextFontFace: Writable<string | null>,
+    defaultTextFontFace: (set?: string | null) => string | null,
     getAudioContext: () => AudioContext
 } ;
 
