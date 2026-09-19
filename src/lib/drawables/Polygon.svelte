@@ -17,7 +17,7 @@
 
     const draw: DrawFunction<{x: number, y: number, w: number, h: number}> = function({ ctx }, { x, y }) {
         ctx.beginPath();
-        for (let i = 0; i + 1 < points.length; i += 1) {
+        for (let i = 0; i + 1 < points.length; i += 2) {
             if (i === 0) {
                 ctx.moveTo(pointers[i] + x, pointers[i + 1] + y);
                 continue;
