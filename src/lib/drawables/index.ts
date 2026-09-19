@@ -7,3 +7,4 @@ export { default as MultiLineText } from "./MultiLineText.svelte";
 export { default as RoundedRectangle } from "./RoundedRectangle.svelte";
 export { default as Tiled } from "./Tiled.svelte";
 export { setupDrawable, type DrawableContext, type DrawFunction, type DrawableObject } from "../drawable.js";
+export { default as Polygon } from "./Polygon.svelte";
