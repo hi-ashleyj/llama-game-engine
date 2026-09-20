@@ -7,12 +7,12 @@
     interface Props {
         url: string;
         volume?: number;
-        paused?: boolean;
-        playbackPosition: number;
+        playing?: boolean;
+        playbackPosition?: number;
         loop?: boolean;
     }
 
-    let { url, volume = 1, paused = $bindable(true), playbackPosition = $bindable(), loop = false }: Props = $props();
+    let { url, volume = 1, playing = $bindable(false), playbackPosition = $bindable(0), loop = false }: Props = $props();
 
     let output: GainNode | undefined = $state();
     let sourceNode: MediaElementAudioSourceNode
@@ -37,4 +37,4 @@
 
 </script>
 
-<audio src={url} hidden loop={loop} bind:paused={paused} bind:currentTime={playbackPosition} bind:this={element}></audio>
+<audio src={url} hidden loop={loop} bind:paused={() => !playing, (v) => playing = !v} bind:currentTime={playbackPosition} bind:this={element}></audio>

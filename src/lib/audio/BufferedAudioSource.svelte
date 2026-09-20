@@ -1,16 +1,16 @@
 <script lang="ts">
 
     import { getAudioContext, getConnector } from "./context.js";
-    import { onMount } from "svelte";
+    import { onMount, untrack } from "svelte";
     const audioContext = getAudioContext();
 
     interface Props {
         volume?: number;
         audioBuffer: AudioBuffer;
-        paused?: boolean;
+        playing?: boolean;
     }
 
-    let { volume = 1, audioBuffer, paused = $bindable(true) }: Props = $props();
+    let { volume = 1, audioBuffer, playing = $bindable(false) }: Props = $props();
 
     let output: GainNode | undefined = $state();
     let audioCTX: AudioContext;
@@ -21,15 +21,16 @@
         }
     });
 
-    const playing = new Set<AudioBufferSourceNode>();
+    const active = new Set<AudioBufferSourceNode>();
 
     let cancel: (() => void) | undefined = $state();
     $effect(() => {
-        if (paused && cancel) {
-            cancel();
+        const c = untrack(() => cancel);
+        if (!playing && c) {
+            c();
             cancel = undefined;
         }
-        else if (!paused) cancel = play();
+        else if (playing) cancel = play();
     })
 
     const play = () => {
@@ -38,17 +39,17 @@
         source.buffer = audioBuffer;
         source.addEventListener("ended", () => {
             source.disconnect(output!);
-            playing.delete(source);
+            active.delete(source);
         });
 
         source.connect(output!);
-        playing.add(source);
+        active.add(source);
         source.start();
         return () => {
-            if (playing.has(source)) {
+            if (active.has(source)) {
                 source.stop();
                 source.disconnect(output!);
-                playing.delete(source);
+                active.delete(source);
             }
         }
     }
@@ -61,7 +62,7 @@
 
         const disconnect = connect(output);
         return () => {
-            for (let node of playing) {
+            for (let node of active) {
                 node.stop();
                 node.disconnect(output!);
             }
