@@ -32,5 +32,6 @@ export { default as MediaAudioSource } from "./audio/MediaAudioSource.svelte";
 export { default as AudioGain } from "./audio/AudioGain.svelte";
 export { default as AudioPanner } from "./audio/AudioPanner.svelte";
 export { default as AudioCompressor } from "./audio/AudioCompressor.svelte";
+export { default as AudioPosition } from "./audio/AudioPosition.svelte";
 
 export * as Scenes from "./scenes.js";
