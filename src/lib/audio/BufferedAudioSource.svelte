@@ -8,9 +8,10 @@
         volume?: number;
         audioBuffer: AudioBuffer;
         playing?: boolean;
+        oncomplete?: () => any
     }
 
-    let { volume = 1, audioBuffer, playing = $bindable(false) }: Props = $props();
+    let { volume = 1, audioBuffer, playing = $bindable(false), oncomplete }: Props = $props();
 
     let output: GainNode | undefined = $state();
     let audioCTX: AudioContext;
@@ -38,6 +39,7 @@
         const source = audioCTX.createBufferSource();
         source.buffer = audioBuffer;
         source.addEventListener("ended", () => {
+            if (oncomplete) oncomplete();
             source.disconnect(output!);
             active.delete(source);
         });
