@@ -36,6 +36,6 @@
     <Rectangle fill="white" />
 </GameObject>
 
-<style lang="scss">
+<style>
 
 </style>

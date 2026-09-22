@@ -1,14 +1,21 @@
 import { createContext, onDestroy } from "svelte";
 import { getGame } from "$lib/core-contexts.js";
 
-type SceneContext<T extends string[] = any> = {
-    readonly activeScene: string,
-    readonly wantedScene: string,
-    readonly animationState: number,
-    changeScene: (to: T[number]) => void
+declare global {
+    namespace Llama {
+        interface Scenes {}
+        type Scene = keyof Scenes extends never ? string : keyof Scenes;
+    }
 }
 
-const [ getter, setter ] = createContext<SceneContext<string[]>>();
+type SceneContext = {
+    readonly activeScene: Llama.Scene,
+    readonly wantedScene: Llama.Scene,
+    readonly animationState: number,
+    changeScene: (to: Llama.Scene) => void
+}
+
+const [ getter, setter ] = createContext<SceneContext>();
 
 export const setupScenes = ( transition: number ) => {
     const game = getGame();

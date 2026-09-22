@@ -32,7 +32,7 @@
     </Game>
 </div>
 
-<style lang="scss">
+<style>
     * {
         box-sizing: border-box;
     }
