@@ -52,9 +52,10 @@
          * Distance Model, Rolloff Factor, Ref Distance, Max Distance
          */
         falloff?: [ "inverse" | "linear" | "exponential", number, number, number ];
+        children?: import("svelte").Snippet;
     }
 
-    let { position = [0, 0, 0], orientation = [0, 0, 0], cone = [ 360, 0 ], falloff = [ "inverse", 1, 1, 10000 ] }: Props = $props();
+    let { position = [0, 0, 0], orientation = [0, 0, 0], cone = [ 360, 0 ], falloff = [ "inverse", 1, 1, 10000 ], children }: Props = $props();
     const audioContext = getAudioContext();
     let output: PannerNode | undefined = $state();
 
@@ -87,3 +88,5 @@
     $effect(() => { if (output) output.refDistance = falloff[2] });
     $effect(() => { if (output) output.maxDistance = falloff[3] });
 </script>
+
+{@render children?.()}
