@@ -1,5 +1,10 @@
 <script module lang="ts">
 
+    export interface Props {
+        Client: import("svelte").Component<ChildProps>;
+        width?: number;
+        height?: number;
+    }
     export type ChildProps = {
         wrapper?: HTMLDivElement,
     }
@@ -8,12 +13,7 @@
 
 <script lang="ts">
 
-    import type { Component, ComponentProps } from "svelte";
     import Game from "$lib/Game.svelte";
-
-    interface Props extends Omit<ComponentProps<typeof Game>, "children"> {
-        Client: Component<ChildProps>;
-    }
 
     let { Client, ...rest }: Props = $props();
     let x: HTMLDivElement | undefined = $state();

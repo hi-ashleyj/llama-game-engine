@@ -4,6 +4,8 @@ export { default as Layer } from "./Layer.svelte";
 export { getGame, getLayer, getTriggerLayerRender } from "./core-contexts.js";
 export type { GameContext, LayerContext, LayerDrawable } from "./core-contexts.js";
 
+export * as Scenes from "./scenes.js";
+
 // CONTROLLERS
 export { default as MouseClickable } from "./controllers/MouseClickable.svelte";
 export { default as MouseEventArea } from "./controllers/MouseEventArea.svelte";
@@ -33,5 +35,3 @@ export { default as AudioGain } from "./audio/AudioGain.svelte";
 export { default as AudioPanner } from "./audio/AudioPanner.svelte";
 export { default as AudioCompressor } from "./audio/AudioCompressor.svelte";
 export { default as AudioPosition } from "./audio/AudioPosition.svelte";
-
-export * as Scenes from "./scenes.js";

@@ -13,7 +13,6 @@ export type GameContext = {
     assign: (ctx: LayerContext, obj: LayerDrawable) => DestroyFunction,
     width: () => number, 
     height: () => number, 
-    background: () => string,
     timer: Timing["createTimer"],
     burst: Timing["createBurst"],
     on: (type: "frame" | "before" | "after", callback: (info: { delta: number, time: number }) => any | void) => () => any,

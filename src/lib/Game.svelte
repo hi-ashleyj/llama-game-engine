@@ -14,11 +14,10 @@
     interface Props {
         width?: number;
         height?: number;
-        background?: string;
         children?: import('svelte').Snippet;
     }
 
-    let { width = 1920, height = 1080, background = "#000000", children }: Props = $props();
+    let { width = 1920, height = 1080, children }: Props = $props();
     let fontFace: string | null = $state(null);
 
     const layerDrawables = new Set<LayerDrawable>();
@@ -51,7 +50,6 @@
     export const context: GameContext = {
         width: () => width,
         height: () => height,
-        background: () => background,
         layer: (name) => layerAssignments.get(name) ?? null,
         assign,
         timer: timing.createTimer.bind(timing),
@@ -137,11 +135,11 @@
 
 </script>
 
-<div class="game" style:background-color={background}>
+<div class="game" bind:clientWidth={wiw} bind:clientHeight={wih}>
     {@render children?.()}
 </div>
 
-<svelte:window bind:innerHeight={wih} bind:innerWidth={wiw} onclick={resumeAudioContext} onkeydown={resumeAudioContext}></svelte:window>
+<svelte:window onclick={resumeAudioContext} onkeydown={resumeAudioContext}></svelte:window>
 
 <style>
     .game {
