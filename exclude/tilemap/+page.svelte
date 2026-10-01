@@ -2,7 +2,7 @@
 
     import { Game, Layer, GameObject, Drawables } from "$lib/index.js";
     import MovingBox from "./MovingBox.svelte";
-    import { SensibleDefaultStyles } from "../../../../dist/index.js";
+    import { SensibleDefaultStyles } from "../../dist/index.js";
 
 </script>
 

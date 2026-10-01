@@ -1,7 +1,7 @@
 import type { Timers } from "./controllers/motions.svelte.js";
 import type { Keyboard } from "./controllers/keyboard.svelte.js";
 import type { Mouse } from "./controllers/mouse.svelte.js";
-import { getContext, setContext, createContext } from 'svelte';
+import { createContext } from 'svelte';
 import { setupDrawable, type DrawableContext } from './drawable.js';
 
 export interface RequiredModules {
@@ -9,6 +9,7 @@ export interface RequiredModules {
     on: (type: "frame" | "before" | "after", callback: (info: { delta: number, time: number }) => any | void) => () => any | void,
     font: () => string | undefined,
     layer: (name: string) => LayerContext | null,
+    assign: (ctx: LayerContext, obj: LayerDrawable) => DestroyFunction,
 }
 
 export interface AvailableModules {
@@ -38,41 +39,17 @@ declare global {
 export type DestroyFunction = () => any;
 export type RegisterFunction<T> = (run: T) => DestroyFunction;
 
-const GAME = Symbol();
-
-// export type GameContext = { 
-//     assign: (ctx: LayerContext, obj: LayerDrawable) => DestroyFunction,
-//     size: () => [ number, number ],
-//     timer: Timing["createTimer"],
-//     burst: Timing["createBurst"],
-//     on: (type: "frame" | "before" | "after", callback: (info: { delta: number, time: number }) => any | void) => () => any,
-//     onMouse: Mouse["on"],
-//     keyboard: Keyboard,
-//     mouse: Mouse["info"],
-//     layer: (name: string) => LayerContext | null,
-//     font: (set?: string | null) => string | null,
-//     audio: () => AudioContext
-// };
-
-const [ getter, setter ] = createContext<Llama.GameContext>();
-
-export const setupGame = function (context: Llama.GameContext) {
-    if (getContext(GAME)) {
-        throw new Error("Cannot Mount Game inside a Game");
-    }
-
-    setContext<Llama.GameContext>(GAME, context);
+const [ getter, setter, hasser ] = createContext<Llama.GameContext>();
+export const getGame = getter;
+export const setupGame = (context: Llama.GameContext) => {
+    if (hasser()) throw new Error("Cannot Mount Game inside a Game")
+    setter(context);
 };
-
-export const getGame = function() {
-    return getContext<Llama.GameContext>(GAME);
-};
-
-const LAYER = Symbol();
 
 export type LayerContext = Required<DrawableContext<null>> & {
     requestFrame: (...optional: any[]) => any;
 };
+const [ getLayer, setLayer, hasLayer ] = createContext<LayerContext>();
 
 export type LayerDrawable = {
     draw: () => any | void
@@ -81,13 +58,10 @@ export type LayerDrawable = {
 };
 
 export const setupLayer = function (context: LayerContext): RegisterFunction<LayerDrawable> {
-    if (getContext(LAYER)) {
-        throw new Error("Cannot Mount Layer inside a Layer");
-    }
-    const game = getContext(GAME) as Llama.GameContext | undefined;
-    if (!game) throw new Error("Layers must be inside a Game");
-    setContext(LAYER, context);
+    if (hasLayer()) throw new Error("Cannot Mount Layer inside a Layer");
+    const game = getGame();
 
+    setLayer(context);
     setupDrawable({ assign: context.assign });
 
     return (obj) => {
@@ -95,13 +69,4 @@ export const setupLayer = function (context: LayerContext): RegisterFunction<Lay
     }
 };
 
-export const getLayer = function() {
-    let layer = getContext<LayerContext>(LAYER);
-    if (!layer) throw new Error("Layer context does not exist!");
-    return layer;
-};
-
-export const getTriggerLayerRender = function() {
-    let layer = getLayer();
-    return layer.requestFrame;
-};
+export { getLayer };

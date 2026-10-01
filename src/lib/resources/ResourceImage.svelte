@@ -1,6 +1,6 @@
 <script lang="ts">
 
-    import { pushAsset } from "./index.js";
+    import { putImage } from "./index.js";
     import { onMount } from "svelte";
     interface Props {
         url: string;
@@ -12,7 +12,7 @@
 
     onMount(() => {
         if (!element) return;
-        pushAsset(url, element);
+        putImage(url, element);
     })
 
 </script>

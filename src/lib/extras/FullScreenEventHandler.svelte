@@ -3,7 +3,7 @@
     import { getGame } from "$lib/context.js";
     import { onMount } from "svelte";
 
-    const context = getGame();
+    const { keyboard } = getGame();
     // ONLY OBSERVED ON MOUNT. NOT REACTIVE (good practice anyway)
     interface Props {
         key?: string;
@@ -22,11 +22,11 @@
     }: Props = $props();
 
     onMount(() => {
-        return context.onKeyboard("down", (k) => {
+        return keyboard.on("down", (k) => {
             if (k !== key) return;
-            if (usesShift && !context.keyboard["shift"]) return;
-            if (usesCtrl && !context.keyboard["ctrl"]) return;
-            if (usesAlt && !context.keyboard["alt"]) return;
+            if (usesShift && !keyboard.is["shift"]) return;
+            if (usesCtrl && !keyboard.is["ctrl"]) return;
+            if (usesAlt && !keyboard.is["alt"]) return;
 
             if (document.fullscreenElement) {
                 document.exitFullscreen();

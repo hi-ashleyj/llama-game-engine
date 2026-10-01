@@ -14,7 +14,7 @@
 </script>
 
 <div class="game-wrapper">
-    <Game>
+    <Game font="Comic Sans MS">
         <Layer zIndex={0} name="bg">
             <Primitives.Area x={0} y={0} w={1920} h={1080} >
                 <Rectangle fill="#1e1e1e" radius={10} />
@@ -71,5 +71,6 @@
     .game-wrapper {
         width: 100%;
         height: 100%;
+        aspect-ratio: 16 / 9;
     }
 </style>

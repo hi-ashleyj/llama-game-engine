@@ -1,7 +1,7 @@
 // CORE
 export { default as Game } from "./Game.svelte";
 export { default as Layer } from "./Layer.svelte";
-export { getGame, getLayer, getTriggerLayerRender } from "./context.js";
+export { getGame, getLayer } from "./context.js";
 export type { LayerContext, LayerDrawable } from "./context.js";
 
 export * as Scenes from "./scenes/index.js";
@@ -23,7 +23,6 @@ export * as Primitives from "./primitives/index.js";
 export { default as SensibleDefaultStyles } from "./extras/SensibleDefaultStyles.svelte";
 export { default as LayerPortal } from "./extras/LayerPortal.svelte";
 export { default as Tweened } from "./extras/Tweened.svelte";
-export { default as DefaultFontFace } from "./extras/DefaultFontFace.svelte";
 export { default as FullScreenEventHandler } from "./extras/FullScreenEventHandler.svelte";
 
 // AUDIO

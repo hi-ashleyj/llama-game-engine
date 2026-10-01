@@ -4,7 +4,7 @@
     import { setupDrawable, type DrawFunction } from "../drawable.js";
     import { onMount } from "svelte";
 
-    const context = getGame();
+    const { mouse } = getGame();
     let c = $state({ x: 0, y: 0, w: 0, h: 0 });
 
     type Click = () => void;
@@ -26,11 +26,11 @@
     const register = setupDrawable<{x: number, y: number, w: number, h: number}, null>({ hasChildren: false });
 
     onMount(() => {
-        const event = context.onMouse<"press">("press", (key, state) => {
+        const event = mouse.on("press", (key, state) => {
             if (!state) return;
-            const x = context.mouse.x;
+            const x = mouse.is.x;
             if (x < c.x || x > c.x + c.w) return;
-            const y = context.mouse.y;
+            const y = mouse.is.y;
             if (y < c.y || y > c.y + c.h) return;
             onclick?.();
             switch (key) {

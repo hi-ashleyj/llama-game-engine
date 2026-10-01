@@ -5,6 +5,6 @@
 
 </script>
 
-<Primitives.Area x={mouse.x} y={mouse.y} w={50} h={50} center={true}>
+<Primitives.Area x={mouse.is.x} y={mouse.is.y} w={50} h={50} center={true}>
     <Drawables.Rectangle fill="white" />
 </Primitives.Area>

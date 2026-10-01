@@ -2,16 +2,13 @@
 
     import { useScenes } from "./scenes.svelte.js";
     import { type Component, onMount } from "svelte";
-    import { getTriggerLayerRender } from "../context.js";
 
-    const triggerRender = getTriggerLayerRender();
     const scenedata = useScenes();
 
     let last = $state("default");
 
     $effect(() => {
         if (scenedata.activeScene !== last && scenedata.animationState > 0.5) {
-            triggerRender();
             last = $state.snapshot(scenedata.activeScene);
         }
     })

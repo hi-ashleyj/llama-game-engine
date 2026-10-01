@@ -3,7 +3,7 @@
     import { setupGame, type LayerContext, type LayerDrawable } from "./context.js";
     import { timers } from "./controllers/motions.svelte.js";
     import { keyboard } from "./controllers/keyboard.svelte.js";
-    import { Mouse } from "./controllers/mouse.svelte.js";
+    import { mouse } from "./controllers/mouse.svelte.js";
     import { getSetupAudio } from "./audio/context.js";
 
     interface Props {
@@ -14,7 +14,6 @@
 
     let { size = [ 1920, 1080 ], font, children }: Props = $props();
 
-    let fontFace: string | null = $state(null);
     const layerDrawables = new Set<LayerDrawable>();
     const layerAssignments = new Map<string, LayerContext>();
 
@@ -36,7 +35,7 @@
 
     const keyboardModule = keyboard();
     const timersModule = timers();
-    const mouse = new Mouse();
+    const mouseModule = mouse();
 
     type FrameEvent = { type: "frame" | "before" | "after", callback: (info: { delta: number, time: number }) => any | void };
     const events = new Set<FrameEvent>();
@@ -48,8 +47,7 @@
         layer: (name) => layerAssignments.get(name) ?? null,
         timers: timersModule,
         keyboard: keyboardModule,
-        onMouse: mouse.on.bind(mouse),
-        mouse: mouse.info,
+        mouse: mouseModule,
         on: (type: "frame" | "before" | "after", callback: (info: { delta: number, time: number }) => any | void) => {
             const event = { type, callback };
             events.add(event);
@@ -92,20 +90,14 @@
     onMount(() => {
         audio = new AudioContext();
         requestAnimationFrame(loop);
-        mouse.start();
 
         const stop = [ 
             keyboardModule.start(),
+            mouseModule.start(),
             timersModule.destroy 
         ];
         return () => stop.forEach(it => it());
     });
-
-    let wiw = $state(0);
-    let wih = $state(0);
-
-    $effect(() => mouse.changeWindowDimensions(wiw, wih));
-    $effect(() => mouse.setGameSize(size));
 
     const resumeAudioContext = () => {
         if (audio?.state === "suspended") {
@@ -113,13 +105,28 @@
         }
     }
 
+    let element: HTMLDivElement | undefined = $state();
+    $effect(() => mouseModule.game(...size));
+
+    const resize = () => {
+        if (!element) return;
+        const rect = element.getBoundingClientRect();
+        const left = rect.left;
+        const top = rect.top;
+        const width = rect.width;
+        const height = rect.height;
+        mouseModule.raw({ left, top, width, height });
+    }
+
+    $effect(() => {element ? resize() : null});
+
 </script>
 
-<div class="game" bind:clientWidth={wiw} bind:clientHeight={wih}>
+<div class="game" onresize={resize} bind:this={element}>
     {@render children?.()}
 </div>
 
-<svelte:window onclick={resumeAudioContext} onkeydown={resumeAudioContext}></svelte:window>
+<svelte:window onclick={resumeAudioContext} onresize={resize} onscroll={resize} onkeydown={resumeAudioContext}></svelte:window>
 
 <style>
     .game {

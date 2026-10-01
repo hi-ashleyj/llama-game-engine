@@ -22,6 +22,19 @@ type Events = {
 
 type Event<T extends keyof Events = keyof Events> = { action: T, call: (...params: Events[T]) => void };
 
+export type MouseModule = {
+    raw: (width: number, height: number) => void;
+    game: (width: number, height: number) => void;
+    readonly is: States;
+    on: <T extends keyof Events = keyof Events>(action: T, call: (...params: Events[T]) => void) => () => void;
+    start: () => () => void;
+}
+
+export type Mouse = {
+    on: MouseModule["on"],
+    is: MouseModule["is"],
+}
+
 const button = (b: number) => {
     switch (b) {
         case (0): return "left" as const;
@@ -31,9 +44,9 @@ const button = (b: number) => {
     }
 }
 
-export class Mouse {
-    private events = new Set<Event>();
-    state: States = $state({
+export const mouse = () => {
+    const events = new Set<Event>();
+    let status: States = $state({
         left: false,
         middle: false,
         right: false,
@@ -41,91 +54,100 @@ export class Mouse {
         y: 0,
     });
 
-    rawWidth  : number = 1920;
-    rawHeight : number = 1080;
-    gameWidth : number = 1920;
-    gameHeight: number = 1080;
+    let game = $state({ w: 1920, h: 1080 });
+    let raw = $state({ x: 0, y: 0, w: 1920, h: 1080 });
 
-    private fire<T extends keyof Events = keyof Events>(target: T, ...data: Events[T]) {
-        this.events.forEach(({ action, call }) => {
+    let wider = $derived(raw.w / raw.h > 16 / 9);
+    let scale = $derived(wider ? game.h / raw.h : game.w / raw.w);
+
+    const fire = <T extends keyof Events = keyof Events>(target: T, ...data: Events[T]) => {
+        events.forEach(({ action, call }) => {
             if (target === action) call(...data);
         })
     }
+
+    const pointerdown = (e: PointerEvent) => {
+        e.preventDefault();
+        const key = button(e.button);
+        if (!key) return;
+        
+        status[key] = true;
+        fire(key, true);
+        fire("press", key, true);
+    }
+
+    const pointerup = (e: PointerEvent) => {
+        e.preventDefault();
+        const key = button(e.button);
+        if (!key) return;
+        
+        status[key] = false;
+        fire(key, false);
+        fire("press", key, false);
+    }
     
-    start() {
-        window.addEventListener("pointerdown", (e: PointerEvent) => {
-            e.preventDefault();
-            const key = button(e.button);
-            if (!key) return;
-            
-            this.state[key] = true;
-            this.fire(key, true);
-            this.fire("press", key, true);
-        });
+    const pointermove = (e: PointerEvent) => {
+        const rawX = e.clientX - raw.x;
+        const rawY = e.clientY - raw.y;
 
-        window.addEventListener("pointerup", (e: PointerEvent) => {
-            e.preventDefault();
-            const key = button(e.button);
-            if (!key) return;
-            
-            this.state[key] = false;
-            this.fire(key, false);
-            this.fire("press", key, false);
-        });
+        const x = (game.w - (raw.w * scale)) / 2 + (scale * rawX);
+        const y = (game.h - (raw.h * scale)) / 2 + (scale * rawY);
 
-        window.addEventListener("pointermove", (e: PointerEvent) => {
-            const rawX = e.offsetX;
-            const rawY = e.offsetY;
+        status.x = x;
+        status.y = y;
 
-            const wider = this.rawWidth / this.rawHeight > 16 / 9;
-
-            const scale = wider ?
-                this.gameHeight / this.rawHeight :
-                this.gameWidth  / this.rawWidth;
-            
-            const x = (this.gameWidth  - (this.rawWidth  * scale)) / 2 + (scale * rawX);
-            const y = (this.gameHeight - (this.rawHeight * scale)) / 2 + (scale * rawY);
-
-            this.state.x = x;
-            this.state.y = y;
-
-            this.fire("x", x);
-            this.fire("y", y);
-            this.fire("move", x, y);
-        });
-
-        window.addEventListener("wheel", (e: WheelEvent) => {
-            let rawX = e.deltaX;
-            let rawY = e.deltaY;
-
-            if (Math.abs(rawX) > 0) this.fire("scroll_x", rawX);
-            if (Math.abs(rawY) > 0) this.fire("scroll_y", rawY);
-            this.fire("scroll", rawX, rawY);
-        });
-
-        window.addEventListener("contextmenu", (e) => {
-            e.preventDefault();
-        })
+        fire("x", x);
+        fire("y", y);
+        fire("move", x, y);
     }
 
-    on<T extends keyof Events = keyof Events>(action: T, call: (...params: Events[T]) => void): () => void {
-        const handle = { action, call } as Event;
+    const wheel = (e: WheelEvent) => {
+        let rawX = e.deltaX;
+        let rawY = e.deltaY;
 
-        this.events.add(handle);
-        return () => { this.events.delete(handle); }
+        if (Math.abs(rawX) > 0) fire("scroll_x", rawX);
+        if (Math.abs(rawY) > 0) fire("scroll_y", rawY);
+        fire("scroll", rawX, rawY);
     }
 
-    get info() {
-        return this.state;
+    const contextmenu = (e: PointerEvent) => {
+        e.preventDefault();
     }
 
-    changeWindowDimensions(width: number, height: number) {
-        this.rawHeight = height;
-        this.rawWidth = width;
-    }
-
-    setGameSize(size: [ number, number ]) {
-        this.gameWidth = size[0];
-        this.gameHeight = size[1];
+    return {
+        raw: (rect: { left: number, top: number, width: number, height: number }) => {
+            console.log(rect);
+            if (!rect) return;
+            raw.x = rect.left;
+            raw.y = rect.top;
+            raw.w = rect.width;
+            raw.h = rect.height;
+        },
+        game: (width: number, height: number) => {
+            game.w = width; game.h = height;
+        },
+        get is() {
+            return status;
+        },
+        on: <T extends keyof Events = keyof Events>(action: T, call: (...params: Events[T]) => void): () => void => {
+            const handle = { action, call } as Event;
+            events.add(handle);
+            return () => { events.delete(handle); }
+        },
+        start: () => {
+            if (!window) return () => null;
+            window.addEventListener("pointerdown", pointerdown);
+            window.addEventListener("pointerup", pointerup);
+            window.addEventListener("pointermove", pointermove);
+            window.addEventListener("wheel", wheel);
+            window.addEventListener("contextmenu", contextmenu);
+            return () => {
+                window.removeEventListener("pointerdown", pointerdown);
+                window.removeEventListener("pointerup", pointerup);
+                window.removeEventListener("pointermove", pointermove);
+                window.removeEventListener("wheel", wheel);
+                window.removeEventListener("contextmenu", contextmenu);
+            }
+        }
     }
 }
