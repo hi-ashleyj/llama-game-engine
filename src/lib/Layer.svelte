@@ -1,7 +1,7 @@
 <script lang="ts">
 
     import type { DrawFunction } from "./drawable.js";
-    import { setupLayer, getGame } from "./core-contexts.js";
+    import { setupLayer, getGame } from "./context.js";
     import { onMount } from "svelte";
 
     let shouldRenderNextFrame = $state(true);

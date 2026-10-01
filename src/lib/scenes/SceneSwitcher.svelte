@@ -2,7 +2,7 @@
 
     import { useScenes } from "./scenes.svelte.js";
     import { type Component, onMount } from "svelte";
-    import { getTriggerLayerRender } from "../core-contexts.js";
+    import { getTriggerLayerRender } from "../context.js";
 
     const triggerRender = getTriggerLayerRender();
     const scenedata = useScenes();

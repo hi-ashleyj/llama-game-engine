@@ -1,5 +1,5 @@
 import { getContext, setContext } from 'svelte';
-import { getGame } from "../core-contexts.js";
+import { getGame } from "../context.js";
 
 export type DisconnectFunction = () => any;
 

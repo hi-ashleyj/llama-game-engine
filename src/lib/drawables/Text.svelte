@@ -1,7 +1,7 @@
 <script lang="ts">
 
     import { setupDrawable, type DrawFunction } from "$lib/drawable.js";
-    import { getGame } from "$lib/core-contexts.js";
+    import { getGame } from "$lib/context.js";
     import { onMount } from "svelte";
 
     interface Props {

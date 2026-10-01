@@ -124,8 +124,8 @@ export class Mouse {
         this.rawWidth = width;
     }
 
-    setGameSize(width: number, height: number) {
-        this.gameWidth = width;
-        this.gameHeight = height;
+    setGameSize(size: [ number, number ]) {
+        this.gameWidth = size[0];
+        this.gameHeight = size[1];
     }
 }

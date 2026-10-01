@@ -1,6 +1,6 @@
 <script lang="ts">
 
-    import { getGame } from "$lib/core-contexts.js";
+    import { getGame } from "$lib/context.js";
     import { onMount } from "svelte";
 
     const context = getGame();

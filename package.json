@@ -50,16 +50,20 @@
       "svelte": "./dist/drawables/index.js"
     },
     "./primitives": {
-      "types": "./dist/primitives.d.ts",
-      "svelte": "./dist/primitives.js"
+      "types": "./dist/primitives/index.d.ts",
+      "svelte": "./dist/primitives/index.js"
     },
     "./scenes": {
-      "types": "./dist/scenes.d.ts",
-      "svelte": "./dist/scenes.js"
+      "types": "./dist/scenes/index.d.ts",
+      "svelte": "./dist/scenes/index.js"
     },
     "./resources": {
-      "types": "./dist/resources.d.ts",
-      "svelte": "./dist/resources.js"
+      "types": "./dist/resources/index.d.ts",
+      "svelte": "./dist/resources/index.js"
+    },
+    "./vite": {
+      "types": "./dist/vite/index.d.ts",
+      "svelte": "./dist/vite/index.js"
     }
   },
   "types": "./dist/index.d.ts"

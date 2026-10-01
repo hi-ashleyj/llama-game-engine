@@ -1,12 +1,13 @@
 <script lang="ts">
 
-    import {pushAsset} from "./images.js";
+    import { pushAsset } from "./index.js";
     import { onMount } from "svelte";
     interface Props {
-        url: any;
+        url: string;
+        onload?: () => void;
     }
 
-    let { url }: Props = $props();
+    let { url, onload }: Props = $props();
     let element: HTMLImageElement | undefined = $state();
 
     onMount(() => {
@@ -16,4 +17,4 @@
 
 </script>
 
-<img src={url} alt="A Game Asset" bind:this={element} />
+<img src={url} alt="A Game Asset" {onload} bind:this={element} />

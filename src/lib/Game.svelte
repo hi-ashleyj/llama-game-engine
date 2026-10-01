@@ -1,25 +1,20 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import { setupGame, type GameContext, type LayerContext, type LayerDrawable } from "./core-contexts.js";
-    import { Timing } from "./controllers/motions.js";
-    import { Keyboard } from "./controllers/keyboard.svelte.js";
+    import { setupGame, type LayerContext, type LayerDrawable } from "./context.js";
+    import { timers } from "./controllers/motions.svelte.js";
+    import { keyboard } from "./controllers/keyboard.svelte.js";
     import { Mouse } from "./controllers/mouse.svelte.js";
     import { getSetupAudio } from "./audio/context.js";
-    import { decodeAllBuffers } from "./resources/audio.js";
-
-    const raise = (err: string) => {
-        throw new Error(err);
-    }
 
     interface Props {
-        width?: number;
-        height?: number;
+        size?: [ number, number ];
+        font?: string;
         children?: import('svelte').Snippet;
     }
 
-    let { width = 1920, height = 1080, children }: Props = $props();
-    let fontFace: string | null = $state(null);
+    let { size = [ 1920, 1080 ], font, children }: Props = $props();
 
+    let fontFace: string | null = $state(null);
     const layerDrawables = new Set<LayerDrawable>();
     const layerAssignments = new Map<string, LayerContext>();
 
@@ -39,71 +34,52 @@
         };
     };
 
-    const timing = new Timing();
-    const keyboard = new Keyboard();
+    const keyboardModule = keyboard();
+    const timersModule = timers();
     const mouse = new Mouse();
 
-    const frameEvents: Set<(info: { delta: number, time: number }) => any | void> = new Set();
-    const frameBeforeEvents: Set<(info: { delta: number, time: number }) => any | void> = new Set();
-    const frameAfterEvents: Set<(info: { delta: number, time: number }) => any | void> = new Set();
+    type FrameEvent = { type: "frame" | "before" | "after", callback: (info: { delta: number, time: number }) => any | void };
+    const events = new Set<FrameEvent>();
 
-    export const context: GameContext = {
-        width: () => width,
-        height: () => height,
-        layer: (name) => layerAssignments.get(name) ?? null,
+    const context: Llama.GameContext = {
+        size: () => size,
+        font: () => font,
         assign,
-        timer: timing.createTimer.bind(timing),
-        burst: timing.createBurst.bind(timing),
-        onKeyboard: keyboard.on.bind(keyboard),
-        keyboard: keyboard.info,
+        layer: (name) => layerAssignments.get(name) ?? null,
+        timers: timersModule,
+        keyboard: keyboardModule,
         onMouse: mouse.on.bind(mouse),
         mouse: mouse.info,
-        on: (type, callback) => {
-            switch (type) {
-                case "frame": {
-                    frameEvents.add(callback);
-                    return () => frameEvents.delete(callback);
-                }
-                case "before": {
-                    frameBeforeEvents.add(callback);
-                    return () => frameBeforeEvents.delete(callback);
-                }
-                case "after": {
-                    frameAfterEvents.add(callback);
-                    return () => frameAfterEvents.delete(callback);
-                }
-            }
+        on: (type: "frame" | "before" | "after", callback: (info: { delta: number, time: number }) => any | void) => {
+            const event = { type, callback };
+            events.add(event);
+            return () => events.delete(event);
         },
-        font: (setter) => {
-            if (setter === null || typeof setter === "string") fontFace = setter;
-            return fontFace
-        },
-        audio: () => audio ? audio : raise("There Is No AudioContext"),
+        audio: () => { if (audio) return audio; throw new Error("There Is No AudioContext") },
     }
 
     setupGame(context);
-    let last = -1;
+    let last = $state(-1);
 
     const loop = function(time: DOMHighResTimeStamp) {
         if (last < 0) last = time;
-
-        let delta = (time - last);
+        const delta = (time - last);
 
         if (delta > 1000) {
-            requestAnimationFrame(loop);
-            return last = time;
+            last = time;
+            return requestAnimationFrame(loop);
         }
 
-        frameBeforeEvents.forEach((callback) => callback({ delta, time }));
-        timing.update(delta);
+        events.forEach(it => { if (it.type === "before") it.callback({ delta, time }) });
+        timersModule.update(delta);
 
-        frameEvents.forEach((callback) => callback({ delta, time }));
+        events.forEach(it => { if (it.type === "frame") it.callback({ delta, time }) });
         draw();
 
-        frameAfterEvents.forEach((callback) => callback({ delta, time }));
+        events.forEach(it => { if (it.type === "after") it.callback({ delta, time }) });
 
-        requestAnimationFrame(loop);
         last = time;
+        return requestAnimationFrame(loop);
     };
 
     let audio: AudioContext | null = null;
@@ -115,17 +91,21 @@
 
     onMount(() => {
         audio = new AudioContext();
-        decodeAllBuffers(audio);
         requestAnimationFrame(loop);
-        keyboard.start();
         mouse.start();
+
+        const stop = [ 
+            keyboardModule.start(),
+            timersModule.destroy 
+        ];
+        return () => stop.forEach(it => it());
     });
 
     let wiw = $state(0);
     let wih = $state(0);
 
     $effect(() => mouse.changeWindowDimensions(wiw, wih));
-    $effect(() => mouse.setGameSize(width, height));
+    $effect(() => mouse.setGameSize(size));
 
     const resumeAudioContext = () => {
         if (audio?.state === "suspended") {

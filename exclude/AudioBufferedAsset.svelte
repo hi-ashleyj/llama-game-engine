@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import { pushBufferAsset } from "./audio.js";
+    import { pushBufferAsset } from "../src/lib/resources/audio.js";
 
     interface Props {
         url: any;

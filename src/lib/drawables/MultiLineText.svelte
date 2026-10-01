@@ -2,7 +2,7 @@
 
     import { setupDrawable, type DrawFunction } from "$lib/drawable.js";
     import { onMount } from "svelte";
-    import { getGame } from "$lib/core-contexts.js";
+    import { getGame } from "$lib/context.js";
 
     interface Props {
         text: string;

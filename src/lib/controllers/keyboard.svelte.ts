@@ -9,38 +9,59 @@ type Events = {
 
 type Event<T extends keyof Events = keyof Events> = { action: T, call: (...params: Events[T]) => void };
 
-export class Keyboard {
-    private state: States = {};
-    events = new Set<Event>();
-    
-    start() {
-        window.addEventListener("keydown", (e: KeyboardEvent) => {
-            let eklc = e.key.toLowerCase();
-            this.state[eklc] = true;
+export type KeyboardModule = {
+    start(): () => void;
+    on<T extends keyof Events = keyof Events>(action: T, call: (...params: Events[T]) => void): () => void;
+    readonly is: States;
+}
 
-            this.events.forEach(({ action, call }) => {
-                if (action === "down") call(eklc);
-            })
-        });
+export type Keyboard = {
+    on: KeyboardModule["on"],
+    is: KeyboardModule["is"],
+}
 
-        window.addEventListener("keyup", (e: KeyboardEvent) => {
-            let eklc = e.key.toLowerCase();
-            this.state[eklc] = false;
+export const keyboard = (): KeyboardModule => {
+    const state: States = {};
+    const events = new Set<Event>();
 
-            this.events.forEach(({ action, call }) => {
-                if (action === "up") call(eklc);
-            })
-        });
+    const keydown = (e: KeyboardEvent) => {
+        let eklc = e.key.toLowerCase();
+        state[eklc] = true;
+
+        events.forEach(({ action, call }) => {
+            if (action === "down") call(eklc);
+        })
     }
 
-    on<T extends keyof Events = keyof Events>(action: T, call: (...params: Events[T]) => void): () => void {
-        const handle = { action, call } as Event;
+    const keyup = (e: KeyboardEvent) => {
+        let eklc = e.key.toLowerCase();
+        state[eklc] = false;
 
-        this.events.add(handle);
-        return () => { this.events.delete(handle); }
+        events.forEach(({ action, call }) => {
+            if (action === "up") call(eklc);
+        })
+    };
+
+    return {
+        on<T extends keyof Events = keyof Events>(action: T, call: (...params: Events[T]) => void): () => void {
+            const handle = { action, call } as Event;
+
+            events.add(handle);
+            return () => { events.delete(handle); }
+        },
+        get is() {
+            return state;
+        },
+        start() {
+            if (!window) return () => null;
+            window.addEventListener("keydown", keydown);
+            window.addEventListener("keyup", keyup);
+
+            return () => {
+                window.removeEventListener("keydown", keydown);
+                window.removeEventListener("keyup", keyup);
+            }
+        }
     }
 
-    get info() {
-        return this.state;
-    }
 }

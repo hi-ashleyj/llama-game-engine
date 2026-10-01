@@ -1,5 +1,5 @@
 import { createContext, onDestroy } from "svelte";
-import { getGame } from "$lib/core-contexts.js";
+import { getGame } from "$lib/context.js";
 
 declare global {
     namespace Llama {
@@ -21,20 +21,18 @@ export const setupScenes = ( transition: number ) => {
     const game = getGame();
     let active = $state("default");
     let wanted = $state("default");
-    const signal = game.burst({ duration: transition, initialTrigger: false });
+    const signal = game.timers.burst({ duration: transition, immediate: false });
 
-    let current = $state(1);
-    signal.subscribe((v) => {
-        if (wanted !== active && v > 0.5) {
+    $effect(() => {
+        if (wanted !== active && signal.value > 0.5) {
             active = wanted;
         }
-        current = v;
     })
 
     setter({
         get activeScene() { return active },
         get wantedScene() { return wanted },
-        get animationState() { return current },
+        get animationState() { return signal.value },
         changeScene: (to: string) => {
             wanted = to;
             signal.trigger();

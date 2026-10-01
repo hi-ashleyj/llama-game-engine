@@ -2,8 +2,7 @@
 
     export interface Props {
         Client: import("svelte").Component<ChildProps>;
-        width?: number;
-        height?: number;
+        size?: [ number, number ];
     }
     export type ChildProps = {
         wrapper?: HTMLDivElement,

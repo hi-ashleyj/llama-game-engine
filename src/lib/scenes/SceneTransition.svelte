@@ -1,7 +1,7 @@
 <script lang="ts">
 
     import { useScenes } from "./scenes.svelte.js";
-    import { getTriggerLayerRender } from "../core-contexts.js";
+    import { getTriggerLayerRender } from "../context.js";
 
     const scenedata = useScenes();
 

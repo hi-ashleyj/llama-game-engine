@@ -1,6 +1,6 @@
 <script lang="ts">
 
-    import { getAudioContext, getConnector } from "./context.js";
+    import { getAudioContext, getConnector } from "../src/lib/audio/context.js";
     import { onMount, untrack } from "svelte";
     const audioContext = getAudioContext();
 
