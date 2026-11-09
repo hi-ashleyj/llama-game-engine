@@ -8,7 +8,7 @@
 </script>
 
 <div class="game-wrapper" bind:this={x}>
-    {@render children?.({ wrapper: x, })}
+    {@render children?.({ wrapper: x })}
 </div>
 
 <style>

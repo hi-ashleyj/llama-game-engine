@@ -1,7 +1,7 @@
 <script lang="ts">
 
     import { Game, Layer, GameObject, type GameContext } from "../../../lib";
-    import { Rectangle } from "../../../lib/drawables";
+    import { Rectangle } from "../../../lib/primitive";
 
     import { onMount } from "svelte";
     import MovingBox from "./MovingBox.svelte";

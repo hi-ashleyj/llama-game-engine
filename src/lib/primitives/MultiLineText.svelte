@@ -1,18 +1,18 @@
 <script lang="ts">
 
-    import { setupDrawable, type DrawFunction } from "$lib/drawable.js";
+    import { useDrawable, type DrawFunction } from "$lib/core/drawable.js";
     import { onMount } from "svelte";
-    import { getGame } from "$lib/context.js";
+    import { getGame } from "$lib/core/game.js";
 
     interface Props {
         text: string;
         size: number;
         spacing?: number;
-        font?: string | null;
-        style?: string | undefined;
-        fill?: string | undefined;
-        stroke?: string | undefined;
-        strokeWidth?: number | null;
+        font?: string;
+        style?: string;
+        fill?: string;
+        stroke?: string;
+        strokeWidth?: number;
         alignH?: "left" | "center" | "right";
         alignV?: "top" | "middle" | "bottom" | "alphabetic";
     }
@@ -21,11 +21,11 @@
         text,
         size,
         spacing = 1.4,
-        font = null,
+        font = undefined,
         style = undefined,
         fill = undefined,
         stroke = undefined,
-        strokeWidth = null,
+        strokeWidth = undefined,
         alignH = "left",
         alignV = "top"
     }: Props = $props();
@@ -69,9 +69,9 @@
         }
     };
 
-    let register = setupDrawable<{x: number, y: number, w: number, h: number}, null>({ hasChildren: false });
+    let register = useDrawable<{x: number, y: number, w: number, h: number}, null>();
 
     onMount(() => {
-        return register({ draw });
+        return register(draw);
     });
 </script>

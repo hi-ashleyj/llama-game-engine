@@ -1,7 +1,7 @@
 <script lang="ts">
 
-    import { getGame } from "../context.js";
-    import { setupDrawable, type DrawableObject, type DrawFunction } from "../drawable.js";
+    import { getGame } from "../core/game.js";
+    import { setupDrawable, type DrawableObject, type DrawFunction } from "../core/drawable.js";
     import { onMount } from "svelte";
 
     const game = getGame();

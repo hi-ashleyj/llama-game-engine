@@ -1,6 +1,6 @@
 <script lang="ts">
 
-    import { setupDrawable, type DrawFunction } from "$lib/drawable.js";
+    import { useDrawable, type DrawFunction } from "../core/drawable.js";
     import { onMount } from "svelte";
 
     interface Props {
@@ -12,7 +12,6 @@
     }
 
     let { fill = null, stroke = null, strokeWidth = null, points, close }: Props = $props();
-
     let pointers = $derived(points.flat());
 
     const draw: DrawFunction<{x: number, y: number, w: number, h: number}> = function({ ctx }, { x, y }) {
@@ -39,10 +38,9 @@
         }
     };
     
-    let register = setupDrawable<{x: number, y: number, w: number, h: number}, null>({ hasChildren: false });
-
+    const register = useDrawable<{x: number, y: number, w: number, h: number}, null>();
     onMount(() => {
-        return register({ draw });
+        return register(draw);
     })
 
 </script>

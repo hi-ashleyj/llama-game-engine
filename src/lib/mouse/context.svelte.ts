@@ -1,3 +1,6 @@
+import type { ModuleInitialiser } from "../core/game";
+import { createContext } from "svelte";
+
 type States = {
     "left": boolean;
     "middle": boolean;
@@ -22,17 +25,9 @@ type Events = {
 
 type Event<T extends keyof Events = keyof Events> = { action: T, call: (...params: Events[T]) => void };
 
-export type MouseModule = {
-    raw: (width: number, height: number) => void;
-    game: (width: number, height: number) => void;
+export type Mouse = {
     readonly is: States;
     on: <T extends keyof Events = keyof Events>(action: T, call: (...params: Events[T]) => void) => () => void;
-    start: () => () => void;
-}
-
-export type Mouse = {
-    on: MouseModule["on"],
-    is: MouseModule["is"],
 }
 
 const button = (b: number) => {
@@ -44,7 +39,10 @@ const button = (b: number) => {
     }
 }
 
-export const mouse = () => {
+const [ getter, setter ] = createContext<Mouse>();
+
+export const useMouse = getter;
+export const mouse: ModuleInitialiser<Mouse> = (ctx) => {
     const events = new Set<Event>();
     let status: States = $state({
         left: false,
@@ -114,18 +112,7 @@ export const mouse = () => {
         e.preventDefault();
     }
 
-    return {
-        raw: (rect: { left: number, top: number, width: number, height: number }) => {
-            console.log(rect);
-            if (!rect) return;
-            raw.x = rect.left;
-            raw.y = rect.top;
-            raw.w = rect.width;
-            raw.h = rect.height;
-        },
-        game: (width: number, height: number) => {
-            game.w = width; game.h = height;
-        },
+    const context = {
         get is() {
             return status;
         },
@@ -133,20 +120,55 @@ export const mouse = () => {
             const handle = { action, call } as Event;
             events.add(handle);
             return () => { events.delete(handle); }
-        },
+        }
+    }
+
+    const resize = () => {
+        const root = ctx.root();
+        if (!root) return;
+        const rect = root.getBoundingClientRect();
+        raw.x = rect.left;
+        raw.y = rect.top;
+        raw.w = rect.width;
+        raw.h = rect.height;
+        console.log(rect);
+    }
+
+    setter(context);
+
+    return {
+        fetch: getter,
         start: () => {
             if (!window) return () => null;
+            const root = ctx.root();
+            if (root) root.addEventListener("resize", resize);
+
             window.addEventListener("pointerdown", pointerdown);
             window.addEventListener("pointerup", pointerup);
             window.addEventListener("pointermove", pointermove);
             window.addEventListener("wheel", wheel);
             window.addEventListener("contextmenu", contextmenu);
+            window.addEventListener("resize", resize);
+            window.addEventListener("scroll", resize);
+
+            ctx.on("before", () => {
+                const [ w, h ] = ctx.size();
+                game.w = w;
+                game.h = h;
+            })
+
+            resize();
+
             return () => {
+                if (root) root.removeEventListener("resize", resize);
+
                 window.removeEventListener("pointerdown", pointerdown);
                 window.removeEventListener("pointerup", pointerup);
                 window.removeEventListener("pointermove", pointermove);
                 window.removeEventListener("wheel", wheel);
                 window.removeEventListener("contextmenu", contextmenu);
+                window.removeEventListener("resize", resize);
+                window.removeEventListener("scroll", resize)
             }
         }
     }

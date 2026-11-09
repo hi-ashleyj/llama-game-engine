@@ -1,6 +1,6 @@
 <script lang="ts">
 
-    import { setupDrawable } from "../drawable.js";
+    import { useDrawable } from "../core/drawable.js";
     import { onMount } from "svelte";
 
     interface Props {
@@ -11,13 +11,10 @@
 
     let { x, y, children }: Props = $props();
 
-    let register = setupDrawable<{x: number, y: number}, {x: number, y: number}>({ hasChildren: true });
-
+    const register = useDrawable<{x: number, y: number}, {x: number, y: number}>(true);
     onMount(() => {
-        return register({
-            draw: ({ width, height, ctx, children }, offset) => {
-                children.forEach(f => f.draw({ width, height, ctx, children: [] }, { x: offset.x + x, y: offset.y + y }));
-            }
+        return register(({ children }, offset) => {
+            children({ x: offset.x + x, y: offset.y + y });
         });
     });
 

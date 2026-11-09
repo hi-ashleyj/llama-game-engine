@@ -1,35 +1,20 @@
 // CORE
-export { default as Game } from "./Game.svelte";
-export { default as Layer } from "./Layer.svelte";
-export { getGame, getLayer } from "./context.js";
-export type { LayerContext, LayerDrawable } from "./context.js";
+export { default as Game } from "./core/Game.svelte";
+export { default as Layer } from "./core/Layer.svelte";
+export { default as Canvas } from "./core/Canvas.svelte";
+export { setupCanvas, useCanvas, useInvalidate, type CanvasContext, type LayerUpdater, type LayerDrawable } from "./core/layer.js";
+export { setupDrawable, useDrawable, type DrawableAssign, type DrawFunction, type DrawChildren } from "./core/drawable.js";
 
-export * as Scenes from "./scenes/index.js";
-
-// CONTROLLERS
-export { default as MouseClickable } from "./controllers/MouseClickable.svelte";
-export { default as MouseEventArea } from "./controllers/MouseEventArea.svelte";
+// export * as Scenes from "./scenes/index.js";
 
 // DRAWABLES
-export * as Drawables from "./drawables/index.js";
+export * as Draw from "./primitive.js";
 
 // RESOURCES
-export * as Resource from "./resources/index.js";
-
-// PRIMITIVES
-export * as Primitives from "./primitives/index.js";
+// export * as Resource from "./resources/index.js";
 
 // EXTRAS
-export { default as SensibleDefaultStyles } from "./extras/SensibleDefaultStyles.svelte";
-export { default as LayerPortal } from "./extras/LayerPortal.svelte";
-export { default as Tweened } from "./extras/Tweened.svelte";
-export { default as FullScreenEventHandler } from "./extras/FullScreenEventHandler.svelte";
-
-// AUDIO
-export { getAudioContext, getConnector as getAudioConnector, type AudioSvelteContext as LlamaAudioContext } from "./audio/context.js";
-export { default as AudioListenerPosition } from "./audio/AudioListenerPosition.svelte";
-export { default as MediaAudioSource } from "./audio/MediaAudioSource.svelte";
-export { default as AudioGain } from "./audio/AudioGain.svelte";
-export { default as AudioPanner } from "./audio/AudioPanner.svelte";
-export { default as AudioCompressor } from "./audio/AudioCompressor.svelte";
-export { default as AudioPosition } from "./audio/AudioPosition.svelte";
+// export { default as SensibleDefaultStyles } from "./extras/SensibleDefaultStyles.svelte";
+// export { default as LayerPortal } from "./extras/LayerPortal.svelte";
+// export { default as Tweened } from "./extras/Tweened.svelte";
+// export { default as FullScreenEventHandler } from "./extras/FullScreenEventHandler.svelte";

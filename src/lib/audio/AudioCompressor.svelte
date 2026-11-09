@@ -1,8 +1,7 @@
 <script lang="ts">
 
-    import { getAudioContext, getConnector } from "$lib/audio/context.js";
+    import { useAudioCable } from "./context.js";
     import { onMount } from "svelte";
-    const audioContext = getAudioContext();
 
     type Millisecond = number;
     type Decibel = number;
@@ -53,13 +52,13 @@
         }
     });
 
-    const connect = getConnector((node) => {
+    const { connect, context } = useAudioCable((node) => {
         node.connect(output!);
         return () => node.disconnect(output!);
     });
 
     onMount(() => {
-        const audioCTX = audioContext();
+        const audioCTX = context();
         output = audioCTX.createGain();
         input = audioCTX.createGain();
         process = audioCTX.createDynamicsCompressor();

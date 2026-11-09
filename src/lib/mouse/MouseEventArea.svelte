@@ -1,10 +1,10 @@
 <script lang="ts">
 
-    import { getGame } from "../context.js";
-    import { setupDrawable, type DrawFunction } from "../drawable.js";
+    import { useMouse } from "./context.svelte.js";
+    import { useDrawable, type DrawFunction } from "../core/drawable.js";
     import { onMount } from "svelte";
 
-    const { mouse } = getGame();
+    const mouse = useMouse();
     let c = $state({ x: 0, y: 0, w: 0, h: 0 });
 
     type Click = () => void;
@@ -32,7 +32,7 @@
         hover = true;
     };
 
-    let register = setupDrawable<{x: number, y: number, w: number, h: number}, null>({ hasChildren: false });
+    let register = useDrawable<{x: number, y: number, w: number, h: number}, null>();
 
     onMount(() => {
         let event = mouse.on("press", (key, state) => {
@@ -45,7 +45,7 @@
             }
             onother?.();
         });
-        let deregister = register({ draw });
+        let deregister = register(draw);
         return () => {
             event();
             deregister();

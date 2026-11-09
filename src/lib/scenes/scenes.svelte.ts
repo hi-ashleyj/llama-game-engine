@@ -1,5 +1,5 @@
+import { getGame } from "../core/game.js";
 import { createContext, onDestroy } from "svelte";
-import { getGame } from "$lib/context.js";
 
 declare global {
     namespace Llama {

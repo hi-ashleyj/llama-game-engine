@@ -1,19 +1,19 @@
 <script lang="ts">
 
-    import { setupDrawable, type DrawFunction } from "$lib/drawable.js";
+    import { useDrawable, type DrawFunction } from "../core/drawable.js";
     import { onMount } from "svelte";
 
     interface Props {
-        fill?: string | null;
-        stroke?: string | null;
-        strokeWidth?: number | null;
+        fill?: string;
+        stroke?: string;
+        strokeWidth?: number;
         radius?: number | [ number ] | [ number, number ] | [ number, number, number ] | [ number, number, number, number ];
     }
 
     let {
-        fill = null,
-        stroke = null,
-        strokeWidth = null,
+        fill,
+        stroke,
+        strokeWidth,
         radius = 0
     }: Props = $props();
     
@@ -33,10 +33,9 @@
         }
     };
     
-    let register = setupDrawable<{x: number, y: number, w: number, h: number}, null>({ hasChildren: false });
-
+    const register = useDrawable<{x: number, y: number, w: number, h: number}, null>();
     onMount(() => {
-        return register({ draw });
+        return register(draw);
     })
 
 </script>

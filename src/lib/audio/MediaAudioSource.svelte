@@ -1,8 +1,7 @@
 <script lang="ts">
 
-    import { getAudioContext, getConnector } from "./context.js";
+    import { useAudioCable } from "./context.js";
     import { onMount } from "svelte";
-    const audioContext = getAudioContext();
 
     interface Props {
         url: string;
@@ -24,11 +23,11 @@
         }
     });
 
-    const connect = getConnector();
+    const { connect, context } = useAudioCable();
 
     onMount(() => {
         if (!element) { throw new Error("Failed to mount Audio Element"); }
-        const audioCTX = audioContext();
+        const audioCTX = context();
         sourceNode = audioCTX.createMediaElementSource(element);
         output = audioCTX.createGain();
         sourceNode.connect(output);

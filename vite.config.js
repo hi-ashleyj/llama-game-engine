@@ -29,13 +29,13 @@ const config = {
 				hover: "#23a923",
 			},
 			navbar: [
-				{ to: "/guide", title: "Guide" },
-				{ to: "/reference", title: "Reference" },
+				{ to: "/guides", title: "Guide" },
+				{ to: "/docs", title: "Reference" },
 				{ to: "/examples", title: "Examples" },
 			],
 			sidebar: {
 				enabled: true,
-				roots: [ "/guide/", "/reference/", "/examples/" ],
+				roots: [ "/guide/", "/docs/", "/examples/" ],
 			},
 			i18n: { heroImage: false },
 		}),

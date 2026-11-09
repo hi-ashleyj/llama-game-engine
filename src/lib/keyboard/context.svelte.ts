@@ -1,3 +1,6 @@
+import type { ModuleInitialiser } from "../core/game";
+import { createContext } from "svelte";
+
 type States = {
     [K: string]: boolean;
 }
@@ -9,18 +12,15 @@ type Events = {
 
 type Event<T extends keyof Events = keyof Events> = { action: T, call: (...params: Events[T]) => void };
 
-export type KeyboardModule = {
-    start(): () => void;
+export type Keyboard = {
     on<T extends keyof Events = keyof Events>(action: T, call: (...params: Events[T]) => void): () => void;
     readonly is: States;
 }
 
-export type Keyboard = {
-    on: KeyboardModule["on"],
-    is: KeyboardModule["is"],
-}
+const [ getter, setter ] = createContext<Keyboard>();
 
-export const keyboard = (): KeyboardModule => {
+export const useKeyboard = getter;
+export const keyboard: ModuleInitialiser<Keyboard> = (ctx) => {
     const state: States = {};
     const events = new Set<Event>();
 
@@ -42,7 +42,7 @@ export const keyboard = (): KeyboardModule => {
         })
     };
 
-    return {
+    const context = {
         on<T extends keyof Events = keyof Events>(action: T, call: (...params: Events[T]) => void): () => void {
             const handle = { action, call } as Event;
 
@@ -52,6 +52,12 @@ export const keyboard = (): KeyboardModule => {
         get is() {
             return state;
         },
+    }
+
+    setter(context);
+
+    return {
+        fetch: getter,
         start() {
             if (!window) return () => null;
             window.addEventListener("keydown", keydown);

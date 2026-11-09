@@ -1,7 +1,7 @@
 <script lang="ts">
 
     import { GameObject } from "../../../lib";
-    import { Rectangle } from "../../../lib/drawables";
+    import { Rectangle } from "../../../lib/primitive";
     import { getGame } from "../../../lib";
     import { onMount } from "svelte";
 
