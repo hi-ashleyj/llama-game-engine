@@ -1,7 +1,7 @@
 <script lang="ts">
 
-    import { Primitives, getGame } from "$lib/index.js";
-    import { Arc } from "$lib/primitive.js";
+    import { Primitives, getGame } from "#lib/index.js";
+    import { Arc } from "#lib/primitive.js";
     import { onDestroy } from "svelte";
 
     const context = getGame();

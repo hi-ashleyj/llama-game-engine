@@ -1,7 +1,7 @@
 <script lang="ts">
 
-    import { Game, Layer, Drawables, Primitives } from "$lib/index.js";
-    import { Rectangle } from "$lib/primitive.js";
+    import { Game, Layer, Drawables, Primitives } from "#lib/index.js";
+    import { Rectangle } from "#lib/primitive.js";
 
     import Spinning from "./Spinning.svelte";
     import LoadingText from "./LoadingText.svelte";

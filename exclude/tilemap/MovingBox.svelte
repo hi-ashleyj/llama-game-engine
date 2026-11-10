@@ -1,6 +1,6 @@
 <script lang="ts">
 
-    import { GameObject, Drawables, getGame, useTileSet, resolveImage, type TileSet } from "$lib/index.js";
+    import { GameObject, Drawables, getGame, useTileSet, resolveImage, type TileSet } from "#lib/index.js";
     import { onMount, type ComponentProps } from "svelte";
     import imageURI from "./panicface.png";
 

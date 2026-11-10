@@ -12,9 +12,9 @@
 
 <script lang="ts">
 
-    import { Game, Layer, Canvas } from "$lib/index.js";
-    import { RoundedRectangle as Rectangle, Text, Area, Opacity } from "$lib/primitive.js";
-    import { mouse, MouseClickable, MouseEventArea } from "$lib/mouse.js";
+    import { Game, Layer, Canvas } from "#lib/index.js";
+    import { RoundedRectangle as Rectangle, Text, Area, Opacity } from "#lib/primitive.js";
+    import { mouse, MouseClickable, MouseEventArea } from "#lib/mouse.js";
     import Follow from "./Follow.svelte";
 
     let leftFill = $state("#aa0000");

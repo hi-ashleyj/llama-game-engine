@@ -1,6 +1,6 @@
 <script lang="ts">
 
-    import { getGame } from "$lib/core/game.js";
+    import { getGame } from "#lib/core/game.js";
     import { onMount } from "svelte";
 
     const { keyboard } = getGame();

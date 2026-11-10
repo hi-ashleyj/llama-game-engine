@@ -1,7 +1,7 @@
 <script lang="ts">
 
-    import { Draw } from "$lib/index.js";
-    import { useMouse } from "$lib/mouse";
+    import { Draw } from "#lib/index.js";
+    import { useMouse } from "#lib/mouse.js";
     let mouse = useMouse();
 
 </script>

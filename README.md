@@ -152,7 +152,7 @@ And now, let's create a layer, and add the scene switcher to it.
 
     import { Layer } from "@hi-ashleyj/llama";
     import { SceneSwitcher } from "@hi-ashleyj/llama/scenes";
-    import { SCENES } from "$lib/constants.js";
+    import { SCENES } from "#lib/constants.js";
 
     // ... import individual scene components here
 
@@ -182,7 +182,7 @@ Here's an example for how to add the Menu and Game scenes we hinted earlier:
 ```diff
 /// layers/background/_Layer.svelte
 
-    import { SCENES } from "$lib/constants.js";
+    import { SCENES } from "#lib/constants.js";
 
     // ... import individual scene components here
 +   import Menu from "./Menu.svelte"

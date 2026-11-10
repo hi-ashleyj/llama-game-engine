@@ -1,6 +1,6 @@
 <script lang="ts">
 
-    import { Game, Layer } from "$lib/index.js";
+    import { Game, Layer } from "#lib/index.js";
     import BackgroundLayer from "./BackgroundLayer.svelte";
     import OtherLayer from "./OtherLayer.svelte";
 

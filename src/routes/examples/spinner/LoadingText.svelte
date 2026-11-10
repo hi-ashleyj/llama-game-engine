@@ -1,7 +1,7 @@
 <script lang="ts">
 
     import { onDestroy } from "svelte";
-    import { Drawables, Primitives, getGame } from "$lib/index.js";
+    import { Drawables, Primitives, getGame } from "#lib/index.js";
 
     const context = getGame();
 

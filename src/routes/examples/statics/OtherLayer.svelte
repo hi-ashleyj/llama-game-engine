@@ -1,7 +1,7 @@
 <script lang="ts">
 
-    import { Primitives } from "$lib/index.js";
-    import { Rectangle } from "$lib/primitive.js";
+    import { Primitives } from "#lib/index.js";
+    import { Rectangle } from "#lib/primitive.js";
 
     interface Props {
         hue?: number;

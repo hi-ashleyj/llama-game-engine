@@ -1,7 +1,7 @@
 <script lang="ts">
 
-    import { Primitives, MouseClickable, getTriggerLayerRender } from "$lib/index.js";
-    import { Rectangle } from "$lib/primitive.js";
+    import { Primitives, MouseClickable, getTriggerLayerRender } from "#lib/index.js";
+    import { Rectangle } from "#lib/primitive.js";
 
     const triggerRender = getTriggerLayerRender();
     interface Props {

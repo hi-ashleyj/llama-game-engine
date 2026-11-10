@@ -1,6 +1,6 @@
 <script lang="ts">
 
-    import { Game, Layer, GameObject, Drawables } from "$lib/index.js";
+    import { Game, Layer, GameObject, Drawables } from "#lib/index.js";
     import MovingBox from "./MovingBox.svelte";
     import { SensibleDefaultStyles } from "../../dist/index.js";
 

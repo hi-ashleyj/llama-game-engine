@@ -1,4 +1,4 @@
-import { type Props as DisplayImage } from "$lib/drawables/DisplayImage.svelte";
+import { type Props as DisplayImage } from "#lib/drawables/DisplayImage.svelte";
 
 export type TileSet = {
     width: number;

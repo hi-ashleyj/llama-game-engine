@@ -1,8 +1,8 @@
 <script lang="ts">
 
-    import { useDrawable, type DrawFunction } from "$lib/core/drawable.js";
+    import { useDrawable, type DrawFunction } from "../core/drawable.js";
     import { onMount } from "svelte";
-    import { getGame } from "$lib/core/game.js";
+    import { getGame } from "../core/game.js";
 
     interface Props {
         text: string;

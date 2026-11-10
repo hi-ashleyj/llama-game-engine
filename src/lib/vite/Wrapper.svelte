@@ -15,7 +15,7 @@
 
 <script lang="ts">
 
-    import Game from "$lib/core/Game.svelte";
+    import Game from "../core/Game.svelte";
 
     let { Client, ...rest }: Props = $props();
     let x: HTMLDivElement | undefined = $state();
