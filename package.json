@@ -1,6 +1,7 @@
 {
   "name": "@hi-ashleyj/llama",
   "description": "A (Very Incomplete) 2D Canvas Game Engine powered by Svelte",
+  "cli": "dist/cli/index.js",
   "version": "0.16.7",
   "type": "module",
   "scripts": {
@@ -9,7 +10,8 @@
     "package": "svelte-package",
     "preview": "vite preview",
     "sync": "svelte-kit sync",
-    "check": "svelte-check"
+    "check": "svelte-check",
+    "test-cli": "svelte-package && node dist/cli/index.js"
   },
   "repository": {
     "type": "git",
@@ -93,6 +95,8 @@
   "dependencies": {
     "@clack/prompts": "^1.9.0",
     "commander": "^15.1.0",
-    "picocolors": "^1.1.1"
+    "detect-package-manager": "^3.0.2",
+    "picocolors": "^1.1.1",
+    "zod": "^4.6.7"
   }
 }

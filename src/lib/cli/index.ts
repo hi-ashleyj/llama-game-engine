@@ -1,10 +1,15 @@
 import { program } from "commander";
-import * as commands from "./commands/index.js";
+import { pick } from "./commands/index.js";
+import { intro, cancel } from "@clack/prompts";
 
-if (process.argv.slice(2).length > 0) {
-    
+intro("Llama Game Engine CLI (@hi-ashleyj/llama)");
+
+if (process.argv.slice(2).length <= 0) {
+    const res = await pick();
+    if (!res) cancel("Sad Llama ToT");
+    process.exit(0);
 }
 
-program.name("Llama");
+program.name("Llama Game Engine CLI");
 //program.addCommand(command)
 program.parse();
