@@ -3,6 +3,7 @@
 
     import { onMount, tick } from "svelte";
     import { setupGame, type ModuleSetup, type CurrentModules, type ModuleInitialiser } from "./game.js";
+    import { HTML_FRAGMENT } from "#lib/vite/plugin.ts";
 
     const raise = (str: string) => { throw new Error(str); };
     type Ready<T extends CurrentModules = CurrentModules> = { id: T, go: ReturnType<ModuleInitialiser<AvailableModules[T]>> };
@@ -76,8 +77,10 @@
 </script>
 
 <div class="game" bind:this={element}>
-    {#if warm}
+    {#if warm && false}
         {@render children?.()}
+    {:else}
+        {@html HTML_FRAGMENT}
     {/if}
 </div>
 

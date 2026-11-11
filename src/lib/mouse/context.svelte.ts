@@ -131,7 +131,6 @@ export const mouse: ModuleInitialiser<Mouse> = (ctx) => {
         raw.y = rect.top;
         raw.w = rect.width;
         raw.h = rect.height;
-        console.log(rect);
     }
 
     setter(context);
