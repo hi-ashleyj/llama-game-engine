@@ -1,34 +1,43 @@
-<script lang="ts">
-    import ResourceImage from './ResourceImage.svelte';
-    import ResourceFont from "./ResourceFont.svelte";
+<script lang="ts" module>
 
-    interface Props {
-        children?: import('svelte').Snippet<[ number, number, number ]>;
-        images?: string[];
-        playback?: string[];
-        fonts?: Record<string, string>;
+    import type { ImageResources } from "./images.svelte.ts";
+    export type Resource = {
+        image: ImageResources
     }
 
-    let { children, images, playback, fonts }: Props = $props();
-
-    let loaded: string[] = $state([]);
-    let imagesDeduped = $derived([ ...new Set(images ?? []) ]);
-    let playbackDeduped = $derived([ ...new Set(playback ?? []) ]);
-    let fontDerived = $derived(Object.entries(fonts ?? {}));
-
-    let count = $derived(imagesDeduped.length + playbackDeduped.length + fontDerived.length);
-    let percentage = $derived(loaded.length / count);
-    let ready = $derived(loaded.length >= count);
 </script>
 
-{@render children?.(percentage, count, loaded.length)}
+<script lang="ts">
+
+    interface Props {
+        children?: import('svelte').Snippet;
+        placeholder?: import('svelte').Snippet<[ number, number, number ]>;
+        resources: Resource;
+    }
+
+    let { children, placeholder, resources }: Props = $props();
+
+    let images = $derived(resources.image._loader());
+
+    let loaded = $derived(images.loaded);
+    let count = $derived(images.preloads.length);
+
+    let percentage = $derived(loaded / count);
+    let ready = $derived(loaded >= count);
+
+</script>
+
+{#if placeholder && !ready}
+    {@render placeholder?.(percentage, count, loaded)}
+{:else if (!ready)}
+
+{:else}
+    {@render children?.()}
+{/if}
 
 <div class="-llama-asset-pool--">
-    {#each imagesDeduped as url (url)}
-        <ResourceImage {url} onload={() => loaded.some(it => it === url) ? null : loaded.push(url) } />
-    {/each}
-    {#each fontDerived as [ url, font ] (url)}
-        <ResourceFont {font} {url} onload={() => loaded.some(it => it === url) ? null : loaded.push(url) } />
+    {#each images.preloads as url (url)}
+        <img src={url} onload={() => images.tag(url) } alt="A Game Asset" bind:this={null, (el) => images.push(url, el ? el : null)} />
     {/each}
 </div>
 
