@@ -8,6 +8,6 @@
     },
     "include": [
         "src",
-        "vite.config.js",
+        "vite.config.js", "exclude/tileset.ts",
     ]
 }

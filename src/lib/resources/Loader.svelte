@@ -1,33 +1,26 @@
-<script lang="ts" module>
-
-    import type { ImageResources } from "./images.svelte.ts";
-    export type Resource = {
-        image: ImageResources
-    }
-
-</script>
-
 <script lang="ts">
+
+    import { type Collect } from './collect.svelte.ts';
 
     interface Props {
         children?: import('svelte').Snippet;
         placeholder?: import('svelte').Snippet<[ number, number, number ]>;
-        resources: Resource;
+        resources: ReturnType<Collect>;
     }
 
     let { children, placeholder, resources }: Props = $props();
 
-    let images = $derived(resources.image._loader());
+    // let images = $derived(resources);
 
-    let loaded = $derived(images.loaded);
-    let count = $derived(images.preloads.length);
+    // let loaded = $derived(images.loaded);
+    // let count = $derived(images.preloads.length);
 
-    let percentage = $derived(loaded / count);
-    let ready = $derived(loaded >= count);
+    // let percentage = $derived(loaded / count);
+    // let ready = $derived(loaded >= count);
 
 </script>
 
-{#if placeholder && !ready}
+<!-- {#if placeholder && !ready}
     {@render placeholder?.(percentage, count, loaded)}
 {:else if (!ready)}
 
@@ -39,7 +32,7 @@
     {#each images.preloads as url (url)}
         <img src={url} onload={() => images.tag(url) } alt="A Game Asset" bind:this={null, (el) => images.push(url, el ? el : null)} />
     {/each}
-</div>
+</div> -->
 
 <style>
     .-llama-asset-pool-- {

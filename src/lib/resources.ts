@@ -1,8 +1,3 @@
-import { setupImages } from "./resources/images.svelte.ts";
-import { default as LoadingScreen, type Resource } from "./resources/Loader.svelte";
-
-export const setupResources = (): Resource => ({
-    image: setupImages(),
-})
-
-export { type Resource, LoadingScreen };
+export { setupImages, type ImageInstance, type ImageInstantiate } from "./resources/images.svelte.ts";
+export { collect, type AssetTypes, ASSET_TYPES } from "./resources/collect.svelte.ts";
+export { default as Loader } from "./resources/Loader.svelte";

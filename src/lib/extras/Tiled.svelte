@@ -1,6 +1,6 @@
 <script lang="ts">
 
-    import type { TileSet } from "../resources/tileset.js";
+    import type { TileSet } from "../../../exclude/tileset.ts";
     import { setupDrawable, type DrawFunction } from "../core/drawable.js";
     import { onMount } from "svelte";
 
