@@ -1,5 +1,3 @@
-import { SvelteSet, SvelteMap } from 'svelte/reactivity';
-
 export type AssetTypes = {
     image: HTMLImageElement,
     audio: HTMLAudioElement
@@ -11,19 +9,15 @@ export const ASSET_TYPES = {
 } as const satisfies { [K in keyof AssetTypes]: K };
 
 export type Loader<T extends keyof AssetTypes = keyof AssetTypes> = { _loader: (fetch: (url: string) => AssetTypes[T]) => { load: string[] }, _type: T };
-export type Collect = <T extends { [K in string]: Loader }> (assets: T) => <K extends keyof T>(list: K) => T[K];
+export type Collect = <T extends { [K in string]: Loader }> (assets: T) => (<K extends keyof T>(list: K) => T[K]) & { _loader: () => { [K: string]: string[] }, push: (url: string, asset: AssetTypes[keyof AssetTypes] | null) => void };
 
 export const collect: Collect = (assets) => {
     const list = new Map<string, AssetTypes[keyof AssetTypes]>();
-    const preloads = new SvelteMap<string, keyof AssetTypes>();
-    const loaded = new SvelteSet<string>();
 
     const fetch = <T extends keyof AssetTypes = keyof AssetTypes>(type: T, url: string): AssetTypes[T] => {
         if (list.has(url)) {
-            if (!loaded.has(url)) console.warn(preloads.has(url) ? `Asset "${url}" was preloaded, but still used before sync completed` : `Asset "${url}" was used before it was loaded`);
             return list.get(url)! as AssetTypes[T];
         }
-        if (!loaded.has(url)) console.warn(preloads.has(url) ? `Asset "${url}" is preloaded, but was still somehow loaded before even preload began.` : `Asset "${url}" was loaded ad-hoc`);
         switch (type) {
             case "image": {
                 const img = document.createElement("img");
@@ -42,12 +36,15 @@ export const collect: Collect = (assets) => {
         }
     }
 
-    const answers = Object.values(assets).map(it => ({ ...it._loader((url) => fetch(it._type, url)), type: it._type } ));
-    answers.forEach(v => {
-        v.load.forEach(it => preloads.set(it, v.type));
-    })
-
-    return (req) => {
-        return assets[req];
-    }
+    return Object.assign(<T extends keyof typeof assets>(req: T) => assets[req], {
+        _loader: () => {
+            const answers = Object.values(assets).map(it => ({ ...it._loader((url) => fetch(it._type, url)), type: it._type } ));
+            const grouped = Object.groupBy(answers, (it) => it.type);
+            return Object.fromEntries(Object.entries(grouped).map(([ k, v ]) => [ k, [ ...new Set(...v.map(it => it.load).flat()) ] ]));
+        },
+        push: (url, asset) => {
+            if (asset === null) list.delete(url);
+            else list.set(url, asset);
+        }
+    } satisfies Pick<ReturnType<Collect>, keyof ReturnType<Collect>>);
 }

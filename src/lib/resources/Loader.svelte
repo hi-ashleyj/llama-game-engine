@@ -1,5 +1,7 @@
 <script lang="ts">
 
+    import { onMount } from 'svelte';
+    import { SvelteSet } from 'svelte/reactivity';
     import { type Collect } from './collect.svelte.ts';
 
     interface Props {
@@ -10,18 +12,22 @@
 
     let { children, placeholder, resources }: Props = $props();
 
-    // let images = $derived(resources);
+    const loaded = new SvelteSet<string>();
+    let preload: { [K: string]: string[] } = $state({});
+    
+    let count = $derived(Object.values(preload).reduce((p, v) => p + v.length, 0));
 
-    // let loaded = $derived(images.loaded);
-    // let count = $derived(images.preloads.length);
+    let percentage = $derived(loaded.size / count);
+    let ready = $derived(loaded.size >= count);
 
-    // let percentage = $derived(loaded / count);
-    // let ready = $derived(loaded >= count);
+    onMount(() => {
+        preload = resources._loader();
+    })
 
 </script>
 
-<!-- {#if placeholder && !ready}
-    {@render placeholder?.(percentage, count, loaded)}
+{#if placeholder && !ready}
+    {@render placeholder?.(percentage, count, loaded.size)}
 {:else if (!ready)}
 
 {:else}
@@ -29,10 +35,12 @@
 {/if}
 
 <div class="-llama-asset-pool--">
-    {#each images.preloads as url (url)}
-        <img src={url} onload={() => images.tag(url) } alt="A Game Asset" bind:this={null, (el) => images.push(url, el ? el : null)} />
-    {/each}
-</div> -->
+    {#if "image" in preload}
+        {#each preload.image as url (url)}
+            <img src={url} onload={() => loaded.add(url) } alt="A Game Asset" bind:this={null, (el) => resources.push(url, el ? el : null)} />
+        {/each}
+    {/if}
+</div>
 
 <style>
     .-llama-asset-pool-- {
