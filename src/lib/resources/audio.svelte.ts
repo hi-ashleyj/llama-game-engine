@@ -1,15 +1,15 @@
 import type { Loader } from "./collect.svelte.ts";
 
 export type AudioAssetList = { [K: string]: string };
-export type AudioInstance<T extends AudioAssetList> = ((asset: keyof T) => HTMLAudioElement) & {
+export type AudioInstance<T extends AudioAssetList> = Loader<"audio", T> & {
     preload: (...list: (keyof T)[]) => void,
-} & Loader<"audio">
+}
 
 export type AudioInstantiate = <T extends AudioAssetList>(param: T) => AudioInstance<T>;
 
 export const setupImages: AudioInstantiate = (assets) => {
     const preloads = new Set<string>();
-    let fetch: (asset: string) => HTMLAudioElement;
+    let fetch: (asset: string) => string;
 
     const lookup = (key: keyof typeof assets) => {
         if (!fetch) throw new Error("Not Initialised");

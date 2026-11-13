@@ -29,7 +29,7 @@
 {#if placeholder && !ready}
     {@render placeholder?.(percentage, count, loaded.size)}
 {:else if (!ready)}
-
+    
 {:else}
     {@render children?.()}
 {/if}
@@ -38,6 +38,11 @@
     {#if "image" in preload}
         {#each preload.image as url (url)}
             <img src={url} onload={() => loaded.add(url) } alt="A Game Asset" bind:this={null, (el) => resources.push(url, el ? el : null)} />
+        {/each}
+    {/if}
+    {#if "audio" in preload}
+        {#each preload.audio as url (url)}
+            <audio src={url} muted preload="auto" oncanplaythrough={() => loaded.add(url)} bind:this={null, (el) => resources.push(url, el ? url : null)}></audio>
         {/each}
     {/if}
 </div>

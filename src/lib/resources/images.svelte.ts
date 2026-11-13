@@ -2,10 +2,10 @@ import type { Loader } from "./collect.svelte.ts";
 
 export type ImageAssetList = { [K: string]: string | [ string, number, number ] | [ string, number, number, number, number ] };
 export type ImagePositionList<T extends ImageAssetList> = { [K in keyof T as T[K] extends string ? never : K]: { x?: number, y?: number, w: number, h: number }}
-export type ImageInstance<T extends ImageAssetList> = ((asset: keyof T) => HTMLImageElement) & { 
+export type ImageInstance<T extends ImageAssetList> = Loader<"image", T> & { 
     position: <X extends keyof ImagePositionList<T> = keyof ImagePositionList<T>>(name: X) => ImagePositionList<T>[X], 
     preload: (...list: (keyof T)[]) => void,
-} & Loader<"image">
+}
 
 export type ImageInstantiate = <T extends ImageAssetList>(param: T, relative: "TL" | "BR" | "C") => ImageInstance<T>;
 
