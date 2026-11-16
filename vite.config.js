@@ -35,7 +35,7 @@ const config = {
 			],
 			sidebar: {
 				enabled: true,
-				roots: [ "/guide/", "/docs/", "/examples/" ],
+				roots: [ "/guides/", "/docs/", "/examples/" ],
 			},
 			i18n: { heroImage: false },
 		}),

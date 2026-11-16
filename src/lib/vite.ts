@@ -6,3 +6,5 @@ export const wrap = (target: Component<ChildProps>, options: Omit<Props, "Client
         return Wrapper(internals, { ...props, ...options, Client: target });
     });
 }
+
+export { HTML_FRAGMENT, plugin } from "./vite/plugin.js";
