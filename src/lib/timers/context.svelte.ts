@@ -1,14 +1,14 @@
-import type { ModuleInitialiser } from "../core/game";
+import type { ModuleInitialiser } from "../core/game.js";
 import { createContext } from "svelte";
 
 export type Timer = (options: { duration: number, repeats: number }) => {
     readonly value: number;
-    stop: () => any | void;
+    start: () => () => any | void;
 };
 export type Burst = (options: { duration: number, immediate: boolean }) => {
     readonly value: number;
     trigger: () => void;
-    stop: () => any | void;
+    start: () => () => any | void;
 };
 
 export type Timers = {
@@ -16,12 +16,12 @@ export type Timers = {
     burst: Burst,
 }
 
-type Target = { duration: number, repeats: number, burst: boolean, now: number }
+type Target = { duration: number, repeats: number, burst: boolean, now: number, setty: (it: number) => void }
 
 const [ getter, setter ] = createContext<Timers>();
 
-export const useTimer = () => getter().timer;
-export const useBurst = () => getter().burst;
+export const useTimer: Timer = (...props) => getter().timer(...props);
+export const useBurst: Burst = (...props) => getter().burst(...props);
 export const timers: ModuleInitialiser<Timers> = (ctx) => {
     const targets = new Set<Target>();
 
@@ -35,19 +35,23 @@ export const timers: ModuleInitialiser<Timers> = (ctx) => {
             get now() {
                 return status;
             },
-            set now(it: number) {
+            setty: (it: number) => {
                 status = it;
             }
         }
-
-        targets.add(item);
+        
         const trigger = burst ? { trigger: () => {status = 0} } : {};
 
         return {
             get value() {
                 return progress
             },
-            stop: () => targets.delete(item),
+            start: () => {
+                targets.add(item);
+                return () => {
+                    targets.delete(item);
+                }
+            },
             ...trigger,
         }
     }
@@ -68,7 +72,7 @@ export const timers: ModuleInitialiser<Timers> = (ctx) => {
                 it.now = -1;
                 return;
             }
-            it.now = it.now + delta;
+            it.setty(it.now + delta);
         })
     });
 

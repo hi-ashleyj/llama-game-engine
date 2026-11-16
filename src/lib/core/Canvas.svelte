@@ -4,15 +4,15 @@
 
     import { onMount } from "svelte";
     import { getGame } from "./game.js";
-    import { setupCanvas } from "./layer.js";
+    import { setupCanvas } from "./layer.svelte.js";
 
     interface Props {
-        allFrames?: boolean;
+        mode?: "always" | "calculated" | "manual";
         scaling?: "pixelated" | "smooth";
         children?: import('svelte').Snippet;
     }
 
-    let { allFrames = true, scaling = "pixelated", children }: Props = $props();
+    let { mode = "always", scaling = "pixelated", children }: Props = $props();
 
     const { size, on } = getGame();
     let [ width, height ] = $derived(size());
@@ -50,6 +50,9 @@
         invalidate: () => {
             invalidated = true;
         },
+        changed: () => {
+            if (mode === "calculated") invalidated = true;
+        },
         registerLayer: (draw: DrawFunction<null>) => {
             const id = push(draw);
             return {
@@ -69,12 +72,14 @@
         return on("draw", () => {
             if (!invalidated) return;
             if (ctx === null) return;
+            console.log("Frame!");
             ctx.clearRect(0, 0, width, height);
             ctx.imageSmoothingEnabled = scaling === "smooth";
+            ctx.globalAlpha = 1;
 
             ls.forEach(it => it({ width, height, ctx }, null));
 
-            if (!allFrames) invalidated = false;
+            if (mode !== "always") invalidated = false;
         })
     });
 

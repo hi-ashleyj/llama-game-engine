@@ -1,40 +1,25 @@
 <script lang="ts">
 
-    import { GameObject } from "../../../lib";
-    import { Rectangle } from "../../../lib/primitive";
-    import { getGame } from "../../../lib";
+    import { Node, Area, Rectangle } from "#lib/primitive.js";
+    import { useTimer } from "#lib/timers.js";
     import { onMount } from "svelte";
 
-    let { width, height, getKeyboardStore, onFrame } = getGame();
+    const timer = useTimer({ duration: 1000, repeats: 0 });
+    let x = $derived(timer.value * 1920);
 
-    let x = $state($width / 2);
-    let y = $state($height / 2);
-
-
-    const speed = 100;
     const size = 50;
 
-    const wPressed = getKeyboardStore("w");
-    const aPressed = getKeyboardStore("a");
-    const sPressed = getKeyboardStore("s");
-    const dPressed = getKeyboardStore("d");
-
     onMount(() => {
-
-        return onFrame(({ delta }) => {
-            let xMovement = (($aPressed ? -1 : 0) + ($dPressed ? 1 : 0)) * delta * speed / 1000;
-            let yMovement = (($wPressed ? -1 : 0) + ($sPressed ? 1 : 0)) * delta * speed / 1000;
-
-            x = Math.min(Math.max(x + xMovement, 0), $width - size);
-            y = Math.min(Math.max(y + yMovement, 0), $height - size);
-        });
+        return timer.start();
     })
 
 </script>
 
-<GameObject x={x} y={y} w={size} h={size} >
-    <Rectangle fill="white" />
-</GameObject>
+<Node x={x} y={540} >
+    <Area w={size} h={size} center>
+        <Rectangle fill="white" />
+    </Area>
+</Node>
 
 <style>
 

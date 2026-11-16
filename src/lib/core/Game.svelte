@@ -77,7 +77,7 @@
 </script>
 
 <div class="game" bind:this={element}>
-    {#if warm && false}
+    {#if warm}
         {@render children?.()}
     {:else}
         {@html HTML_FRAGMENT}

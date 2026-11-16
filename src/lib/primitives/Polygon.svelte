@@ -1,22 +1,25 @@
 <script lang="ts">
 
+    import { useProps } from "../core/layer.svelte.js";
     import { useDrawable, type DrawFunction } from "../core/drawable.js";
     import { onMount } from "svelte";
 
     interface Props {
         points: [ number, number ][] | number[],
         close?: boolean,
-        fill?: string | null;
-        stroke?: string | null;
-        strokeWidth?: number | null;
+        fill?: string;
+        stroke?: string;
+        strokeWidth?: number;
     }
 
-    let { fill = null, stroke = null, strokeWidth = null, points, close }: Props = $props();
-    let pointers = $derived(points.flat());
+    let props: Props = $props();
+    let pointers = $derived(props.points.flat());
+
+    useProps(() => props);
 
     const draw: DrawFunction<{x: number, y: number, w: number, h: number}> = function({ ctx }, { x, y }) {
         ctx.beginPath();
-        for (let i = 0; i + 1 < points.length; i += 2) {
+        for (let i = 0; i + 1 < props.points.length; i += 2) {
             if (i === 0) {
                 ctx.moveTo(pointers[i] + x, pointers[i + 1] + y);
                 continue;
@@ -24,16 +27,16 @@
             ctx.lineTo(pointers[i] + x, pointers[i + 1] + y);
         }
 
-        if (close) ctx.closePath();
+        if (props.close) ctx.closePath();
         
-        if (fill) {
-            ctx.fillStyle = fill;
+        if (props.fill) {
+            ctx.fillStyle = props.fill;
             ctx.fill();
         }
 
-        if (stroke && strokeWidth) {
-            ctx.strokeStyle = stroke;
-            ctx.lineWidth = strokeWidth;
+        if (props.stroke && props.strokeWidth) {
+            ctx.strokeStyle = props.stroke;
+            ctx.lineWidth = props.strokeWidth;
             ctx.stroke();
         }
     };

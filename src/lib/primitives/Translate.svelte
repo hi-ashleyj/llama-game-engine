@@ -1,5 +1,6 @@
 <script lang="ts">
 
+    import { useProps } from "../core/layer.svelte.js";
     import { useDrawable } from "../core/drawable.js";
     import { onMount } from "svelte";
 
@@ -9,12 +10,13 @@
         children?: import('svelte').Snippet;
     }
 
-    let { x, y, children }: Props = $props();
+    let { children, ...props }: Props = $props();
+    useProps(() => props);
 
     const register = useDrawable<{x: number, y: number}, {x: number, y: number}>(true);
     onMount(() => {
         return register(({ children }, offset) => {
-            children({ x: offset.x + x, y: offset.y + y });
+            children({ x: offset.x + props.x, y: offset.y + props.y });
         });
     });
 

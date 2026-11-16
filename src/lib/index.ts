@@ -2,7 +2,7 @@
 export { default as Game } from "./core/Game.svelte";
 export { default as Layer } from "./core/Layer.svelte";
 export { default as Canvas } from "./core/Canvas.svelte";
-export { setupCanvas, useCanvas, useInvalidate, type CanvasContext, type LayerUpdater, type LayerDrawable } from "./core/layer.js";
+export { setupCanvas, useCanvas, useInvalidate, useProps, type CanvasContext, type LayerUpdater, type LayerDrawable } from "./core/layer.svelte.js";
 export { setupDrawable, useDrawable, type DrawableAssign, type DrawFunction, type DrawChildren } from "./core/drawable.js";
 
 // export * as Scenes from "./scenes/index.js";

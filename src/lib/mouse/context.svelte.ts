@@ -1,4 +1,4 @@
-import type { ModuleInitialiser } from "../core/game";
+import type { ModuleInitialiser } from "../core/game.js";
 import { createContext } from "svelte";
 
 type States = {

@@ -28,7 +28,7 @@
 
 <div class="game-wrapper">
     <Game font="Comic Sans MS" modules={{ mouse }}>
-        <Canvas>
+        <Canvas mode="calculated">
             <Layer z={0} name="bg">
                 <Area x={0} y={0} w={1920} h={1080} >
                     <Rectangle fill="#1e1e1e" radius={10} />

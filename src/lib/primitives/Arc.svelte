@@ -1,5 +1,6 @@
 <script lang="ts">
 
+    import { useProps } from "../core/layer.svelte.js";
     import { useDrawable } from "../core/drawable.js";
     import { onMount } from "svelte";
 
@@ -11,16 +12,12 @@
         endAngle: number;
     }
 
-    let {
-        fill,
-        stroke,
-        strokeWidth,
-        startAngle,
-        endAngle
-    }: Props = $props();
+    let props: Props = $props();
 
-    let sd = $derived((startAngle - 90) * Math.PI / 180);
-    let ed = $derived((endAngle - 90) * Math.PI / 180);
+    let sd = $derived((props.startAngle - 90) * Math.PI / 180);
+    let ed = $derived((props.endAngle - 90) * Math.PI / 180);
+
+    useProps(() => props);
 
     const register = useDrawable<{x: number, y: number, w: number, h: number}, null>();
     onMount(() => {
@@ -31,14 +28,14 @@
             ctx.arc(x + r, y + r, r, sd, ed);
             ctx.lineTo(x + r, y + r);
             
-            if (fill) {
-                ctx.fillStyle = fill;
+            if (props.fill) {
+                ctx.fillStyle = props.fill;
                 ctx.fill();
             }
 
-            if (stroke && strokeWidth) {
-                ctx.strokeStyle = stroke;
-                ctx.lineWidth = strokeWidth;
+            if (props.stroke && props.strokeWidth) {
+                ctx.strokeStyle = props.stroke;
+                ctx.lineWidth = props.strokeWidth;
                 ctx.stroke();
             }
         });

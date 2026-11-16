@@ -1,34 +1,41 @@
+<script lang="ts" module>
+
+    declare global {
+        namespace Llama {
+            interface Modules {
+                timers: any;
+            }
+        }
+    }
+
+</script>
+
 <script lang="ts">
 
-    import { Game, Layer, GameObject, type GameContext } from "../../../lib";
-    import { Rectangle } from "../../../lib/primitive";
+    import { Game, Canvas, Layer } from "#lib/index.js";
+    import { Rectangle, Node, Area } from "#lib/primitive.js";
+    import { timers } from "#lib/timers.js";
 
-    import { onMount } from "svelte";
     import MovingBox from "./MovingBox.svelte";
-
-    let context: GameContext = $state();
-    let xStore;
-
-    onMount(() => {
-        xStore = context.createTimer({ duration: 1000, repeats: 0 });
-    });
-
-    let xPosition = $derived(960 + (($xStore! - 0.5) * 200));
-
-    let frame = () => {};
 
 </script>
 
 <div class="game-wrapper">
-    <Game bind:context={context}>
-        <Layer zIndex={0} name="bg">
-            <GameObject x={0} y={0} w={1920} h={1080} >
-                <Rectangle fill="#333333" />
-            </GameObject>
-        </Layer>
-        <Layer zIndex={1} name="ui">
-            <MovingBox />
-        </Layer>
+    <Game modules={{ timers }} size={[ 1920, 1080 ]}>
+        <Canvas mode="manual">
+            <Layer name="background">
+                <Node x={0} y={0}>
+                    <Area w={1920} h={1080}>
+                        <Rectangle fill="#333333" />
+                    </Area>
+                </Node>
+            </Layer>
+        </Canvas>
+        <Canvas mode="calculated">
+            <Layer name="box">
+                <MovingBox />
+            </Layer>
+        </Canvas>
     </Game>
 </div>
 
@@ -48,5 +55,6 @@
     .game-wrapper {
         width: 100%;
         height: 100%;
+        aspect-ratio: 16 / 9;
     }
 </style>
