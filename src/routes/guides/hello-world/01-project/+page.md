@@ -25,7 +25,9 @@ npx @hi-ashleyj/llama new
 ```
 Then follow the instructions.  
 This scaffolds the project based off of Vite's `svelte-ts` template, replacing the `src` directory and getting the basic game code set up.
-> The CLI uses lockfiles via `detect-package-manager` to guess your preferred package manager. If it's not correct, install dependencies manually, generating the lockfile. 
+:::note
+The CLI uses lockfiles via `detect-package-manager` to guess your preferred package manager. If it's not correct, install dependencies manually, generating the lockfile. 
+:::
 
 ### Manually
 This assumes you already have a Vite project with Svelte available.  
@@ -43,29 +45,27 @@ Assuming your file structure looks like this:
 There are a number of things you can do.  
   
 Llama provides a convienent `wrap` function from `@hi-ashleyj/llama/vite`, which automatically does a large amount default styling, as well as holds the root `<Game>` object, so you can immediately start using contexts within your main component.  
-```ts
+```ts title="src/main.ts"
 import { mount } from "svelte";
-import { wrap } from "@hi-ashleyj/llama/vite"; // <- Import wrapper
+import { wrap } from "@hi-ashleyj/llama/vite"; // [svp! ++] // <- Import wrapper
 import Main from './Main.svelte'
 
-const game = wrap(Main, { // <- This returns a mountable component as well
-    // As well as game options
-    size: [ 1920, 1080 ],
-    font: "Roboto",
-    modules: {} 
-});
+const game = wrap(Main, { // [svp! ++] //  <- This returns a mountable component as well
+    // [svp! ++] // As well as game options
+    size: [ 1920, 1080 ], // [svp! ++]
+    font: "Roboto", // [svp! ++]
+    modules: {} // [svp! ++]
+}); // [svp! ++]
 
-const app = mount(game, { // <- actually mount the game
+const app = mount(game, { // [svp! hl] // <- actually mount the game
   target: document.getElementById('app')!,
-  props: {
-    // you can also specify the props here (as per Svelte Docs)
-  }
+  props: {} // <- you can also specify game options here
 })
 ```
 Or you will need to mount `<Game>` yourself if you choose not to use this.  
   
 You should also provide placeholder content to display in the area on first paint, while waiting for the first svelte tick.
-```html
+```html title="index.html"
 <body>
     <div id="app" style="display: contents">
         <!-- Your placeholder content would go here, and would be

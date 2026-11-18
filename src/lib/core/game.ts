@@ -1,4 +1,4 @@
-import type { AvailableModules } from "./registry";
+import type { AvailableModules } from "./registry.js";
 import { createContext } from 'svelte';
 
 export type CurrentModules = (keyof Llama.Modules extends never ? keyof AvailableModules : keyof Llama.Modules extends keyof AvailableModules ? keyof Llama.Modules : never);
@@ -9,9 +9,6 @@ export interface RequiredModules {
     root: () => HTMLDivElement | undefined,
 
     on: (type: "frame" | "before" | "after", callback: (info: { delta: number, time: number }) => any | void) => () => any | void,
-
-    // layer: (name: string) => LayerContext | null,
-    // assign: (ctx: LayerContext, obj: LayerDrawable) => DestroyFunction,
     get: <T extends CurrentModules>(plugin: T) => AvailableModules[T];
 }
 
@@ -24,9 +21,11 @@ export const MODULES = {
     AUDIO: "audio",
 } as const satisfies { [K in Uppercase<keyof AvailableModules>]: Lowercase<K> };
 
-export type ModuleSetup = {
+type ModuleSetupList = {
     [K in keyof AvailableModules as K extends CurrentModules ? K : never]: ModuleInitialiser<AvailableModules[K]>;
 }
+
+export type ModuleSetup = keyof Llama.Modules extends never ? Partial<ModuleSetupList> : ModuleSetupList;
 
 const [ getter, setter, hasser ] = createContext<Llama.GameContext>();
 export const getGame = getter;

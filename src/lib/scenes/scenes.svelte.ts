@@ -1,4 +1,4 @@
-import { getGame, type ModuleInitialiser } from "../core/game.js";
+import type { ModuleInitialiser } from "../core/game.js";
 import { createContext, onDestroy, type Component } from "svelte";
 
 declare global {
@@ -62,37 +62,44 @@ export type SceneLayerExports = {
 }
 
 type SceneContext = {
-    readonly active: Llama.Scene,
-    readonly from: Llama.Scene,
-    readonly to: Llama.Scene,
-    readonly animationState: number,
-    changeScene: (to: Llama.Scene) => void
+    readonly from: Llama.Scene | null,
+    readonly to: Llama.Scene | null,
+    changeScene: (to: Llama.Scene) => void,
+    touch: (to: Llama.Scene) => void,
 }
 
 const [ getter, setter ] = createContext<SceneContext>();
 
 // TODO: 
 export const useScenes = getter;
-export const scenes: ModuleInitialiser<SceneContext> = (ctx) => {
-    let active = $state("default");
-    let wanted = $state("default");
-    const signal = game.timers.burst({ duration: transition, immediate: false });
+export const scenes: ModuleInitialiser<SceneContext> = () => {
+    let from: Llama.Scene | null = $state(null);
+    let to: Llama.Scene | null = $state(null);
 
-    $effect(() => {
-        if (wanted !== active && signal.value > 0.5) {
-            active = wanted;
+    const context: SceneContext = {
+        changeScene: (scene) => {
+            if (to === from && scene !== from) {
+                to = scene;
+            }
+        },
+        touch: (scene) => {
+            if (to !== from && scene === from) {
+                from = "" + scene;
+            }
+        },
+        get from() {
+            return from;
+        },
+        get to() {
+            return to;
         }
-    })
+    }
 
-    setter({
-        get activeScene() { return active },
-        get wantedScene() { return wanted },
-        get animationState() { return signal.value },
-        changeScene: (to: string) => {
-            wanted = to;
-            signal.trigger();
+    return {
+        fetch: getter,
+        start: () => {
+            return () => null;
         }
-    });
+    }
 
-    onDestroy(signal.stop);
 }

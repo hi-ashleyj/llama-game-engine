@@ -9,6 +9,6 @@
     },
     "include": [
         "src",
-        "vite.config.js",
+        "vite.config.js", "config/sidebar.ts", "config/sidebar.ts",
     ]
 }

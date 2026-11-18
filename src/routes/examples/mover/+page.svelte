@@ -1,15 +1,3 @@
-<script lang="ts" module>
-
-    declare global {
-        namespace Llama {
-            interface Modules {
-                timers: any;
-            }
-        }
-    }
-
-</script>
-
 <script lang="ts">
 
     import { Game, Canvas, Layer } from "#lib/index.js";

@@ -1,15 +1,3 @@
-<script lang="ts" module>
-
-    declare global {
-        namespace Llama {
-            interface Modules {
-                mouse: any;
-            }
-        }
-    }
-
-</script>
-
 <script lang="ts">
 
     import { Game, Layer, Canvas } from "#lib/index.js";

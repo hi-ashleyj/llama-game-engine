@@ -12,10 +12,11 @@
         size?: [ number, number ];
         font?: string;
         children?: import('svelte').Snippet;
+        fallback?: import("svelte").Snippet;
         modules: ModuleSetup;
     }
 
-    let { size = [ 1920, 1080 ], font, children, modules }: Props = $props();
+    let { size = [ 1920, 1080 ], font, children, modules, fallback }: Props = $props();
     let element: HTMLDivElement | undefined = $state();
     let warm = $state(false);
 
@@ -79,6 +80,8 @@
 <div class="game" bind:this={element}>
     {#if warm}
         {@render children?.()}
+    {:else if fallback}
+        {@render fallback?.()}
     {:else}
         {@html HTML_FRAGMENT}
     {/if}

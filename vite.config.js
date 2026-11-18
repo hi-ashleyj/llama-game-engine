@@ -1,13 +1,15 @@
 import adapter from '@sveltejs/adapter-static'
 import { defaultTheme } from '@sveltepress/theme-default';
 import { sveltepress } from '@sveltepress/vite';
+import sidebar from './config/sidebar.ts'
 
 /** @type {import('vite').UserConfig} */
 const config = {
 	plugins: [sveltepress({
 		svelteKitOptions: {
 			paths: {
-				base: process.argv.includes('dev') ? '' : "/llama-game-engine"
+				base: process.argv.includes('dev') ? '' : "/llama-game-engine",
+				relative: false,
 			},
 			adapter: adapter(),
 		},
@@ -29,14 +31,11 @@ const config = {
 				hover: "#23a923",
 			},
 			navbar: [
-				{ to: "/guides", title: "Guide" },
+				{ to: "/guides/hello-world/01-project", title: "Guide" },
 				{ to: "/docs", title: "Reference" },
 				{ to: "/examples", title: "Examples" },
 			],
-			sidebar: {
-				enabled: true,
-				roots: [ "/guides/", "/docs/", "/examples/" ],
-			},
+			sidebar,
 			i18n: { heroImage: false },
 		}),
 	})],
