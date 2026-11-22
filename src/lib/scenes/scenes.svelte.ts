@@ -78,14 +78,11 @@ export const scenes: ModuleInitialiser<SceneContext> = () => {
 
     const context: SceneContext = {
         changeScene: (scene) => {
-            if (to === from && scene !== from) {
-                to = scene;
-            }
+            if (to === from && scene !== from) to = scene;
+            if (from === null) from = "" + scene;
         },
         touch: (scene) => {
-            if (to !== from && scene === from) {
-                from = "" + scene;
-            }
+            if (to !== from && scene === from) from = "" + scene;
         },
         get from() {
             return from;
@@ -94,6 +91,8 @@ export const scenes: ModuleInitialiser<SceneContext> = () => {
             return to;
         }
     }
+
+    setter(context);
 
     return {
         fetch: getter,
