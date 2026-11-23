@@ -11,11 +11,38 @@ declare global {
     }
 }
 
-export type AssetLoadingMode = "only-when-required" | "lazy-when-preempted" | "optimistic-when-preempted" | "required-when-preempted"
+export type AssetLoadingMode = "never" | "only-when-required" | "lazy-when-preempted" | "optimistic-when-preempted" | "required-when-preempted"
+
+export type TransitionConfig = {
+    transition: Llama.SceneTransition | null,
+    duration?: number,
+    override?: Partial<{
+        [K in Llama.Scene]: {
+            transition?: Llama.SceneTransition,
+            duration?: number | null,
+        }
+    }>
+}
+
+export type ResolvedTransition = Required<Omit<TransitionConfig, "override">>;
+
+export const resolveTransition = (transition: TransitionConfig, alt: Llama.Scene | null): ResolvedTransition => {
+    if (!alt || !transition.override || !transition.override[alt]) {
+        return {
+            transition: transition.transition ?? null,
+            duration: transition.duration ?? 0,
+        }
+    };
+    const override = transition.override[alt];
+    return {
+        transition: override.transition ?? transition.transition ?? null,
+        duration: override.duration ?? transition.duration ?? 0,
+    }
+}
 
 export type SceneDefinition = {
     in: {
-        transition: Llama.SceneTransition,
+        transition: Llama.SceneTransition | null,
         duration?: number,
         loading: AssetLoadingMode,
         override?: Partial<{
@@ -27,9 +54,9 @@ export type SceneDefinition = {
         }>
     },
     out: {
-        transition: Llama.SceneTransition,
+        transition: Llama.SceneTransition | null,
         duration?: number,
-        preempt: Llama.Scene[],
+        preempt?: Llama.Scene[],
         override?: Partial<{
             [K in Llama.Scene]: {
                 transition?: Llama.SceneTransition,
