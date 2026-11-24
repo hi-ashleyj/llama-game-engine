@@ -27,5 +27,8 @@ jobs:
         name: Install dependencies
       - run: npm run package
         name: Build Package
-      - run: npm publish --access public
+      - run: 'node -p "require(''./package.json'').version.includes(''-'') ? ''tag=next'' : ''tag=latest''" >> ""$GITHUB_OUTPUT"" '
+        name: Get Version
+        id: get-version
+      - run: npm publish --access public --tag ${{ steps.get-version.outputs.tag }}
         name: Publish
