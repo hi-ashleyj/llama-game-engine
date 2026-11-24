@@ -6,7 +6,8 @@ export {
     type SceneInformation, 
     type SceneDefinition, 
     type SceneTransitionList, 
-    type SceneLayerExports 
+    type SceneLayerExports,
 } from "./scenes/scenes.svelte.js";
 
 export { default as SceneProvider } from "./scenes/SceneProvider.svelte";
+export { default as FadeTransition } from "./scenes/Fade.svelte";
