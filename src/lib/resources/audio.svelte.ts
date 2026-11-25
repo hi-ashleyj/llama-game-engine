@@ -7,7 +7,7 @@ export type AudioInstance<T extends AudioAssetList> = Loader<"audio", T> & {
 
 export type AudioInstantiate = <T extends AudioAssetList>(param: T) => AudioInstance<T>;
 
-export const setupImages: AudioInstantiate = (assets) => {
+export const setupAudio: AudioInstantiate = (assets) => {
     const preloads = new Set<string>();
     let fetch: (asset: string) => string;
 

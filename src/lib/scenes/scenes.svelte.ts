@@ -88,7 +88,7 @@ export type SceneLayerExports = {
     default: SceneLayerComponent
 }
 
-type SceneContext = {
+export type SceneContext = {
     readonly from: Llama.Scene | null,
     readonly to: Llama.Scene | null,
     changeScene: (to: Llama.Scene) => void,

@@ -19,6 +19,7 @@ export const MODULES = {
     MOUSE: "mouse",
     TIMERS: "timers",
     AUDIO: "audio",
+    SCENES: "scenes"
 } as const satisfies { [K in Uppercase<keyof AvailableModules>]: Lowercase<K> };
 
 type ModuleSetupList = {
