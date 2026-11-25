@@ -1,3 +1,4 @@
+export const HTML_FRAGMENT = `
 <div class="-llama-loading-wrapper--">
     <div class="-llama-loading-why--">
         <div class="-llama-loading-container--">
@@ -114,3 +115,4 @@
     }
 
 </style>
+`;

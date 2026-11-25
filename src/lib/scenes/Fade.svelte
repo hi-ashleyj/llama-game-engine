@@ -1,7 +1,7 @@
 <script lang="ts">
 
-    import { getGame } from "../core/game.ts";
-    import { Opacity, Rectangle, Area } from "../primitive.js";
+    import { getGame } from "../core/game.js";
+    import { Opacity, Rectangle, Area } from "../primitives.js";
     let { t }: { t: number } = $props();
 
     const game = getGame();

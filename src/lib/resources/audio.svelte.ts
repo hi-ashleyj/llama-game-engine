@@ -1,4 +1,4 @@
-import type { Loader } from "./collect.svelte.ts";
+import type { Loader } from "./collect.svelte.js";
 
 export type AudioAssetList = { [K: string]: string };
 export type AudioInstance<T extends AudioAssetList> = Loader<"audio", T> & {

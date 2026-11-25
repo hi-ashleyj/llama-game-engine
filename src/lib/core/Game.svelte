@@ -1,9 +1,9 @@
 <script lang="ts">
-    import type { AvailableModules } from "./registry.js";
+    import type { AvailableModules } from "../index.js";
 
     import { onMount, tick } from "svelte";
     import { setupGame, type ModuleSetup, type CurrentModules, type ModuleInitialiser } from "./game.js";
-    import { HTML_FRAGMENT } from "#lib/vite/plugin.ts";
+    import { HTML_FRAGMENT } from "../vite/fragment.js";
 
     const raise = (str: string) => { throw new Error(str); };
     type Ready<T extends CurrentModules = CurrentModules> = { id: T, go: ReturnType<ModuleInitialiser<AvailableModules[T]>> };

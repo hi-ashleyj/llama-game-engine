@@ -1,13 +1,6 @@
 import { createContext } from "svelte";
 import type { DrawFunction } from "./drawable.js";
 
-declare global {
-    namespace Llama {
-        interface Layers {}
-        type LayerKey = keyof Layers extends never ? string : keyof Layers;
-    }
-}
-
 export type LayerUpdater = (options: { name?: Llama.LayerKey, z?: number }) => void;
 
 export type CanvasContext = {

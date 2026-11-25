@@ -2,7 +2,7 @@
   "name": "@hi-ashleyj/llama",
   "description": "A (Very Incomplete) 2D Canvas Game Engine powered by Svelte",
   "cli": "dist/cli/index.js",
-  "version": "0.17.0-dev.2",
+  "version": "0.17.0-dev.3",
   "type": "module",
   "scripts": {
     "dev": "vite dev",
@@ -107,6 +107,6 @@
   "overrides": {
     "sharp": "$sharp",
     "glob": "^14.0.0",
-    "filelist": "^2.0.2"
+    "minimatch": "^11.0.1"
   }
 }

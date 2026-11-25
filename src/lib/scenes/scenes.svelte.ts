@@ -1,15 +1,5 @@
 import type { ModuleInitialiser } from "../core/game.js";
-import { createContext, onDestroy, type Component } from "svelte";
-
-declare global {
-    namespace Llama {
-        interface Scenes {}
-        type Scene = keyof Scenes extends never ? string : keyof Scenes;
-
-        interface SceneTransitions {}
-        type SceneTransition = keyof SceneTransitions extends never ? string : keyof SceneTransitions;
-    }
-}
+import { createContext, type Component } from "svelte";
 
 export type AssetLoadingMode = "never" | "only-when-required" | "lazy-when-preempted" | "optimistic-when-preempted" | "required-when-preempted"
 

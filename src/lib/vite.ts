@@ -7,4 +7,5 @@ export const wrap = (target: Component<ChildProps>, options: Omit<Props, "Client
     });
 }
 
-export { HTML_FRAGMENT, plugin } from "./vite/plugin.js";
+export { plugin } from "./vite/plugin.js";
+export { HTML_FRAGMENT } from "./vite/fragment.js";

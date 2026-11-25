@@ -1,8 +1,7 @@
-import type { AvailableModules } from "./registry.js";
+import type { AvailableModules } from "../index.js";
 import { createContext } from 'svelte';
 
 export type CurrentModules = (keyof Llama.Modules extends never ? keyof AvailableModules : keyof Llama.Modules extends keyof AvailableModules ? keyof Llama.Modules : never);
-
 export interface RequiredModules {
     size: () => [ number, number ],
     font: () => string | undefined,

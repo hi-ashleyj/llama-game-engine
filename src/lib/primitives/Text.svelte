@@ -1,6 +1,6 @@
 <script lang="ts">
 
-    import { useProps } from "../core/layer.svelte.js";
+    import { useProps } from "../core/layer-context.svelte.js";
     import { useDrawable, type DrawFunction } from "../core/drawable.js";
     import { getGame } from "../core/game.js";
     import { onMount } from "svelte";

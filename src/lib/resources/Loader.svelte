@@ -2,7 +2,7 @@
 
     import { onMount } from 'svelte';
     import { SvelteSet } from 'svelte/reactivity';
-    import { type Collect } from './collect.svelte.ts';
+    import { type Collect } from './collect.svelte.js';
 
     interface Props {
         children?: import('svelte').Snippet;

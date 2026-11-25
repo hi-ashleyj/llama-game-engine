@@ -1,7 +1,7 @@
 <script lang="ts">
 
     import { type DrawFunction, setupDrawable } from "./drawable.js";
-    import { useCanvas, type LayerUpdater } from "./layer.svelte.js";
+    import { useCanvas, type LayerUpdater } from "./layer-context.svelte.js";
     import { onMount } from "svelte";
 
     interface Props {

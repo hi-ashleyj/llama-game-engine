@@ -6,7 +6,7 @@
 </script>
 <script lang="ts">
 
-    import { useProps } from "../core/layer.svelte.js";
+    import { useProps } from "../core/layer-context.svelte.js";
     import { useDrawable } from "../core/drawable.js";
     import { onMount } from "svelte";
 

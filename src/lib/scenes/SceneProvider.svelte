@@ -1,6 +1,6 @@
 <script lang="ts">
 
-    import { getGame } from "../core/game.ts";
+    import { getGame } from "../core/game.js";
     import Layer from "../core/Layer.svelte";
     import { type SceneInformation, type SceneLayerExports, type SceneTransitionList, useScenes, resolveTransition } from "./scenes.svelte.js";
     import { onMount, type Snippet } from "svelte";

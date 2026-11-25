@@ -1,4 +1,4 @@
-import type { Loader } from "./collect.svelte.ts";
+import type { Loader } from "./collect.svelte.js";
 
 export type ImageAssetList = { [K: string]: string | [ string, number, number ] | [ string, number, number, number, number ] };
 export type ImagePositionList<T extends ImageAssetList> = { [K in keyof T as T[K] extends string ? never : K]: { x?: number, y?: number, w: number, h: number }}

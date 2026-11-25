@@ -1,7 +1,7 @@
 import adapter from '@sveltejs/adapter-static'
 import { defaultTheme } from '@sveltepress/theme-default';
 import { sveltepress } from '@sveltepress/vite';
-import sidebar from './config/sidebar.ts'
+import sidebar from './config/sidebar.js'
 
 /** @type {import('vite').UserConfig} */
 const config = {

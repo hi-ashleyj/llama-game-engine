@@ -4,7 +4,7 @@
 
     import { onMount } from "svelte";
     import { getGame } from "./game.js";
-    import { setupCanvas } from "./layer.svelte.js";
+    import { setupCanvas } from "./layer-context.svelte.js";
 
     interface Props {
         mode?: "always" | "calculated" | "manual";
